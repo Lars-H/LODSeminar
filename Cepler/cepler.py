@@ -14,11 +14,11 @@ def getJSON():
     print("Getting JSON")
 
     #Send Request to application
-    #handler = RequestHandler();
-    #handler.getResponse(value, unit, 'json')
+    handler = RequestHandler();
+    stringResp = handler.getResponse(value, unit, 'json')
 
     #Check if request could be answered
-    return jsonify(result = 'Here is your JSON data')
+    return jsonify(result = str(stringResp))
 
 @app.route('/getRDF')
 def getRDF():
