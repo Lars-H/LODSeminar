@@ -3,6 +3,7 @@ import simplejson as json
 from StringIO import StringIO
 from wrapper.Properties import Mapping
 import random
+import helper.conversion as con
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 import pprint
 
@@ -18,7 +19,6 @@ class RequestHandler:
 		newValue = orig_value  /factor
 		
 		rng = 0.15*newValue;
-		
 		print(newValue)
 		print(rng)
 
