@@ -72,16 +72,26 @@ class RequestHandler:
 			result = BNode('result1')
 		
 		
-			rdfResult.add( (result, RDF.value , Literal(orig_value) ))
+			rdfResult.add( (result, RDF.value , Literal(norm_value) ))
 			rdfResult.add( (result, URIRef("http://www.w3.org/ns/org#hasUnit") , URIRef("http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Kilogram") ))
 			rdfResult.add( (result, URIRef("http://dbpedia.org/ontology/ratio"), Literal(factor) ))
 		
-			rdfResult.serialize(destination='output.txt', format='turtle')
+			# For debugging, uncomment:
+			#rdfResult.serialize(destination='output.txt', format='turtle')
 		
 			# TODO do some fancy things to output
 			# TODO dependent on outformat
 			for stmt in rdfResult:
 				pprint.pprint(stmt)
-		
+
+			# In progress: Process RDF graph that is coming back.
+			outStr = "You wanted a comparison for " + str(orig_value) + str(orig_unit) + "." + "\n"
+			outStr += "It equals about " + str(factor) + " "
+			
+			for rdfLabel in rdfResult.objects(BNode('result1'),RDFS.label): # should only ocurr once!
+				outStr += rdfLabel
+
+			outStr += ". Nice!"
+
 		# Return graph to the calling program.
-		return rdfResult
+		return outStr
