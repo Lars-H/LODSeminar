@@ -1,17 +1,15 @@
-@prefix ns1: <http://dbpedia.org/ontology/> .
-@prefix ns2: <http://www.w3.org/ns/org#> .
-@prefix ns3: <http://xmlns.com/foaf/0.1/> .
+@prefix ns1: <http://www.w3.org/ns/org#> .
+@prefix ns2: <http://dbpedia.org/ontology/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://dbpedia.org/resource/Mallet's_Mortar> a [ a ns1:Device ;
-            rdfs:label "Mortaio di Mallet" ;
-            ns1:ratio 1 ;
+<http://dbpedia.org/resource/Louise_Brown> a [ a ns2:Person ;
+            rdfs:label "لويز براون" ;
+            ns2:ratio 19351 ;
             rdf:value 45000000 ;
-            ns2:hasUnit <http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Kilogram> ;
-            ns3:depiction <http://commons.wikimedia.org/wiki/Special:FilePath/Mallet's_mortar.JPG> ] .
+            ns1:hasUnit <http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Kilogram> ] .
 
-ns1:Device rdfs:label "device" .
+ns2:Person rdfs:label "person" .
 
