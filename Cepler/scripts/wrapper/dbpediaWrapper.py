@@ -25,9 +25,9 @@ class DBPediaWrapper:
 
 	#Main function that gets the results
 	#@return: RDF Graph	
-	def getResults(self, unit, value, rng):
+	def getResults(self, quantity, value, rng):
 		#Build Query String
-		queryStr = self.buildQuery(unit, value, rng)
+		queryStr = self.buildQuery(quantity, value, rng)
 
 		#Run Query
 		results = self.runQuery(queryStr)
@@ -58,12 +58,12 @@ class DBPediaWrapper:
 		results = self.sparql.query().convert()
 		return results;
 
-	def buildQuery(self, unit, value, rng):
+	def buildQuery(self, quantity, value, rng):
 		#Add the QueryPrefix
 		query = self.QueryPrefix
 
 		#Different Properties for different unit
-		if unit == Mapping.WEIGHT:
+		if quantity == Mapping.WEIGHT:
 			props = dbProperties.weightProperties
 
 			#iterate through possible properties
@@ -91,7 +91,7 @@ class DBPediaWrapper:
 
 
 		#Cost
-		elif unit == Mapping.COST:
+		elif quantity == Mapping.COST:
 
 			for i in range(len(dbProperties.costProperties)):
 				if(i > 0):
@@ -117,7 +117,7 @@ class DBPediaWrapper:
 
 
 		#Distance
-		elif unit == Mapping.DISTANCE:
+		elif quantity == Mapping.DISTANCE:
 			for i in range(len(dbProperties.distanceProperties)):
 				if(i > 0):
 					query += " OPTIONAL "
