@@ -4,7 +4,7 @@ from SPARQLWrapper import SPARQLWrapper, N3
 import simplejson as json 
 import dbProperties
 import random
-from Properties import Mapping
+from properties import Mapping
 
 class DBPediaWrapper: 
 
