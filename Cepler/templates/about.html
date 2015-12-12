@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<title>Cepler</title>
+	<meta charset="iso-8859-1">	
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
+<ul>
+	<ul style="float:right;list-style-type:none;">
+	  <li><a href="/">Try it!</a></li>
+	  <li><a href="/api">The Cepler API</a></li>
+	  <li><a href="/about">About</a></li>
+	</ul>
+</ul>
+<canvas height="100"></canvas>
+<div align=center>
+<label>
+	<h1 font size="20" >
+	About us!
+	</font>
+</label>
+</div>
+<div align=center>
+<div  id="d2" align=center >
+	<d1 >
+	</br>
+	Hi, </br></br>
+	we are the Cepler-Team. </br>
+	Ben, Nico, Lars.</br>
+	We want to exploit the linked data cloud in order to provide better comparisons.</br>
+	People are bad a imagining large numbers.</br>
+	Therefore, we provide a comparison, such that people can understand those numbers more intuitively.
+	</br></br></br>
+	Try it and have fun!
+	</d1>
+</div>
+</div>
+
+<div id="bottom">
+       <img id="bottomPic" src="/static/logo.png" />
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')
+</script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+</head>
+</html>

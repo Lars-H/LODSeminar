@@ -1,60 +1,65 @@
 <!doctype html>
 <html>
 <head>
-	<title>LOD-Seminar</title>
+	<title>Cepler</title>
 	<meta charset="iso-8859-1">	
 	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
-
-
-<div ALIGN=CENTER> 
+<ul>
+	<ul style="float:right;list-style-type:none;">
+	  <li><a href="/">Try it!</a></li>
+	  <li><a href="/api">The Cepler API</a></li>
+	  <li><a href="/about">About</a></li>
+	</ul>
+</ul>
+<canvas height="100"></canvas>
+<div align=center>
 <label>
-	<h1 font size="20" s>
-	Fun Fact!
+	<h1 font size="20" >
+	Try out Cepler!
 	</font>
 </label>
+
 </br>
 </br>
 </br>
+
+
 <form>
-<div align=center>
-	<div>
-		<input id="textbox"></input>
-	
-		<select id ="slct">
-		<option selected> Choose a unit... </option>
-		  <optgroup label="Weight">
-		  	<option value="t">t</option>
-		    <option value="kg">kg</option>
-		    <option value="g">g</option>
-		  </optgroup>
-		  <optgroup label="Distance">
-		    <option value="km">km</option>
-		    <option value="m">m</option>
-		    <option value="cm">cm</option>
-		  </optgroup>
-		    <optgroup label="Money">
-		    <option value="euro">Euro</option>
-		    <option value="usd">US-Dollar</option>
-		  </optgroup>
-		</select>
-</div>
-</form>
-
-</br>
-
-<div  id='infoDiv'  style="display:none;" >
-	<label id="outputLabel" font size="14"> </input>
-
-</div>
-
-</br>
-</br>
-</br>
-<div align="center">
-	<button type="button" id="button" onclick="tryItClick()" >Try it!</button>
-</div>
-
+	<div align=center>
+		<div >
+			<input id="textbox"></input>
+			<select id ="slct" >
+			<option selected> Choose a unit... </option>
+			  <optgroup label="Weight">
+			  	<option value="t">t</option>
+			    <option value="kg">kg</option>
+			    <option value="g">g</option>
+			  </optgroup>
+			  <optgroup label="Distance">
+			    <option value="km">km</option>
+			    <option value="m">m</option>
+			    <option value="cm">cm</option>
+			  </optgroup>
+			    <optgroup label="Money">
+			    <option value="euro">Euro</option>
+			    <option value="usd">US-Dollar</option>
+			  </optgroup>
+			</select>
+	</div>
+	</form>
+	<canvas height="50"></canvas>
+	<div  id='infoDiv'  style="display:none;" height="20" >
+		<label id="outputLabel" font size="14"> </input>
+	</div>
+	<canvas height="50"></canvas>
+	<div align="center">
+		<button type="button" id="button" onclick="tryItClick()" >Try it!</button>
+	</div>
 <!--<span id=result>?</span>-->
+
+<div id="bottom">
+       <img id="bottomPic" src="/static/logo.png" />
+ </div>
 
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -91,7 +96,14 @@
 			}
 			else
 			{
-				processRequest(value, selectedUnit);				
+				if(value==27121571)
+				{
+				 	window.location.href = 'https://en.wikipedia.org/wiki/Johannes_Kepler';
+				}
+				else
+				{
+					processRequest(value, selectedUnit);
+				}				
 			}
 		}
 
