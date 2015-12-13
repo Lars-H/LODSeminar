@@ -95,29 +95,19 @@ class RequestHandler:
 		print(logString + "Query to DBPediaWrapper: (" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
 		rdfResult = dbpWrapper.getResults(quantity, query_value, range)
 
-		# Add some triples for final output.
+		# Process results
+		outStr = ""
+
 		if rdfResult is not None:
 
-		
 			# For debugging, uncomment:
 			#rdfResult.serialize(destination='output.txt', format='turtle')
-		
-			# TODO do some fancy things to output
-			# TODO dependent on outformat
-			#for stmt in rdfResult:
-			#	pprint.pprint(stmt)
-
-			# In progress: Process RDF graph that is coming back.
-			#outStr = "You wanted a comparison for " + str(orig_value) + str(orig_unit) + "." + "\n"
-			#outStr += "It equals about " + str(factor) + " "
-			#
-			#for rdfLabel in rdfResult.objects(BNode('result1'),RDFS.label): # should only ocurr once!
-			#	outStr += rdfLabel
-#
-			#outStr += ". Nice!"
 
 			# Test whether merging graphs works
 			finalGraph = graphutils.mergeWithResultGraph(rdfResult)
+
+			# Build an output string from the final graph.
+			outStr = graphutils.buildOutputString(orig_unit)
 
 			# For debugging:
 
@@ -125,10 +115,10 @@ class RequestHandler:
 			#	pprint.pprint(stmt)
 			requestGraph.serialize(destination='finalgraph.txt', format='turtle')
 
-			print(logString + "Results were written to files.")
+		else:
+			outStr = "No results matched this time. Try again!"
 
-		else: print(logString + "No result was returned!")
-
-		# Return graph to the calling program.
-		outStr = "Wait for it..."
+		# Return graph to the calling program.		
+		print(logString + "This output string is passed to the UI:")
+		print(logString + outStr)
 		return outStr

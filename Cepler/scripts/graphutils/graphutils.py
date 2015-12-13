@@ -1,5 +1,5 @@
 import rdflib
-from rdflib.namespace import Namespace, RDF, FOAF, NamespaceManager
+from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
 from rdflib import Graph, BNode, Literal, URIRef
 
 class GraphUtils:
@@ -49,3 +49,24 @@ class GraphUtils:
 		self.g.add( (BNode('query'), self.SCHEMA.result, BNode('result')) )
 
 		return self.g
+
+	# This method builds a string which displays results and is passed to the UI.
+	def buildOutputString(self, inUnit):
+		outStr = ""
+		for inValue in self.g.objects(BNode('request'), RDF.value): # should only occur once!
+			outStr += str(inValue) + " "
+		outStr += inUnit + " are about "
+		for factor in self.g.objects(BNode('query'), self.SEMS.SIO_001018): # should only occur once!
+			outStr += str(factor) + " "
+		for label in self.g.objects(BNode('result'), RDFS.label): # should only occur once!
+			try:
+				outStr += str(label)
+			except UnicodeEncodeError:
+				return "Oops! An invalid label was delivered by the datasource. Try again!"
+		for rType in self.g.objects(BNode('result'), RDF.type): # should occur 0 or 1 times!
+			resultType = rType
+		for typeLabel in self.g.objects(resultType, RDFS.label): # should occur 0 or 1 times!
+			outStr += ", which is a " + str(typeLabel)
+		outStr += "."
+
+		return outStr
