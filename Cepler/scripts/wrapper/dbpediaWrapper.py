@@ -47,9 +47,11 @@ class DBPediaWrapper:
 		if(len(results) >0):
 			#As of now: Return the first result
 			i  = random.randrange(0, len(results), 1)
-			rdfResult = self.__resultToRDF(results['results']['bindings'][i])
-
-
+			try:
+				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
+			except ValueError:	
+				#raise ValueError('Could not parse result to RDF in DBPediaWrapper')
+				return None
 
 		#Return Wrapper Result
 		return rdfResult;
@@ -117,9 +119,9 @@ class DBPediaWrapper:
 
 			#Filtering Results
 			#Half the range is added, and half subtracted
-			if not (value is None):
-				query += " FILTER (?value >" + str(value - rng/2) + ")"
-				query += " FILTER (?value <" + str(value + rng/2) + ")"	
+			
+			query += " FILTER (?value >" + str(value - rng/2) + ")"
+			query += " FILTER (?value <" + str(value + rng/2) + ")"	
 
 
 
@@ -139,12 +141,14 @@ class DBPediaWrapper:
 			#Get the tyoe and its name (label)
 			query += "OPTIONAL { ?uri a ?type. ?type rdfs:label ?typeName. FILTER (lang(?typeName) = 'en')}"
 			query += "OPTIONAL { ?uri foaf:depiction ?pic}"
-
+			if not (value is None):
+				query += " FILTER (?value >" + str(value - rng/2) + ")"
+				query += " FILTER (?value <" + str(value + rng/2) + ")"		
 		
 		#Add the query Suffix
 		query += self.QuerySuffix;
 	
-			
+		#print(query)	
 		return query;
 
 

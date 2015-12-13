@@ -23,7 +23,7 @@ print(value)
 
 
 #Get a Result from the Wrapper (RDF Graph)
-rdfResult = dpwarpper.getResults(Mapping.WEIGHT, 4000000 ,range)
+rdfResult = dpwarpper.getResults(Mapping.DISTANCE, 400000 ,10000)
 #print(rdfResult)
 
 if rdfResult is not None:
