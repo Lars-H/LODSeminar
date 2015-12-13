@@ -17,9 +17,10 @@ def getJSON():
             #Send Request to application
             handler = RequestHandler();
             stringResp = handler.getResponse(value, unit, 'json')
+            print(stringResp)
             #Check if request could be answered
             return jsonify(result = str(stringResp))
-        except:   
+        except ValueError:   
             print('ERROR: The application has encountered an unexpected Error')  
             return jsonify(result = 'Sorry, we could not process your request! :(')
     else: 
