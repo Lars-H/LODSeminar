@@ -10,6 +10,7 @@ import pprint
 import sys
 from helper.factor import Factor
 from helper.range import Range
+from graphutils.graphutils import GraphUtils
 
 # Is called from the server with a value, a unit, and an output format.
 # Parses the input, normalizes it, decides which wrapper to query and
@@ -50,6 +51,15 @@ class RequestHandler:
 		factor = Factor().getFactor(norm_value)
 		query_value = norm_value/factor
 
+		# Start building the final RDF graph. The "request" and part of the "query"
+		# section are produced now. TODO don't write factor before final graph.
+		graphutils = GraphUtils()
+		requestGraph = graphutils.buildRequestGraph(orig_value, orig_unit, factor)
+		# For debugging:
+		for stmt in requestGraph:
+				pprint.pprint(stmt)
+		requestGraph.serialize(destination='requestgraph.txt', format='turtle')
+
 		# A range inside which results can lie around the query value is determined.
 		range = Range().getRange(query_value)
 
@@ -64,17 +74,13 @@ class RequestHandler:
 			sys.exit('ERROR: Creating a DBpediaWrapper failed.')
 
 		# Get results from the DBpediaWrapper. It needs grams as input (*1000)
-		rdfResult = dbpWrapper.getResults(quantity, query_value*1000, range*1000)
+		# TODO unify the interface (not *1000)
+		# 13122015: changed to kilogram
+		rdfResult = dbpWrapper.getResults(quantity, query_value, range)
 
 		# Add some triples for final output.
 		if rdfResult is not None:
 
-			result = BNode('result1')
-		
-		
-			rdfResult.add( (result, RDF.value , Literal(norm_value) ))
-			rdfResult.add( (result, URIRef("http://www.w3.org/ns/org#hasUnit") , URIRef("http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Kilogram") ))
-			rdfResult.add( (result, URIRef("http://dbpedia.org/ontology/ratio"), Literal(factor) ))
 		
 			# For debugging, uncomment:
 			#rdfResult.serialize(destination='output.txt', format='turtle')
@@ -85,13 +91,23 @@ class RequestHandler:
 				pprint.pprint(stmt)
 
 			# In progress: Process RDF graph that is coming back.
-			outStr = "You wanted a comparison for " + str(orig_value) + str(orig_unit) + "." + "\n"
-			outStr += "It equals about " + str(factor) + " "
-			
-			for rdfLabel in rdfResult.objects(BNode('result1'),RDFS.label): # should only ocurr once!
-				outStr += rdfLabel
+			#outStr = "You wanted a comparison for " + str(orig_value) + str(orig_unit) + "." + "\n"
+			#outStr += "It equals about " + str(factor) + " "
+			#
+			#for rdfLabel in rdfResult.objects(BNode('result1'),RDFS.label): # should only ocurr once!
+			#	outStr += rdfLabel
+#
+			#outStr += ". Nice!"
 
-			outStr += ". Nice!"
+			# Test whether merging graphs works
+			finalGraph = graphutils.mergeWithResultGraph(rdfResult)
+
+			# For debugging:
+
+			for stmt in finalGraph:
+				pprint.pprint(stmt)
+			requestGraph.serialize(destination='finalgraph.txt', format='turtle')
 
 		# Return graph to the calling program.
+		outStr = "Wait for it..."
 		return outStr
