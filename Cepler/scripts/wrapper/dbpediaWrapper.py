@@ -21,6 +21,14 @@ class DBPediaWrapper:
 		self.sparql.setReturnFormat(self.outformat)
 		self.QueryPrefix = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> select distinct ?uri ?value ?label ?type ?typeName ?pic WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
+		self.__initNamespaces();
+		return;
+
+	def __initNamespaces(self):
+		#Define Namespaces
+		self.PURLD = Namespace('http://purl.org/dqm-vocabulary/v1/dqm#')
+		self.LEMON = Namespace('http://lemon-model.net/lemon#')
+		self.WD = Namespace('https://www.wikidata.org/wiki/')
 		return;
 
 	#Main function that gets the results
@@ -143,16 +151,7 @@ class DBPediaWrapper:
 	def __resultToRDF(self, result):
 		#Check if there is a result
 		if(bool(result)):
-			print(result)
-			#Define Namespaces
-			#purl namespace
-			PURLD = Namespace('http://purl.org/dqm-vocabulary/v1/dqm#')
-
-			#lemon namepace
-			LEMON = Namespace('http://lemon-model.net/lemon#')
-
-			#Nasa QUDT Namespace
-			WD = Namespace('https://www.wikidata.org/wiki/')
+			#print(result)
 
 			#Get the Uri in uriVale
 			uriNode = result['uri']
@@ -172,24 +171,24 @@ class DBPediaWrapper:
 				valueValue = float(float(valueValue) / 1000);
 
 			#Initialize Graph
-			g = Graph()
+			g = self.__initGraph()
 
 			#Create response Blank Node
 			response = BNode('result');
 
 			#Build the Obligatory part for the Response
 			g.add( (response, RDFS.label, Literal(labelValue)))	
-			g.add( (response, PURLD.hasURI, URIRef(uriValue)))
+			g.add( (response, self.PURLD.hasURI, URIRef(uriValue)))
 			g.add( (response, RDF.value, Literal(valueValue)))	
 
 			#Defining the context (which is the unit of the response)s
 			#Using WikiData in order to have a standardized data source for the unit
 			if self.unit == Mapping.WEIGHT:
-				g.add( (response, LEMON.context, WD.Q11570))	
+				g.add( (response, self.LEMON.context, self.WD.Q11570))	
 			elif self.unit == Mapping.COST:	
-				g.add( (response, LEMON.context, WD.Q4917))
+				g.add( (response, self.LEMON.context, self.WD.Q4917))
 			elif self.unit == Mapping.DISTANCE:
-				g.add( (response, LEMON.context, WD.Q11573))
+				g.add( (response, self.LEMON.context, self.WD.Q11573))
 			else:
 				print("ERROR: Missing unit DBPedia Wrapper")
 				return None
@@ -221,3 +220,14 @@ class DBPediaWrapper:
 		else:
 			print("INFORMATION: No Result found in DBPedia Wrapper")
 			return None
+
+	def __initGraph(self):
+		#Initialize Graph
+		g = Graph()
+
+		#Bind Namespace to string variable
+		g.bind('purld', self.PURLD)
+		g.bind('lemon', self.LEMON)
+		g.bind('wd', self.WD)
+		g.bind('foaf', FOAF)
+		return g;		
