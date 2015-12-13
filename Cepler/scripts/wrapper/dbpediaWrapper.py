@@ -76,7 +76,7 @@ class DBPediaWrapper:
 		if unit == Mapping.WEIGHT:
 			#Getting Kilograms as input, however in DBP the properties are in gram
 			#Therefore dividing
-			unit = unit*1000;	
+			value = value*1000;	
 
 			#iterate through possible properties
 			for i in range(len(dbProperties.weightProperties)):
