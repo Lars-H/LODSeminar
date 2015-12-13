@@ -10,15 +10,22 @@ def getJSON():
     #Get the variable value and unit
     value = request.args.get('v')
     unit = request.args.get('u')
+    key = request.args.get('k')
 
-    print("Getting JSON")
+    if key == "27121571":
+        try:
+            #Send Request to application
+            handler = RequestHandler();
+            stringResp = handler.getResponse(value, unit, 'json')
+            #Check if request could be answered
+            return jsonify(result = str(stringResp))
+        except:   
+            print('ERROR: The application has encountered an unexpected Error')  
+            return jsonify(result = 'Sorry, we could not process your request! :(')
+    else: 
+        return jsonify(result = 'Invalid key')
 
-    #Send Request to application
-    handler = RequestHandler();
-    stringResp = handler.getResponse(value, unit, 'json')
-
-    #Check if request could be answered
-    return jsonify(result = str(stringResp))
+    
 
 @app.route('/getRDF')
 def getRDF():

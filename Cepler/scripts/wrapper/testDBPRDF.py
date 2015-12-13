@@ -23,8 +23,8 @@ print(value)
 
 
 #Get a Result from the Wrapper (RDF Graph)
-rdfResult = dpwarpper.getResults(Mapping.WEIGHT, 40000 ,range)
-print(rdfResult)
+rdfResult = dpwarpper.getResults(Mapping.WEIGHT, 4000000 ,range)
+#print(rdfResult)
 
 if rdfResult is not None:
 	rdfResult.serialize(destination='output.txt', format='turtle')
