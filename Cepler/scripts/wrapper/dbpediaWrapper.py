@@ -78,7 +78,7 @@ class DBPediaWrapper:
 			#Getting Kilograms as input, however in DBP the properties are in gram
 			#Therefore dividing
 			value = value*1000;	
-
+			rng = rng *1000;
 			#iterate through possible properties
 			for i in range(len(dbProperties.weightProperties)):
 				if(i > 0):
