@@ -69,4 +69,10 @@ class GraphUtils:
 			outStr += ", which is a " + str(typeLabel)
 		outStr += "."
 
+		# This is preliminary for the interim presentation:
+		for resultUri in self.g.objects(BNode('result'), self.PURLD.hasURI): # should only occur once!
+			outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(resultUri) + "\">More information</a>"
+		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
+			outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(pic) + "\">Picture</a>"
+
 		return outStr
