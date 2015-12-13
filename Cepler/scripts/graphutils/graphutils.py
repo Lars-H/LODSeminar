@@ -1,6 +1,6 @@
 import rdflib
 from rdflib.namespace import Namespace, RDF, FOAF, NamespaceManager
-from rdflib import Graph, BNode, Literal
+from rdflib import Graph, BNode, Literal, URIRef
 
 class GraphUtils:
 	# Constructor
@@ -30,13 +30,13 @@ class GraphUtils:
 	# and the part of the query section that is connected 
 	# to the request section.
 	# TODO add factor at the end when a result was definitely found.
-	def buildRequestGraph(self, inValue, inUnit, factor):
+	def buildRequestGraph(self, inValue, inUnit_wd, factor):
 		self.g.add( (BNode('query'), self.SPIN.query, BNode('request')) )
 		self.g.add( (BNode('query'), self.SEMS.SIO_001018, Literal(int(factor))) )
 		self.g.add( (BNode('request'), RDF.type, self.PURLP.Query) )
 		self.g.add( (BNode('request'), RDF.value, Literal(float(inValue))) )
 		# TODO right unit here!
-		self.g.add( (BNode('request'), self.LEMON.context, self.WD.metre) )
+		self.g.add( (BNode('request'), self.LEMON.context, URIRef(inUnit_wd)) )
 
 		return self.g
 

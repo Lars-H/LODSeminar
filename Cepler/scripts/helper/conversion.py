@@ -29,6 +29,7 @@ class Conversions:
 		else:
 			sys.exit('ERROR: Conversion to kilogram failed.')
 
+		print("Value converted to base unit kilogram: " + str(norm_value))
 		return norm_value
 
 	def convertToMeter(self, orig_value, orig_unit):
@@ -43,6 +44,7 @@ class Conversions:
 		else:
 			sys.exit('ERROR: Conversion to meter failed.')
 
+		print("Value converted to base unit meter: " + str(norm_value))
 		return norm_value
 	
 	def convertToDollar(self, orig_value, orig_unit):
@@ -55,4 +57,5 @@ class Conversions:
 		else:
 			sys.exit('ERROR: Conversion to meter failed.')
 
+		print("Value converted to base unit US dollar: " + str(norm_value))
 		return norm_value
