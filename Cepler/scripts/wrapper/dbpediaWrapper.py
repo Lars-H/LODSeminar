@@ -44,18 +44,23 @@ class DBPediaWrapper:
 		results = self.__runQuery(queryStr)
 
 		#Decode 
-		if(len(results) >0):
+		if(len(results['results']['bindings']) > 0):
 			#As of now: Return the first result
-			i  = random.randrange(0, len(results), 1)
+			print(len(results['results']['bindings']))
+			print(len(results))
+			i  = random.randrange(0, len(results)- 1, 1)
+			print(i)
+			#i = 0;
 			try:
 				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
 			except ValueError:	
 				#raise ValueError('Could not parse result to RDF in DBPediaWrapper')
 				return None
 
-		#Return Wrapper Result
-		return rdfResult;
-
+			#Return Wrapper Result
+			return rdfResult;
+		else: 
+			return None
 		#return queryStr;	
 
 	#Constructor, defying explicit EndPointUrl
