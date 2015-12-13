@@ -26,20 +26,22 @@ class DBPediaWrapper:
 	#Main function that gets the results
 	#@return: RDF Graph	
 	def getResults(self, unit, value, rng):
+		#Set the global value
+		self.unit = unit;
+
 		#Build Query String
-		queryStr = self.buildQuery(unit, value, rng)
+		queryStr = self.__buildQuery(unit, value, rng)
 
 		#Run Query
-		results = self.runQuery(queryStr)
+		results = self.__runQuery(queryStr)
 
 		#Decode 
 		if(len(results) >0):
 			#As of now: Return the first result
 			i  = random.randrange(0, len(results), 1)
-			try:
-				rdfResult = self.resultToRDF(results['results']['bindings'][i])
-			except:	
-				rdfResult = None
+			rdfResult = self.__resultToRDF(results['results']['bindings'][i])
+
+
 
 		#Return Wrapper Result
 		return rdfResult;
@@ -49,22 +51,22 @@ class DBPediaWrapper:
 	#Constructor, defying explicit EndPointUrl
 	def setEndpointUrl(self, endPointUrl):
 		self.sparql = SPARQLWrapper(self.endPointUrl)
-
 		return;
 
-
-	def runQuery(self,  query ):		
+	def __runQuery(self,  query ):		
 		self.sparql.setQuery(query);
 		results = self.sparql.query().convert()
 		return results;
 
-	def buildQuery(self, unit, value, rng):
+	def __buildQuery(self, unit, value, rng):
 		#Add the QueryPrefix
 		query = self.QueryPrefix
 
 		#Different Properties for different unit
 		if unit == Mapping.WEIGHT:
-			props = dbProperties.weightProperties
+			#Getting Kilograms as input, however in DBP the properties are in gram
+			#Therefore dividing
+			unit = unit*1000;	
 
 			#iterate through possible properties
 			for i in range(len(dbProperties.weightProperties)):
@@ -72,8 +74,6 @@ class DBPediaWrapper:
 					query += " OPTIONAL "
 
 				query += "{ ?uri  <" + dbProperties.weightProperties[i] + "> ?value . }" 
-
-
 
 			#Get the label
 			query += " ?uri rdfs:label ?label."
@@ -92,7 +92,6 @@ class DBPediaWrapper:
 
 		#Cost
 		elif unit == Mapping.COST:
-
 			for i in range(len(dbProperties.costProperties)):
 				if(i > 0):
 					query += " OPTIONAL "
@@ -141,23 +140,62 @@ class DBPediaWrapper:
 		return query;
 
 
-	def resultToRDF(self, result):
-		#print(result)
+	def __resultToRDF(self, result):
+		#Check if there is a result
 		if(bool(result)):
+			print(result)
+			#Define Namespaces
+			#purl namespace
+			PURLD = Namespace('http://purl.org/dqm-vocabulary/v1/dqm#')
+
+			#lemon namepace
+			LEMON = Namespace('http://lemon-model.net/lemon#')
+
+			#Nasa QUDT Namespace
+			WD = Namespace('https://www.wikidata.org/wiki/')
+
+			#Get the Uri in uriVale
 			uriNode = result['uri']
 			uriValue = uriNode['value']
 
+			#Get the label in labeValue
 			labelNode = result['label']
 			labelValue = labelNode['value']  
 
+			#Get the Actual Value for the Property
+			valueNode = result['value']
+			valueValue = valueNode['value']
+
+			#Need to retransform the value
+			#For Weight
+			if self.unit == Mapping.WEIGHT:
+				valueValue = float(float(valueValue) / 1000);
+
+			#Initialize Graph
 			g = Graph()
 
-			response = BNode('result1');
+			#Create response Blank Node
+			response = BNode('result');
 
+			#Build the Obligatory part for the Response
+			g.add( (response, RDFS.label, Literal(labelValue)))	
+			g.add( (response, PURLD.hasURI, URIRef(uriValue)))
+			g.add( (response, RDF.value, Literal(valueValue)))	
 
-			g.add( (URIRef(uriValue) , 	RDF.type , response ))
-			g.add( (response, RDFS.label, Literal(labelValue) ))
+			#Defining the context (which is the unit of the response)s
+			#Using WikiData in order to have a standardized data source for the unit
+			if self.unit == Mapping.WEIGHT:
+				g.add( (response, LEMON.context, WD.Q11570))	
+			elif self.unit == Mapping.COST:	
+				g.add( (response, LEMON.context, WD.Q4917))
+			elif self.unit == Mapping.DISTANCE:
+				g.add( (response, LEMON.context, WD.Q11573))
+			else:
+				print("ERROR: Missing unit DBPedia Wrapper")
+				return None
 
+			#Add the Optional Part to the response
+				
 			if(result.has_key("pic")):
 				picNode = result['pic']
 				picValue = picNode['value']
@@ -177,5 +215,9 @@ class DBPediaWrapper:
 					g.add( (URIRef(typeValue) , RDFS.label, Literal(typeNameValue)) )
 
 			#g.serialize(destination='output.txt', format='n3')
-
-		return g	
+			return g	
+		
+		#Print Info, when no result found and return None
+		else:
+			print("INFORMATION: No Result found in DBPedia Wrapper")
+			return None

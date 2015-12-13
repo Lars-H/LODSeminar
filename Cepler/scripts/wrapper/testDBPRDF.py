@@ -1,7 +1,7 @@
 from dbpediaWrapper import DBPediaWrapper
 import simplejson as json
 from StringIO import StringIO
-from Properties import Mapping
+from properties import Mapping
 import random
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 import pprint
@@ -23,17 +23,10 @@ print(value)
 
 
 #Get a Result from the Wrapper (RDF Graph)
-rdfResult = dpwarpper.getResults(Mapping.WEIGHT, value ,range)
+rdfResult = dpwarpper.getResults(Mapping.WEIGHT, 40000 ,range)
+print(rdfResult)
 
 if rdfResult is not None:
-	#rdfResult.add()
-	result = BNode('result1')
-
-
-	rdfResult.add( (result, RDF.value , Literal(orig_value) ))
-	rdfResult.add( (result, URIRef("http://www.w3.org/ns/org#hasUnit") , URIRef("http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#Kilogram") ))
-	rdfResult.add( (result, URIRef("http://dbpedia.org/ontology/ratio"), Literal(factor) ))
-
 	rdfResult.serialize(destination='output.txt', format='turtle')
 
 	for stmt in rdfResult:
