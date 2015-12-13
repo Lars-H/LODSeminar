@@ -46,11 +46,7 @@ class DBPediaWrapper:
 		#Decode 
 		if(len(results['results']['bindings']) > 0):
 			#As of now: Return the first result
-			print(len(results['results']['bindings']))
-			print(len(results))
 			i  = random.randrange(0, len(results)- 1, 1)
-			print(i)
-			#i = 0;
 			try:
 				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
 			except ValueError:	

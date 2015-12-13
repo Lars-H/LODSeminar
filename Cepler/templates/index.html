@@ -47,21 +47,30 @@
 			</select>
 	</div>
 	</form>
-	<canvas height="50"></canvas>
-	<div  id='infoDiv'  style="display:none;" height="20" >
-		<label id="outputLabel" font size="14"> </input>
-	</div>
-	<canvas height="50"></canvas>
+	<canvas height="100"></canvas>
 	<div align="center">
 		<button type="button" id="button" onclick="tryItClick()" >Try it!</button>
 	</div>
 <!--<span id=result>?</span>-->
+
 
 <div id="bottom">
        <img id="bottomPic" src="/static/logo.png" />
  </div>
 
 </div>
+
+
+<div id="overlay" class="overlayCl">
+     <div class="ovClass">
+     	<p id="overlayHeader"></p>
+     	<p id="resultText"></p>  
+     	<button id="overlayButton"  class="ovBtn" onclick="overlay(false)" >Close</button>
+     </div> 
+</div>
+
+
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
 	window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')
@@ -78,8 +87,6 @@
 		//First: check input validity
 		var value = document.getElementById('textbox').value;
 		var selectedUnit = document.getElementById('slct').value;
-
-
 		if( document.getElementById('slct').selectedIndex == 0)
 		{
 			ShowMessage("Please select a valid unit.");
@@ -106,13 +113,34 @@
 				}				
 			}
 		}
+		overlay(true);
 
 	}
 
-	function ShowMessage( text )
+	function ShowMessage( text, displayType )
 	{
-		document.getElementById('outputLabel').innerHTML = text;
-		document.getElementById('infoDiv').style.display = "";
+		DisplayResult(text, displayType)
+
+	}
+
+	function ShowMessage( text)
+	{
+		DisplayResult(text, "")
+	}
+
+
+	function overlay(show )
+	 {
+	 	if(show)
+	 	{
+			el = document.getElementById("overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+		}
+		else
+		{
+			el = document.getElementById("overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+		}
 	}
 	
 	function processRequest( value, unit)
@@ -136,7 +164,21 @@
 
 	function handleResponse(response)
 	{
-		ShowMessage(response.result);
+		DisplayResult(response.result, "result");
+	}
+
+	function DisplayResult( text, displayType )
+	{
+		if(displayType.toString() == "result")
+		{
+			document.getElementById('overlayHeader').innerHTML = "Cepler found a comparison:"
+			document.getElementById('resultText').innerHTML = text.toString();
+		}	
+		else
+		{
+			document.getElementById('overlayHeader').innerHTML = "Ups, something went wrong..."
+			document.getElementById('resultText').innerHTML = text.toString();
+		}
 	}
 
 
