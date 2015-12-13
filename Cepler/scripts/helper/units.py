@@ -13,7 +13,7 @@ class DistanceUnits(enum.Enum):
 
 class MonetaryUnits(enum.Enum):
 	EURO = 'euro'
-	DOLLAR = 'us-dollar'
+	DOLLAR = 'usd'
 
 class WikidataUnits:
 	wdUnits = { MassUnits.TON.value: "https://www.wikidata.org/wiki/Q191118", 
