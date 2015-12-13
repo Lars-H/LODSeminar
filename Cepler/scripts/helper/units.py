@@ -12,8 +12,8 @@ class DistanceUnits(enum.Enum):
 	CENTIMETER = 'cm'
 
 class MonetaryUnits(enum.Enum):
-	EURO = 'Euro'
-	DOLLAR = 'US-Dollar'
+	EURO = 'euro'
+	DOLLAR = 'us-dollar'
 
 class WikidataUnits:
 	wdUnits = { MassUnits.TON.value: "https://www.wikidata.org/wiki/Q191118", 
