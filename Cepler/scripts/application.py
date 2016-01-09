@@ -1,28 +1,27 @@
-from wrapper.dbpedia.dbpediaWrapper import DBPediaWrapper
-import simplejson as json
-from StringIO import StringIO
-from helper.properties import Mapping
-import random
+from graphutils.graphutils import GraphBuilder
 from helper.conversion import Conversions
-import helper.units as units
+from helper.factor import Factor
+from helper.properties import Mapping
+from helper.range import Range
 from helper.units import MassUnits, DistanceUnits, MonetaryUnits, WikidataUnits
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
+from StringIO import StringIO
+from wrapper.dbpedia.dbpediaWrapper import DBPediaWrapper
+import helper.units as units
 import pprint
+import random
+import simplejson as json
 import sys
-from helper.factor import Factor
-from helper.range import Range
-from graphutils.graphutils import GraphBuilder
 
-# Is called from the server with a value, a unit, and an output format.
-# Parses the input, normalizes it, decides which wrapper to query and
-# communicates with that wrapper. Than outputs the response back to the server.
-# Nico Haubner, 20151212
+# Methods for factor or interface communication.
 class RequestHandler: 	
 
 	# For logging:
 	logString = "APPLICATION - "
 
-	# This method does all the work.
+	# Is called from the server with a value, a unit, and an output format.
+	# Parses the input, normalizes it, decides which wrapper to query and
+	# communicates with that wrapper. Than outputs the response back to the server.
 	def getResponse(self, inValue, inUnit):
 
 		# Instance of GraphBuilder which builds the RDF graph.
@@ -38,8 +37,8 @@ class RequestHandler:
 		base_unit = units.baseUnit(quantity)
 		print(RequestHandler.logString + "Base unit: " + str(base_unit))
 		
-		# Input is normalized to base units.
-		print(RequestHandler.logString)
+		# Input is normalized to base unit.
+		print(RequestHandler.logString),
 		norm_value = Conversions().convert(orig_value, orig_unit, quantity)
 
 		# The normalized input value is divided by a partly randomized factor.
@@ -49,7 +48,7 @@ class RequestHandler:
 		print(RequestHandler.logString + "Therefore we will query " + str(query_value)+".")
 
 		# Start building the final RDF graph. The "request" and part of the "query"
-		# section are produced now. TODO: don't write factor before final graph.
+		# section are produced now.
 		requestGraph = self.buildRequestGraph(graphBuilder, orig_unit, orig_value)
 
 		# A range inside which results can lie around the query value is determined.
@@ -59,37 +58,24 @@ class RequestHandler:
 				str(query_value+range/2) + " can be returned.")
 
 		# Right now, only the DBpedia wrapper is queried.
-		# TODO add process to rank wrappers and call them.
+		# TODO add process to rank wrappers and call them (as soon as more than one wrapper is available)
 		rdfResult = self.getData("dbpedia", query_value, base_unit, range)
 
 		# Process results
-		outStr = ""
-
 		if rdfResult is not None:
 
-			# For debugging, uncomment:
-			#rdfResult.serialize(destination='output.txt', format='turtle')
-
-			# Test whether merging graphs works
+			# Merge request and result graphs and add the factor
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
 			finalGraph = graphBuilder.addFactorToGraph(factor)
 
-			# Build an output string from the final graph.
-			outStr = graphBuilder.buildOutputString(orig_unit)
+			# Convert output graph to JSON-LD and save as file (for debugging).
+			finalGraph.serialize(destination='factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
-			# For debugging:
-
-			#for stmt in finalGraph:
-			#	pprint.pprint(stmt)
-			finalGraph.serialize(destination='finalgraph.txt', format='turtle')
+			# Return graph to the calling program.		
+			return finalGraph.serialize(format='json-ld', indent=4)
 
 		else:
-			outStr = "No results matched this time. Try again!"
-
-		# Return graph to the calling program.		
-		print(RequestHandler.logString + "This output string is passed to the UI:")
-		print(RequestHandler.logString + outStr)
-		return outStr
+			return "No results matched this time. Try again!"
 
 	# When "interface" is queried as API. TODO comment.
 	def getResource(self, wrapper, query_value, base_unit, range):
@@ -143,7 +129,7 @@ class RequestHandler:
 		#for stmt in finalGraph:
 		#	pprint.pprint(stmt)
 		if rdfResult is not None:
-			rdfResult.serialize(destination='resultgraph.txt', format='turtle')
+			rdfResult.serialize(destination='resultGraph.txt', format='turtle')
 
 		return rdfResult
 
@@ -182,5 +168,5 @@ class RequestHandler:
 		# For debugging:
 		#for stmt in requestGraph:
 		#		pprint.pprint(stmt)
-		requestGraph.serialize(destination='requestgraph.txt', format='turtle')
+		requestGraph.serialize(destination='requestGraph.txt', format='turtle')
 		return requestGraph
