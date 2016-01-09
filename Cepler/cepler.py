@@ -30,11 +30,6 @@ def compare():
         print('ERROR: The application has encountered an unexpected Error')  
         return jsonify(result = 'no result was found') 
 
-@app.route('/compare')
-#@produces('application/json')
-def compare_json():
-    return page_not_found;
-
 
 #Handling direct negotiation with interfaces
 @app.route('/<path:source>/compare')
