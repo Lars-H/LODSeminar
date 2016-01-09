@@ -12,20 +12,33 @@ app = Flask(__name__)
 @app.route('/compare')
 #@produces('text/html')
 def compare():
+    acceptHeader = str(request.accept_mimetypes)
+    print(acceptHeader)
     #Get the variable value and unit
     try:
         value = request.args.get('v')
         unit = request.args.get('u')
     except IOError:
-        return page_not_found;
+        return badRequest();
 
     try:
-        #Send Request to application
-        handler = RequestHandler();
-        stringResp = handler.getResponse(value, unit)
-        print(stringResp)
-        #Check if request could be answered
-        return jsonify(result = str(stringResp))
+        if not (unit is None) and not(value is None):
+            #Send Request to application
+            handler = RequestHandler();
+            response = handler.getResponse(value, unit)
+            print(str(response))
+            if not (response is None):
+                if "application/ld+json" in acceptHeader:
+                    return response;
+                elif "application/json" in acceptHeader:
+                    return jsonify(result = 'You wanted HTML?!'); 
+                else:
+                    return badRequest();
+            #Check if request could be answered
+            else:
+               return jsonify(result = 'no result was found');
+        else:
+            return badRequest();        
     except ValueError:   
         print('ERROR: The application has encountered an unexpected Error')  
         return jsonify(result = 'no result was found') 
@@ -61,8 +74,8 @@ def datasources():
 
 #Other Function
 
-def page_not_found():
-    return abort(404);
+def badRequest():
+    return abort(400);
 
 
 if __name__ == '__main__':

@@ -40,9 +40,13 @@ h3 {
   color: #04B45F;
 }
 
-h4 {
+h31 {
   font-family: 'Raleway', sans-serif;
-  font-size: 16px;
+  font-size: 24px;
+  font-style: thin;
+  font-variant: normal;
+  font-weight: 500;
+  line-height: 26px;
   color: #333;
 }
 
@@ -161,9 +165,11 @@ it:hover{
 	width: 230px;
 	font-size: 16px;
 	outline: 0 ;
-	opacity: 0.7;
 	text-indent: 5px;
   vertical-align: 70%;
+  opacity: 0.7;
+  -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
 #outputTb {
@@ -191,6 +197,10 @@ it:hover{
        -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
+}
+
+#slct:hover{
+  background-color: #04B45F;
 }
 
 .button {
@@ -546,10 +556,20 @@ it:hover{
   width: 80%;
 }
 
-.left_col {
-  width: 50%;
+.div_res {
+  width: 80%;
+  min-height: 100px;
+  background-color: #f2f2f2;
+  border-top-left-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
+  align: center;
+  margin: auto;
+  border: 1px solid #04B45F;
+  padding: 10px;
 }
 
-.right {
-  width: 50%;
+#outer_res_div {
+  /*display: none; /*
 }
