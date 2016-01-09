@@ -73,6 +73,7 @@ class GraphUtils:
 		for resultUri in self.g.objects(BNode('result'), self.PURLD.hasURI): # should only occur once!
 			outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(resultUri) + "\">More information</a>"
 		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
-			outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(pic) + "\">Picture</a>"
-
+			#outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(pic) + "\">Picture</a>"
+			outStr += "</br> </br> <img src=\"" + str(pic) + "\" height=\"250\" width=\"250\" ></img>"
+			#<img src="smiley.gif" alt="Smiley face" height="42" width="42">
 		return outStr

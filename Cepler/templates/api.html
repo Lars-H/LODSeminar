@@ -1,32 +1,203 @@
 <!doctype html>
 <html>
 <head>
-	<title>Cepler</title>
+	<title>Cepler - API</title>
 	<meta charset="iso-8859-1">	
 	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
-<ul>
-	<ul style="float:right;list-style-type:none;">
-	  <li><a href="/">Try it!</a></li>
-	  <li><a href="/api">The Cepler API</a></li>
-	  <li><a href="/about">About</a></li>
-	</ul>
-</ul>
-<canvas height="100"></canvas>
-<div align=center>
-<label>
-	<h1 font size="20" >
-	The Cepler API
-	</font>
-</label>
-</div>
-<div align=center>
-<div  id="d2" align=center >
-</div>
-</div>
+</head>
 
-<div id="bottom">
-       <img id="bottomPic" src="/static/logo.png" />
+<body>
+
+<!-- NAVIGATION -->	
+<div id="nav_container">
+	<nav id="primary_nav_wrap">
+	<ul class="menu_item">
+	  <li><a href="/"><it>Try it!</it></a>
+	  <li><a href="#"><it>Resources</it></a>
+	    <ul>
+	      <li><a href="/api"><it>API</it></a></li>
+	      <li><a href="/ontology"><it>Ontology</it></a></li>
+	      <li><a href="/datasources"><it>Data Sources</it></a></li>
+	    </ul>
+	  </li>
+	  <li><a href="/about"><it>About</it></a></li>
+	</ul>
+	</nav>
 </div>
+<!--Buffer Div-->
+<div id="buffer_div"> 
+</div> 
+
+
+<!-- Main Div -->	
+<div id="main_div"> 
+	<div class="api_div">
+	<p class="header">Cepler API<subtext> version 1.0</subtext></h1></p>
+	<p class="subtext">http://cepler.org/</p>
+	<div class="line_div"></div>
+	<div style="height:32px;"></div>
+<!-- MAIN /Compare-->
+	<div class="method_container">
+		<div class="Mhead"><p1 class="text">/compare</p1> </div>
+		<div class="Mbody"> 
+			<div class="center_body">
+				<div style="height:33px;">
+				<ul class="tabrow">
+					<li><a href="#request" style="text-decoration: none; color: black;">Request</a></li>
+					<li><a href="#response" style="text-decoration: none; color: black;">Response</a></li>
+					<li><a href="#example" style="text-decoration: none; color: black;">Example</a></li>
+				</ul>
+				<ul class="getrow">
+					<li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" style="text-decoration: none; color: white;">GET</a></li>
+				</ul>
+			</div>
+				<div>
+					<div>
+  						<div class="req_div" id="request">
+  							<div class="inner_div">
+  							<h3>Request</h3>
+  							<h2>Desciption:</h2>
+  							<p class="maintext">The compare method can be used in order to compare a given value and unit to another resource.
+  							</p>
+  							<h2>Parameters:</h2>
+  							<ul class="maintext" >
+  								<li style="font-weight:bold;">value (required)</li>
+  								<p><p1 style="font-style:italic;">Type: </p1>float </p>
+  								<p><p1 style="font-style:italic;">Example: </p1>12993 </p>
+  								<li style="font-weight:bold;">unit (required)</li>	
+  								<p><p1 style="font-style:italic;">Type: </p1>enum </p>
+  								<p><p1 style="font-style:italic;">Unit: </p1>[t,k,g,km,m,euro,usd] </p>
+  								<p><p1 style="font-style:italic;">Example: </p1>"t" </p>	
+  							</ul>
+  						</div>
+  						</div>
+						<div class="req_div" id="response">
+							<div class="inner_div">
+							<h3>Response</h3>
+							<h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/200">200</a> </h2>
+  							<p class="maintext" >If successful, a JSON-LD response is returned:</p>
+  							<div class="json_div">
+  							<pre>
+[
+  {
+    "@id": "_:result",
+    "@type": [
+      "http://dbpedia.org/ontology/Automobile"
+    ],
+    "http://lemon-model.net/lemon#context": [
+      {
+        "@id": "https://www.wikidata.org/wiki/Q11570"
+      }
+    ],
+    "http://purl.org/dqm-vocabulary/v1/dqm#hasURI": [
+      {
+        "@id": "http://dbpedia.org/resource/Penny_board"
+      }
+    ],
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+      {
+        "@value": 1.9
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Penny board"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/depiction": [
+      {
+        "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Penny_Skateboard_at_a_skateboard_and_surfer_shop_in_Shibuya,_Tokyo.jpg"
+      }
+    ]
+  },
+  {
+    "@id": "http://dbpedia.org/ontology/Automobile",
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "automobile"
+      }
+    ]
+  },
+  {
+    "@id": "_:query",
+    "http://schema.org/result": [
+      {
+        "@id": "_:result"
+      }
+    ],
+    "http://semanticscience.org/resource/SIO_001018": [
+      {
+        "@value": 16812
+      }
+    ],
+    "http://spinrdf.org/spin#query": [
+      {
+        "@id": "_:request"
+      }
+    ]
+  },
+  {
+    "@id": "_:request",
+    "@type": [
+      "http://purl.org/net/provenance/types#Query"
+    ],
+    "http://lemon-model.net/lemon#context": [
+      {
+        "@id": "https://www.wikidata.org/wiki/Q11570"
+      }
+    ],
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+      {
+        "@value": 33333.0
+      }
+    ]
+  }
+]</pre>
+  							</div>
+
+  							<p class="maintext" >If no result could be found:</p>
+  							<div class="json_div">
+  							<pre>
+[ { "result": "no result was found"}]  									
+  							</pre>
+  						</div>
+  							<h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
+  							<p class="maintext" >Client Error: The request could not be handled</p>
+  						</div>
+  						</div>	
+  						<div class="req_div" id="example">
+  							<div class="inner_div">
+  							<h3>Example</h3>
+  							<p class="maintext" >The following example request a value of "2000000" and a unit of "t" (tons):</p>
+  							<div class="json_div">
+  								<p class="maintext" style="left-margin=10px;"><pre> http://cepler.org/compare?v=2000000&u=t</pre></p>
+  							</div>
+  						</div>		
+  						</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="height:32px;"></div> 
+<div class="line_div"></div>
+<div style="height:32px;"></div> 
+
+
+</div>
+</div>
+<div style="height:50px;"></div>
+<!-- Footer -->	
+
+<footer>
+	<div id="footerText" align=center>
+	(C) Ben, Nico, Lars
+	</div>
+</footer>
+</body>
+
+
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
@@ -36,6 +207,4 @@
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-
-</head>
 </html>

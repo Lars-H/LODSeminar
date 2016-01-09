@@ -4,29 +4,40 @@
 	<title>Cepler</title>
 	<meta charset="iso-8859-1">	
 	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
-<ul>
-	<ul style="float:right;list-style-type:none;">
-	  <li><a href="/">Try it!</a></li>
-	  <li><a href="/api">The Cepler API</a></li>
-	  <li><a href="/about">About</a></li>
+	<link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->	
+<div id="nav_container">
+	<nav id="primary_nav_wrap">
+	<ul class="menu_item">
+	  <li><a href="/"><it>Try it!</it></a>
+	  <li><a href="#"><it>Resources</it></a>
+	    <ul>
+	      <li><a href="/api"><it>API</it></a></li>
+	      <li><a href="/ontology"><it>Ontology</it></a></li>
+	      <li><a href="/datasources"><it>Data Sources</it></a></li>
+	    </ul>
+	  </li>
+	  <li><a href="/about"><it>About</it></a></li>
 	</ul>
-</ul>
-<canvas height="100"></canvas>
-<div align=center>
-<label>
-	<h1 font size="20" >
-	Try out Cepler!
-	</font>
-</label>
-
-</br>
-</br>
-</br>
+	</nav>
+</div>
+<!--Buffer Div-->
+<div id="buffer_div"> 
+</div> 
 
 
-<form>
+<!-- Main Div -->	
+<div id="main_div"> 
+
+	<div id="controls" align="center">
+		<h1>Try out Cepler!</h1>
+	<form>
 	<div align=center>
-		<div >
+		<div style="height:60px;">
 			<input id="textbox"></input>
 			<select id ="slct" >
 			<option selected> Choose a unit... </option>
@@ -36,7 +47,7 @@
 			    <option value="g">g</option>
 			  </optgroup>
 			  <optgroup label="Distance">
-			    <option value="km">km</option>
+			    <option href="https://www.wikidata.org/wiki/Q828224" value="km">km</option>
 			    <option value="m">m</option>
 			    <option value="cm">cm</option>
 			  </optgroup>
@@ -45,30 +56,35 @@
 			    <option value="usd">US-Dollar</option>
 			  </optgroup>
 			</select>
-	</div>
+		</div>
 	</form>
-	<canvas height="100"></canvas>
-	<div align="center">
-		<button type="button" id="button" onclick="tryItClick()" >Try it!</button>
+	</div> 
+	<div id="button_try_div" align="center" >
+		<button type="button" class="button" onclick="tryItClick()" >Try it!</button>
 	</div>
-<!--<span id=result>?</span>-->
-
-
-<div id="bottom">
-       <img id="bottomPic" src="/static/logo.png" />
- </div>
+	</div>
 
 </div>
 
-
-<div id="overlay" class="overlayCl">
-     <div class="ovClass">
-     	<p id="overlayHeader"></p>
-     	<p id="resultText"></p>  
-     	<button id="overlayButton"  class="ovBtn" onclick="overlay(false)" >Close</button>
-     </div> 
+<!-- Result-->
+<div id="resultDiv" align="center">
+	<h2 style="color: #04B45F;"id="display_result"></h2>
 </div>
 
+
+
+
+
+<!-- Footer -->	
+<div style="height:50px;"></div>
+<footer>
+	<div id="footerText" align=center>
+	(C) Ben, Nico, Lars
+	</div>
+</footer>
+
+
+</body>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -89,17 +105,17 @@
 		var selectedUnit = document.getElementById('slct').value;
 		if( document.getElementById('slct').selectedIndex == 0)
 		{
-			ShowMessage("Please select a valid unit.");
+			ShowMessage("Please select a valid unit!");
 		}
 		else
 		{
 			if(value == "")
 			{
-				ShowMessage("Please enter a value.")
+				ShowMessage("Please enter a value!")
 			}
 			else if(!(Number(value)))
 			{
-				ShowMessage("Please enter a number.")
+				ShowMessage("Please enter a number!")
 			}
 			else
 			{
@@ -113,8 +129,6 @@
 				}				
 			}
 		}
-		overlay(true);
-
 	}
 
 	function ShowMessage( text, displayType )
@@ -127,37 +141,18 @@
 	{
 		DisplayResult(text, "")
 	}
-
-
-	function overlay(show )
-	 {
-	 	if(show)
-	 	{
-			el = document.getElementById("overlay");
-			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-		}
-		else
-		{
-			el = document.getElementById("overlay");
-			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-			document.getElementById('overlayHeader').innerHTML = "";
-			document.getElementById('resultText').innerHTML = "";
-		}
-	}
 	
 	function processRequest( value, unit)
 	{
 		$(function() 
 		{
     		
-      		$.getJSON($SCRIPT_ROOT + '/getJSON', 
+      		$.getJSON($SCRIPT_ROOT + '/compare', 
       		{
         		v: value,
-        		u: unit,
-        		k: "27121571"
+        		u: unit
       		}, function(data) 
       		{
-      			//$("#result").text(data.result);
       			handleResponse(data);
       			return false;
     		});
@@ -174,17 +169,16 @@
 		if(displayType.toString() == "result")
 		{
 			document.getElementById('overlayHeader').innerHTML = "Cepler found a comparison:"
-			document.getElementById('resultText').innerHTML = text.toString();
+			document.getElementById('display_result').innerHTML = text.toString();
 		}	
 		else
 		{
-			document.getElementById('overlayHeader').innerHTML = "Ups, something went wrong..."
-			document.getElementById('resultText').innerHTML = text.toString();
+			document.getElementById('display_result').innerHTML = text.toString();
 		}
 	}
 
 
 </script>
 <!-- $("#result").text(data.result); -->
-</head>
+
 </html>
