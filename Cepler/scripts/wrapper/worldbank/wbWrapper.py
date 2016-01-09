@@ -21,6 +21,14 @@ class wbWrapper:
 		self.sparql.setReturnFormat(self.outformat)
 		self.QueryPrefix = "select distinct ?indicator ?actualValue ?indicatorLabel ?countryLabel WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
+		self.__initNamespaces();
+		return;
+
+	def __initNamespaces(self):
+		#Define Namespaces
+		self.CEP = Namespace('http://cepler.org/ontology#')
+		self.WD = Namespace('https://www.wikidata.org/wiki/')
+		
 		return;
 
 	#Main function that gets the results
@@ -38,7 +46,7 @@ class wbWrapper:
 			print i 
 			try:
 				rdfResult = self.resultToRDF(results['results']['bindings'][i])
-			except:	
+			except ValueError:	
 				rdfResult = None
 
 		#Return Wrapper Result
@@ -101,10 +109,10 @@ class wbWrapper:
 
 
 	def resultToRDF(self, result):
-		#print(result)
+		print(result)
 		if(bool(result)):
 			indicatorNode = result['indicator']
-			indicatorValue = indicatorNode['value']
+			indicatorURI = indicatorNode['value']
 
 			indicatorLabelNode = result['indicatorLabel']
 			indicatorLabelValue = indicatorLabelNode['value']  
@@ -117,17 +125,29 @@ class wbWrapper:
 			indicatorActualValueNode = result['actualValue']
 			indicatorActualValue = indicatorActualValueNode['value']
 
-			g = Graph()
+			#build graph
+
+			g = self.__initGraph()
 
 			response = BNode('result1');
 
-#?indicator ?value ?indicatorLabel ?countryLabel
-
-			#g.add( (response, self.PURLD.hasURI, URIRef(uriValue)))
 			g.add( (response, RDFS.label , Literal(combinedLabelValue) ))
 			g.add( (response, RDF.value , Literal(indicatorActualValue) )) 
-
+			g.add( (response, self.CEP.unit , self.WD.Q4917))
+			g.add( (response, RDF.type , self.CEP.Result))
+			g.add( (response, self.CEP.uri , URIRef(indicatorURI)))
 			
 			g.serialize(destination='output.txt', format='n3')
 
 		return g	
+
+	def __initGraph(self):
+	#Initialize Graph
+		g = Graph()
+
+		#Bind Namespace to string variable
+		g.bind('cep', self.CEP)
+		g.bind('wd', self.WD)
+		g.bind('foaf', FOAF)
+		return g;		
+
