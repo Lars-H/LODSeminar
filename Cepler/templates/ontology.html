@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+	<title>Cepler - Ontology</title>
+	<meta charset="iso-8859-1">	
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
+</head>
+
+<body>
+
+<!-- NAVIGATION -->	
+<div id="nav_container">
+	<nav id="primary_nav_wrap">
+	<ul class="menu_item">
+	  <li><a href="/"><it>Try it!</it></a>
+	  <li><a href="#"><it>Resources</it></a>
+	    <ul>
+	      <li><a href="/api"><it>API</it></a></li>
+	      <li><a href="/ontology"><it>Ontology</it></a></li>
+	      <li><a href="/datasources"><it>Data Sources</it></a></li>
+	    </ul>
+	  </li>
+	  <li><a href="/about"><it>About</it></a></li>
+	</ul>
+	</nav>
+</div>
+<!--Buffer Div-->
+<div id="buffer_div"> 
+</div> 
+
+
+<!-- Main Div -->	
+<div id="main_div"> 
+	<div class="api_div">
+	<p class="header">Cepler Ontology<subtext> so that you know what we talk about</subtext></h1></p>
+	<div class="line_div"></div>
+	<div style="height:32px;"></div>
+	<div class="simple_div">
+		<div class="inner_div">
+			<p class="maintext">
+				Please find our ontology described in RDF below.
+			</p>
+			<div style="height:32px;"></div>
+			<!--A property-->
+			<h1 id="factor">cep:factor</h1>
+			<div class="line_div_b"></div>
+			<table style="width:80%; left-margin: 10%;">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
+			    <td>'Sets a query and a result into a binary relation.'</td> 
+
+			  </tr>
+			</table>
+
+			<!--A property-->
+			<h1 id="query">cep:query</h1>
+			<div class="line_div_b"></div>
+			<table style="width:80%; left-margin: 10%;">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
+			    <td>'Sets a query and a result into a binary relation.'</td> 
+
+			  </tr>
+			</table>
+
+			<!--A property-->
+			<h1 id="response">cep:response</h1>
+			<div class="line_div_b"></div>
+			<table style="width:80%; left-margin: 10%;">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
+			    <td>'Sets a query and a result into a binary relation.'</td> 
+
+			  </tr>
+			</table>
+
+				<h1>Other Resources</h1>
+			<div class="line_div_b"></div>
+		</div>
+
+
+
+		<div class="json_div" style="margin:5px;">
+			<p>
+				<pre>
+@prefix rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns# .
+@prefix rdfs: http://www.w3.org/2000/01/rdf-schema# .
+@prefix xml: http://www.w3.org/XML/1998/namespace .
+@prefix xsd: http://www.w3.org/2001/XMLSchema# .
+@prefix cep: http://www.cepler.org/ontology.
+
+cep:factor rdfs:label 'Sets a query and a result into a binary relation.'.
+</pre>
+
+			</p>
+		</div>
+	</div>
+</div>
+</div> 
+
+
+<!-- Footer -->	
+
+<footer>
+	<div id="footerText" align=center>
+	(C) Ben, Nico, Lars
+	</div>
+</footer>
+</body>
+
+
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')
+</script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+</html>

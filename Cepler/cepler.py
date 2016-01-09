@@ -1,46 +1,48 @@
 #!/usr/bin/env python
-from flask import Flask, jsonify, render_template, request
+import os
+from flask import Flask, jsonify, render_template, request, abort
 from scripts.application import RequestHandler
+from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
+from flask_negotiate import consumes, produces
 
 
 app = Flask(__name__)
 
-@app.route('/getJSON')
-def getJSON():
+#API Methods
+@app.route('/compare')
+#@produces('text/html')
+def compare():
     #Get the variable value and unit
-    value = request.args.get('v')
-    unit = request.args.get('u')
-    key = request.args.get('k')
+    try:
+        value = request.args.get('v')
+        unit = request.args.get('u')
+    except IOError:
+        return page_not_found;
 
-    if key == "27121571":
-        try:
-            #Send Request to application
-            handler = RequestHandler();
-            stringResp = handler.getResponse(value, unit, 'json')
-            print(stringResp)
-            #Check if request could be answered
-            return jsonify(result = str(stringResp))
-        except ValueError:   
-            print('ERROR: The application has encountered an unexpected Error')  
-            return jsonify(result = 'Sorry, we could not process your request! :(')
-    else: 
-        return jsonify(result = 'Invalid key')
+    try:
+        #Send Request to application
+        handler = RequestHandler();
+        stringResp = handler.getResponse(value, unit, 'json')
+        print(stringResp)
+        #Check if request could be answered
+        return jsonify(result = str(stringResp))
+    except ValueError:   
+        print('ERROR: The application has encountered an unexpected Error')  
+        return jsonify(result = 'no result was found') 
 
-    
+@app.route('/compare')
+#@produces('application/json')
+def compare_json():
+    return page_not_found;
 
-@app.route('/getRDF')
-def getRDF():
-    #Get the variable value and unit
-    value = request.args.get('v')
-    unit = request.args.get('u')
 
-    #Send Request to application
-    #handler = RequestHandler();
-    #handler.getResponse(value, unit, 'rdf')
+#Handling direct negotiation with interfaces
+@app.route('/<path:source>/compare')
+def compaer_other(source):
+    s = str(source)
+    return jsonify(result = 'not implemented yet: ' + str(s));
 
-    #Check if request could be answered
-    return jsonify(result = 'Here is your RDF data')            
-
+#HTML Pages
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -52,6 +54,20 @@ def about():
 @app.route('/api')
 def api():
     return render_template('api.html')    
+
+@app.route('/ontology')
+def ontology():
+    return render_template('ontology.html')  
+
+
+@app.route('/datasources')
+def datasources():
+    return render_template('datasources.html')      
+
+#Other Function
+
+def page_not_found():
+    return abort(404);
 
 
 if __name__ == '__main__':
