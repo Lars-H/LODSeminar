@@ -4,11 +4,11 @@ from properties import Mapping
 # convert to base unit
 def baseUnit(quantity):
 	if quantity == Mapping.COST:
-		return MonetaryUnits.DOLLAR
+		return MonetaryUnits.DOLLAR.value
 	elif quantity == Mapping.DISTANCE:
-		return DistanceUnits.METER
+		return DistanceUnits.METER.value
 	elif quantity == Mapping.WEIGHT:
-		return MassUnits.KILOGRAM
+		return MassUnits.KILOGRAM.value
 
 # List of possible input units
 class MassUnits(enum.Enum):

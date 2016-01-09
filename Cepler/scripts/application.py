@@ -36,6 +36,7 @@ class RequestHandler:
 		# It is decided from orig_unit which quantity we want to query.
 		quantity = self.decideContext(orig_unit)
 		base_unit = units.baseUnit(quantity)
+		print(RequestHandler.logString + "Base unit: " + str(base_unit))
 		
 		# Input is normalized to base units.
 		print(RequestHandler.logString)
@@ -79,7 +80,7 @@ class RequestHandler:
 
 			#for stmt in finalGraph:
 			#	pprint.pprint(stmt)
-			requestGraph.serialize(destination='finalgraph.txt', format='turtle')
+			finalGraph.serialize(destination='finalgraph.txt', format='turtle')
 
 		else:
 			outStr = "No results matched this time. Try again!"

@@ -35,7 +35,6 @@ class GraphBuilder:
 		self.g.add( (BNode('query'), self.SEMS.SIO_001018, Literal(int(factor))) )
 		self.g.add( (BNode('request'), RDF.type, self.PURLP.Query) )
 		self.g.add( (BNode('request'), RDF.value, Literal(float(inValue))) )
-		# TODO right unit here!
 		self.g.add( (BNode('request'), self.LEMON.context, URIRef(inUnit_wd)) )
 
 		return self.g
