@@ -1,32 +1,39 @@
-import rdflib
-from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
 from rdflib import Graph, BNode, Literal, URIRef
+from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
+import rdflib
 
 class GraphBuilder:
+
+	# Define some namespaces
+
+	#self.LEMON = Namespace('http://lemon-model.net/lemon#')
+	#self.PURLD = Namespace('http://purl.org/dqm-vocabulary/v1/dqm#')
+	#self.PURLP = Namespace('http://purl.org/net/provenance/types#')
+	#self.SCHEMA = Namespace('http://schema.org/')
+	#self.SEMS = Namespace('http://semanticscience.org/resource/')
+	#self.SPIN = Namespace('http://spinrdf.org/spin#')
+	#self.WD = Namespace('https://www.wikidata.org/wiki/')
+	CEP = Namespace('http://www.cepler.org/ontology#')
+	FOAF = Namespace('http://xmlns.com/foaf/0.1/')
+
+	
 	# Constructor
 	def __init__(self):
+		
+		# Create graph
 		self.g = Graph()
 
-		# Define some namespaces
-		#self.SPIN = Namespace('http://spinrdf.org/spin#')
-		#self.SEMS = Namespace('http://semanticscience.org/resource/')
-		#self.SCHEMA = Namespace('http://schema.org/')
-		#self.PURLP = Namespace('http://purl.org/net/provenance/types#')
-		#self.PURLD = Namespace('http://purl.org/dqm-vocabulary/v1/dqm#')
-		#self.LEMON = Namespace('http://lemon-model.net/lemon#')
-		#self.WD = Namespace('https://www.wikidata.org/wiki/')
-		FOAF = Namespace('http://xmlns.com/foaf/0.1/')
-		CEP = Namespace('http://www.cepler.org/ontology#')
-
-		#self.g.bind("spin", self.SPIN)
-		#self.g.bind("sems", self.SEMS)
-		#self.g.bind("schema", self.SCHEMA)
-		#self.g.bind("purlp", self.PURLP)
-		#self.g.bind("purld", self.PURLD)
+		# Define prefixes
 		#self.g.bind("lemon", self.LEMON)
+		#self.g.bind("purld", self.PURLD)
+		#self.g.bind("purlp", self.PURLP)
+		#self.g.bind("schema", self.SCHEMA)
+		#self.g.bind("sems", self.SEMS)
+		#self.g.bind("spin", self.SPIN)
 		#self.g.bind("wd", self.WD)
-		self.g.bind("foaf", GraphBuilder.FOAF)
 		self.g.bind("cep", GraphBuilder.CEP)
+		self.g.bind("foaf", GraphBuilder.FOAF)
+
 
 	# This method builds the request section of the graph
 	# and the part of the query section that is connected 
@@ -65,8 +72,9 @@ class GraphBuilder:
 		self.g.add( (BNode('query'), GraphBuilder.CEP.factor, Literal(int(factor))) )
 		return self.g
 
+
 	# This method builds a string which displays results and is passed to the UI.
-	# 20160109: deprecated and not used anymore (Nico)
+	# 20160109: deprecated and not used anymore, useful though so keep it temporarily (Nico)
 	#def buildOutputString(self, inUnit):
 	#	outStr = ""
 	#	for inValue in self.g.objects(BNode('request'), RDF.value): # should only occur once!
@@ -84,7 +92,7 @@ class GraphBuilder:
 	#	for typeLabel in self.g.objects(resultType, RDFS.label): # should occur 0 or 1 times!
 	#		outStr += ", which is a " + str(typeLabel)
 	#	outStr += "."
-#
+
 	#	# This is preliminary for the interim presentation:
 	#	for resultUri in self.g.objects(BNode('result'), self.PURLD.hasURI): # should only occur once!
 	#		outStr += "</br> </br> <a target=\"_blank\" href=\"" + str(resultUri) + "\">More information</a>"

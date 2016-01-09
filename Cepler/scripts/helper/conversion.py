@@ -1,5 +1,5 @@
-from units import MassUnits, DistanceUnits, MonetaryUnits
 from properties import Mapping
+from units import MassUnits, DistanceUnits, MonetaryUnits
 import sys
 
 class Conversions:

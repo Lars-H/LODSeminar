@@ -52,7 +52,7 @@ class RequestHandler:
 		requestGraph = self.buildRequestGraph(graphBuilder, orig_unit, orig_value)
 
 		# For debugging:
-		requestGraph.serialize(destination='factorRequestGraph.txt', format='turtle')
+		requestGraph.serialize(destination='graph_tests/factorRequestGraph.txt', format='turtle')
 
 		# A range inside which results can lie around the query value is determined.
 		range = Range().getRange(query_value)
@@ -68,14 +68,14 @@ class RequestHandler:
 		if rdfResult is not None:
 
 			# For debugging:
-			rdfResult.serialize(destination='factorResultGraph.txt', format='turtle')
+			rdfResult.serialize(destination='graph_tests/factorResultGraph.txt', format='turtle')
 
 			# Merge request and result graphs and add the factor
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
 			finalGraph = graphBuilder.addFactorToGraph(factor)
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
-			finalGraph.serialize(destination='factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+			finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
 			# Return graph to the calling program.		
 			return finalGraph.serialize(format='json-ld', indent=4)
@@ -93,7 +93,7 @@ class RequestHandler:
 		requestGraph = self.buildRequestGraph(graphBuilder, base_unit, query_value)
 
 		# For debugging:
-		requestGraph.serialize(destination='interfaceRequestGraph.txt', format='turtle')
+		requestGraph.serialize(destination='graph_tests/interfaceRequestGraph.txt', format='turtle')
 
 		# Get data from wrapper
 		rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
@@ -102,13 +102,13 @@ class RequestHandler:
 		if rdfResult is not None:
 
 			# For debugging, uncomment:
-			rdfResult.serialize(destination='interfaceResultGraph.txt', format='turtle')
+			rdfResult.serialize(destination='graph_tests/interfaceResultGraph.txt', format='turtle')
 
 			# Test whether merging graphs works
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
-			finalGraph.serialize(destination='interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+			finalGraph.serialize(destination='graph_tests/interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
 			# Return to API user.
 			return finalGraph.serialize(format='json-ld', indent=4)

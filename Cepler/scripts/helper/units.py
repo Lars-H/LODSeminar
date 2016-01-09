@@ -1,5 +1,5 @@
-import enum
 from properties import Mapping
+import enum
 
 # convert to base unit
 def baseUnit(quantity):
