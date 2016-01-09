@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+	<title>Cepler</title>
+	<meta charset="iso-8859-1">	
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
+</head>
+
+<body>
+
+<!-- NAVIGATION -->	
+<div id="nav_container">
+	<nav id="primary_nav_wrap">
+	<ul class="menu_item">
+	  <li><a href="/"><it>Try it!</it></a>
+	  <li><a href="#"><it>Resources</it></a>
+	    <ul>
+	      <li><a href="/api"><it>API</it></a></li>
+	      <li><a href="/ontology"><it>Ontology</it></a></li>
+	      <li><a href="/datasources"><it>Data Sources</it></a></li>
+	    </ul>
+	  </li>
+	  <li><a href="/about"><it>About</it></a></li>
+	</ul>
+	</nav>
+</div>
+<!--Buffer Div-->
+<div id="buffer_div"> 
+</div> 
+
+
+<!-- Main Div -->	
+<div id="main_div"> 
+
+</div> 
+
+
+<!-- Footer -->	
+
+<footer>
+	<div id="footerText" align=center>
+	(C) Ben, Nico, Lars
+	</div>
+</footer>
+</body>
+
+
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')
+</script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+</html>
