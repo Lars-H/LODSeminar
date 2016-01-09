@@ -51,6 +51,9 @@ class RequestHandler:
 		# section are produced now.
 		requestGraph = self.buildRequestGraph(graphBuilder, orig_unit, orig_value)
 
+		# For debugging:
+		requestGraph.serialize(destination='factorRequestGraph.txt', format='turtle')
+
 		# A range inside which results can lie around the query value is determined.
 		range = Range().getRange(query_value)
 		print(RequestHandler.logString + "Range is " + str(range) + ", meaning values between " + 
@@ -64,6 +67,9 @@ class RequestHandler:
 		# Process results
 		if rdfResult is not None:
 
+			# For debugging:
+			rdfResult.serialize(destination='factorResultGraph.txt', format='turtle')
+
 			# Merge request and result graphs and add the factor
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
 			finalGraph = graphBuilder.addFactorToGraph(factor)
@@ -75,7 +81,7 @@ class RequestHandler:
 			return finalGraph.serialize(format='json-ld', indent=4)
 
 		else:
-			return "No results matched this time. Try again!"
+			return None
 
 	# When "interface" is queried as API. TODO comment.
 	def getResource(self, wrapper, query_value, base_unit, range):
@@ -86,6 +92,9 @@ class RequestHandler:
 		# Build request graph
 		requestGraph = self.buildRequestGraph(graphBuilder, base_unit, query_value)
 
+		# For debugging:
+		requestGraph.serialize(destination='interfaceRequestGraph.txt', format='turtle')
+
 		# Get data from wrapper
 		rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
 
@@ -93,23 +102,20 @@ class RequestHandler:
 		if rdfResult is not None:
 
 			# For debugging, uncomment:
-			rdfResult.serialize(destination='apiResultGraph.txt', format='turtle')
+			rdfResult.serialize(destination='interfaceResultGraph.txt', format='turtle')
 
 			# Test whether merging graphs works
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
 
-			# For debugging:
-
-			#for stmt in finalGraph:
-			#	pprint.pprint(stmt)
-			finalGraph.serialize(destination='apiFinalGraph.txt', format='turtle')
+			# Convert output graph to JSON-LD and save as file (for debugging).
+			finalGraph.serialize(destination='interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
 			# Return to API user.
-			return finalGraph
+			return finalGraph.serialize(format='json-ld', indent=4)
 
 		# If no result available:
 		else:
-			return "Sorry, no API results :("
+			return None
 
 
 	# Communicates with wrapper. TODO comment.
@@ -123,13 +129,6 @@ class RequestHandler:
 		quantity = self.decideContext(base_unit)
 		print(RequestHandler.logString + "Query to DBPediaWrapper: (" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
 		rdfResult = dbpWrapper.getResults(quantity, query_value, range)
-
-		# For debugging:
-
-		#for stmt in finalGraph:
-		#	pprint.pprint(stmt)
-		if rdfResult is not None:
-			rdfResult.serialize(destination='resultGraph.txt', format='turtle')
 
 		return rdfResult
 
@@ -165,8 +164,5 @@ class RequestHandler:
 
 		# build graph
 		requestGraph = graphBuilder.buildRequestGraph(orig_value, orig_unit_wd)
-		# For debugging:
-		#for stmt in requestGraph:
-		#		pprint.pprint(stmt)
-		requestGraph.serialize(destination='requestGraph.txt', format='turtle')
+
 		return requestGraph
