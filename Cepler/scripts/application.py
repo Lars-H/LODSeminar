@@ -1,4 +1,4 @@
-from graphutils.graphutils import GraphBuilder
+from graphutils import GraphBuilder
 from helper.conversion import Conversions
 from helper.factor import Factor
 from helper.properties import Mapping
@@ -22,7 +22,7 @@ class RequestHandler:
 	# Is called from the server with a value, a unit, and an output format.
 	# Parses the input, normalizes it, decides which wrapper to query and
 	# communicates with that wrapper. Than outputs the response back to the server.
-	def getResponse(self, inValue, inUnit):
+	def getResponse(self, inValue, inUnit, outFormat):
 
 		# Instance of GraphBuilder which builds the RDF graph.
 		graphBuilder = GraphBuilder()
@@ -77,6 +77,8 @@ class RequestHandler:
 			# Convert output graph to JSON-LD and save as file (for debugging).
 			finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
 			finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+
+			# TODO process outFormat parameter here!
 
 			# INPROGRESS: Build a JSON document
 			print(graphBuilder.buildJSON(factor, inValue, inUnit))

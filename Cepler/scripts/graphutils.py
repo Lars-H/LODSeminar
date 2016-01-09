@@ -1,5 +1,6 @@
 from rdflib import Graph, BNode, Literal, URIRef
 from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
+from helper.units import WikidataUnits
 import json
 import rdflib
 
@@ -102,7 +103,11 @@ class GraphBuilder:
 
 		# out_unit
 		for outUnit in self.g.objects(BNode('result'), GraphBuilder.CEP.unit): # should only occur once!
-			query['out_unit'] = outUnit
+			temp = str(outUnit)
+
+		for key, value in WikidataUnits.wdUnits.iteritems():
+			if value == temp: # should also occur exactly once!
+				query['out_unit'] = key
 
 		# out_value
 		for outValue in self.g.objects(BNode('result'), RDF.value): # should only occur once!
