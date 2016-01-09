@@ -48,14 +48,13 @@ class wbWrapper:
 	#Constructor, defying explicit EndPointUrl
 	def setEndpointUrl(self, endPointUrl):
 		self.sparql = SPARQLWrapper(self.endPointUrl)
-
 		return;
 
 
 	def runQuery(self,  query ):		
 		self.sparql.setQuery(query);
 		results = self.sparql.query().convert()
-		print(len(results))
+		#print(len(results))
 		return results;
 
 	def buildQuery(self, unit, value, rng):
@@ -124,9 +123,9 @@ class wbWrapper:
 
 #?indicator ?value ?indicatorLabel ?countryLabel
 
-			g.add( (URIRef(indicatorValue) , RDF.type , response ))
-			g.add( (response, RDFS.label, Literal(combinedLabelValue) ))
-			g.add( (URIRef()))
+			#g.add( (response, self.PURLD.hasURI, URIRef(uriValue)))
+			g.add( (response, RDFS.label , Literal(combinedLabelValue) ))
+			g.add( (response, RDF.value , Literal(indicatorActualValue) )) 
 
 			
 			g.serialize(destination='output.txt', format='n3')

@@ -10,7 +10,7 @@ wbWrapper1 = wbWrapper();
 
 #testresult = wbWrapper1.buildQuery(Mapping.COST, 45000000000, 4500000000)
 
-rdfResult = wbWrapper1.getResults(Mapping.COST, 0, 10) 
+rdfResult = wbWrapper1.getResults(Mapping.COST, 450000, 20000) 
 
 """#Generate Random Division 
 orig_value = 45000000
@@ -42,10 +42,3 @@ if rdfResult is not None:
 
 	for stmt in rdfResult:
 		pprint.pprint(stmt)
-
-
-
-
-
-
-
