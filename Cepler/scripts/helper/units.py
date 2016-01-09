@@ -1,4 +1,14 @@
 import enum
+from properties import Mapping
+
+# convert to base unit
+def baseUnit(quantity):
+	if quantity == Mapping.COST:
+		return MonetaryUnits.DOLLAR
+	elif quantity == Mapping.DISTANCE:
+		return DistanceUnits.METER
+	elif quantity == Mapping.WEIGHT:
+		return MassUnits.KILOGRAM
 
 # List of possible input units
 class MassUnits(enum.Enum):

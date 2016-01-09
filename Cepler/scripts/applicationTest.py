@@ -2,4 +2,4 @@ import application as app
 import rdflib
 
 rq = app.RequestHandler()
-rdfResult = rq.getResponse('1234', 'kg', 'rdf')
+rdfResult = rq.getResource("dbpedia", 1000, "kg", 0.1)

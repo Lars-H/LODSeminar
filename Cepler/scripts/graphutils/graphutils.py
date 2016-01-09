@@ -2,7 +2,7 @@ import rdflib
 from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
 from rdflib import Graph, BNode, Literal, URIRef
 
-class GraphUtils:
+class GraphBuilder:
 	# Constructor
 	def __init__(self):
 		self.g = Graph()
