@@ -9,5 +9,5 @@ rq = app.RequestHandler()
 # For one of the interfaces use:
 # rq.getResource(datasource, value, unit, range)
 
-#print(rq.getResponse(1000, 'kg'))
-print(rq.getResource('dbpedia',1000,'kg',50))
+rq.getResponse(1000, 'kg')
+#print(rq.getResource('dbpedia',1000,'kg',50))

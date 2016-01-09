@@ -1,5 +1,6 @@
 from rdflib import Graph, BNode, Literal, URIRef
 from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
+import json
 import rdflib
 
 class GraphBuilder:
@@ -71,6 +72,59 @@ class GraphBuilder:
 		# Insert factor to query if applicable
 		self.g.add( (BNode('query'), GraphBuilder.CEP.factor, Literal(int(factor))) )
 		return self.g
+
+	# This method builds a JSON document to pass to the UI.
+	def buildJSON(self, factor, inValue, inUnit):
+
+		# Start with a dictionary
+		query = {'in_unit': '', 'in_value': '', 'factor': '',
+					'result_uri': '', 'result_label': '',
+					'out_unit': '', 'out_value': '', 'type_uri': '',
+					'type_label': '', 'depiction': ''}
+		
+		# Those three values are already known, easier than parsing from the graph
+		query['factor'] = factor
+		query['in_unit'] = inUnit
+		query['in_value'] = inValue
+
+		# Those values have to be parsed from the graph:
+
+		# result_uri
+		for resultUri in self.g.objects(BNode('result'), GraphBuilder.CEP.uri): # should only occur once!
+			query['result_uri'] = resultUri
+
+		# result_label
+		for resultLabel in self.g.objects(BNode('result'), RDFS.label): # should only occur once!
+			try:
+				query['result_label'] = resultLabel
+			except UnicodeEncodeError:
+				return "Oops! An invalid label was delivered by the datasource. Try again!"
+
+		# out_unit
+		for outUnit in self.g.objects(BNode('result'), GraphBuilder.CEP.unit): # should only occur once!
+			query['out_unit'] = outUnit
+
+		# out_value
+		for outValue in self.g.objects(BNode('result'), RDF.value): # should only occur once!
+			query['out_value'] = outValue
+
+		# type_uri
+		for typeURI in self.g.objects(query['result_uri'], RDF.type): # should occur 0 or 1 times!
+			query['type_uri'] = typeURI
+
+		# type_label
+		for typeLabel in self.g.objects(query['type_uri'], RDFS.label): # should occur once iff type_uri present!
+			query['type_label'] = typeLabel
+
+		# depiction
+		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
+			query['depiction'] = pic
+
+
+		jsonarray = json.dumps(query, sort_keys=True, indent=4, separators=(',', ': '))
+
+		return jsonarray
+
 
 
 	# This method builds a string which displays results and is passed to the UI.

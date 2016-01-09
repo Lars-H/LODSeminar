@@ -75,7 +75,11 @@ class RequestHandler:
 			finalGraph = graphBuilder.addFactorToGraph(factor)
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
+			finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
 			finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+
+			# INPROGRESS: Build a JSON document
+			print(graphBuilder.buildJSON(factor, inValue, inUnit))
 
 			# Return graph to the calling program.		
 			return finalGraph.serialize(format='json-ld', indent=4)
@@ -109,6 +113,7 @@ class RequestHandler:
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
 			finalGraph.serialize(destination='graph_tests/interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+			finalGraph.serialize(destination='graph_tests/interfaceFinalGraph.txt', format='turtle')
 
 			# Return to API user.
 			return finalGraph.serialize(format='json-ld', indent=4)
