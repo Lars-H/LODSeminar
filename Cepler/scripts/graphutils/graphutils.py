@@ -29,10 +29,8 @@ class GraphBuilder:
 	# This method builds the request section of the graph
 	# and the part of the query section that is connected 
 	# to the request section.
-	# TODO add factor at the end when a result was definitely found.
-	def buildRequestGraph(self, inValue, inUnit_wd, factor):
+	def buildRequestGraph(self, inValue, inUnit_wd):
 		self.g.add( (BNode('query'), self.SPIN.query, BNode('request')) )
-		self.g.add( (BNode('query'), self.SEMS.SIO_001018, Literal(int(factor))) )
 		self.g.add( (BNode('request'), RDF.type, self.PURLP.Query) )
 		self.g.add( (BNode('request'), RDF.value, Literal(float(inValue))) )
 		self.g.add( (BNode('request'), self.LEMON.context, URIRef(inUnit_wd)) )
@@ -47,6 +45,11 @@ class GraphBuilder:
 			self.g.add(triple)
 		self.g.add( (BNode('query'), self.SCHEMA.result, BNode('result')) )
 
+		return self.g
+
+	# If the program was queried with a factor, add it to the final graph
+	def addFactorToGraph(self, factor):
+		self.g.add( (BNode('query'), self.SEMS.SIO_001018, Literal(int(factor))) )
 		return self.g
 
 	# This method builds a string which displays results and is passed to the UI.

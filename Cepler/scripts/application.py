@@ -50,7 +50,7 @@ class RequestHandler:
 
 		# Start building the final RDF graph. The "request" and part of the "query"
 		# section are produced now. TODO: don't write factor before final graph.
-		requestGraph = self.buildRequestGraph(graphBuilder, orig_unit, orig_value, factor)
+		requestGraph = self.buildRequestGraph(graphBuilder, orig_unit, orig_value)
 
 		# A range inside which results can lie around the query value is determined.
 		range = Range().getRange(query_value)
@@ -60,7 +60,7 @@ class RequestHandler:
 
 		# Right now, only the DBpedia wrapper is queried.
 		# TODO add process to rank wrappers and call them.
-		rdfResult = self.getResource("dbpedia", query_value, base_unit, range)
+		rdfResult = self.getData("dbpedia", query_value, base_unit, range)
 
 		# Process results
 		outStr = ""
@@ -72,6 +72,7 @@ class RequestHandler:
 
 			# Test whether merging graphs works
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
+			finalGraph = graphBuilder.addFactorToGraph(factor)
 
 			# Build an output string from the final graph.
 			outStr = graphBuilder.buildOutputString(orig_unit)
@@ -90,9 +91,43 @@ class RequestHandler:
 		print(RequestHandler.logString + outStr)
 		return outStr
 
+	# When "interface" is queried as API. TODO comment.
+	def getResource(self, wrapper, query_value, base_unit, range):
+		
+		# Instance of GraphBuilder which builds the RDF graph.
+		graphBuilder = GraphBuilder()
+
+		# Build request graph
+		requestGraph = self.buildRequestGraph(graphBuilder, base_unit, query_value)
+
+		# Get data from wrapper
+		rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
+
+		# Merge request and result (no factor here).
+		if rdfResult is not None:
+
+			# For debugging, uncomment:
+			rdfResult.serialize(destination='apiResultGraph.txt', format='turtle')
+
+			# Test whether merging graphs works
+			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
+
+			# For debugging:
+
+			#for stmt in finalGraph:
+			#	pprint.pprint(stmt)
+			finalGraph.serialize(destination='apiFinalGraph.txt', format='turtle')
+
+			# Return to API user.
+			return finalGraph
+
+		# If no result available:
+		else:
+			return "Sorry, no API results :("
+
 
 	# Communicates with wrapper. TODO comment.
-	def getResource(self, wrapper, query_value, base_unit, range):
+	def getData(self, wrapper, query_value, base_unit, range):
 		try:
 			dbpWrapper = DBPediaWrapper()
 		except Error:
@@ -107,7 +142,8 @@ class RequestHandler:
 
 		#for stmt in finalGraph:
 		#	pprint.pprint(stmt)
-		rdfResult.serialize(destination='resultgraph.txt', format='turtle')
+		if rdfResult is not None:
+			rdfResult.serialize(destination='resultgraph.txt', format='turtle')
 
 		return rdfResult
 
@@ -137,12 +173,12 @@ class RequestHandler:
 
 
 	# TODO comment
-	def buildRequestGraph(self, graphBuilder, orig_unit, orig_value, factor):
+	def buildRequestGraph(self, graphBuilder, orig_unit, orig_value):
 		# read wikidata unit
 		orig_unit_wd = WikidataUnits.wdUnits.get(orig_unit)
 
 		# build graph
-		requestGraph = graphBuilder.buildRequestGraph(orig_value, orig_unit_wd, factor)
+		requestGraph = graphBuilder.buildRequestGraph(orig_value, orig_unit_wd)
 		# For debugging:
 		#for stmt in requestGraph:
 		#		pprint.pprint(stmt)
