@@ -209,7 +209,7 @@ class DBPediaWrapper:
 				typeNode = result['type']
 				typeValue = typeNode['value']
 
-				g.add( (response, RDF.type , URIRef(typeValue) ))	
+				g.add( (URIRef(uriValue), RDF.type , URIRef(typeValue) ))	
 
 				if(result.has_key("typeName")):
 					typeNameNode = result['typeName']
