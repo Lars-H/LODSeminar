@@ -41,58 +41,158 @@
 				Please find our ontology described in RDF below.
 			</p>
 			<div style="height:32px;"></div>
-			<!--A property-->
-			<h1 id="factor">cep:factor</h1>
-			<div class="line_div_b"></div>
-			<table style="width:80%; left-margin: 10%;">
+			<!-- CLASSES -->
+			<h3>Classes</h3>
+			<div class="line_div"> </div>
+
+			
+			<!--A Class-->
+			<div class="req_div">
+			<p class="h5" id="Query">cep:Query</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
 			  <tr>
 			    <td ><h2>Property:</h2></td>
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
-			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
-			    <td>'Sets a query and a result into a binary relation.'</td> 
-
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Is a Query to the API that combines a Request with a Result.'</td> 
 			  </tr>
 			</table>
+			</div>
 
-			<!--A property-->
-			<h1 id="query">cep:query</h1>
-			<div class="line_div_b"></div>
-			<table style="width:80%; left-margin: 10%;">
+			<!--A Class-->
+			<div class="req_div">
+			<p class="h5" id="Request">cep:Request</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
 			  <tr>
 			    <td ><h2>Property:</h2></td>
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
-			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
-			    <td>'Sets a query and a result into a binary relation.'</td> 
-
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'A Request specifies the parameters that are requested.'</td> 
 			  </tr>
 			</table>
+			</div>
 
-			<!--A property-->
-			<h1 id="response">cep:response</h1>
-			<div class="line_div_b"></div>
-			<table style="width:80%; left-margin: 10%;">
+			<!--A Class-->
+			<div class="req_div">
+			<p class="h5" id="Result">cep:Result</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
 			  <tr>
 			    <td ><h2>Property:</h2></td>
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
-			    <td><a style="text-decoration: underline; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></td>
-			    <td>'Sets a query and a result into a binary relation.'</td> 
-
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'A Result contains information on a result that is related to a request.'</td> 
 			  </tr>
 			</table>
+			</div>
+	
 
-				<h1>Other Resources</h1>
-			<div class="line_div_b"></div>
-		</div>
+			<!-- Properties -->
+			<h3>Properties</h3>
+			<div class="line_div"> </div>
+
+			<!--A Property-->
+			<div class="req_div">
+			<p class="h5" id="request">cep:request</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Relates a Query to its Request.'</td> 
+			  </tr>
+			</table>
+			</div>
+
+			<!--A Property-->
+			<div class="req_div">
+			<p class="h5" id="result">cep:result</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Relates a Query to its Result.'</td> 
+			  </tr>
+			</table>
+			</div>
+
+			<!--A Property-->
+			<div class="req_div">
+			<p class="h5" id="unit">cep:unit</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Defines a unit.'</td> 
+			  </tr>
+			</table>
+			</div>
+
+			<!--A Property-->
+			<div class="req_div">
+			<p class="h5" id="uri">cep:uri</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Defines a URI.'</td> 
+			  </tr>
+			</table>
+			</div>	
+
+			<!--A Property-->
+			<div class="req_div">
+			<p class="h5" id="factor">cep:factor</p>
+			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
+				<col width="40%">
+  				<col width="80%">
+			  <tr>
+			    <td ><h2>Property:</h2></td>
+			    <td><h2>Value:</h2></td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
+			    <td>'Sets a query and a result into a binary relation.'</td> 
+			  </tr>
+			</table>
+			</div>		
 
 
+			<!-- RDF -->
+			<h3>RDF</h3>
+			<div class="line_div"> </div>
 
-		<div class="json_div" style="margin:5px;">
+					<div class="json_div" style="margin:5px;">
 			<p>
 				<pre>
 @prefix rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns# .
@@ -106,6 +206,9 @@ cep:factor rdfs:label 'Sets a query and a result into a binary relation.'.
 
 			</p>
 		</div>
+
+	</div>
+
 	</div>
 </div>
 </div> 

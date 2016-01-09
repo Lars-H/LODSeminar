@@ -22,7 +22,7 @@ def compare():
     try:
         #Send Request to application
         handler = RequestHandler();
-        stringResp = handler.getResponse(value, unit, 'json')
+        stringResp = handler.getResponse(value, unit)
         print(stringResp)
         #Check if request could be answered
         return jsonify(result = str(stringResp))
