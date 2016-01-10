@@ -111,7 +111,7 @@ class DBPediaWrapper:
 
 
 			#Get the label
-			query += " ?uri rdfs:label ?label."
+			query += " ?uri rdfs:label ?label. FILTER (lang(?label) = 'en') "
 
 			#Get the tyoe and its name (label)
 			query += "OPTIONAL { ?uri a ?type. ?type rdfs:label ?typeName. FILTER (lang(?typeName) = 'en')}"
@@ -136,7 +136,7 @@ class DBPediaWrapper:
 
 
 			#Get the label
-			query += " ?uri rdfs:label ?label. FILTER (lang(?label) = 'en')} "
+			query += " ?uri rdfs:label ?label. FILTER (lang(?label) = 'en') "
 
 			#Get the tyoe and its name (label)
 			query += "OPTIONAL { ?uri a ?type. ?type rdfs:label ?typeName. FILTER (lang(?typeName) = 'en')}"
