@@ -88,7 +88,7 @@
 <div style="height: 32px;"></div>
 	<div id="button_try_div" align="center" >
 		<button type="button" class="button" onclick="tryItClick()" >Try again!</button>
-		<button type="button" class="button" onclick="" >Tweet it!</button>
+		<button type="button" class="button" onclick="twitterClick()" >Tweet it!</button>
 	</div>
 </div>
 </div>
@@ -264,6 +264,42 @@
 
 
 		document.getElementById('outer_res_div').style.display = 'block';
+	}
+
+	function twitterClick()
+	{
+		console.log("Posting on Twitter");
+		var textToTweet = getTwitterString();
+		if (textToTweet.length > 140)
+		{
+			alert('Tweet should be less than 140 Chars');
+		}
+		else 
+		{
+			var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(textToTweet);
+			window.open(twtLink,'_blank');
+		}
+	}
+
+	function getTwitterString()
+	{
+		console.log("Building Twitter String");
+
+		var resultLabel = document.getElementById('resultLabel').innerHTML.toString().replace(' ', '');
+
+		var twitterString = "Look, I found this comparison on http://cepler.org : ";
+		twitterString += document.getElementById('inValue').innerHTML.toString();
+		twitterString += " ";
+		twitterString += document.getElementById('inUnit').innerHTML.toString();
+		twitterString += " are about ";
+		twitterString += document.getElementById('factor').innerHTML.toString();
+		twitterString += " ";
+		twitterString += document.getElementById('resultLabel').innerHTML.toString();
+		twitterString += ". #Cepler #" + resultLabel;
+
+		console.log("This is the Twitter String: " + twitterString.toString());
+		return twitterString;
+
 	}
 
 
