@@ -26,7 +26,7 @@ class wbWrapper:
 
 	def __initNamespaces(self):
 		#Define Namespaces
-		self.CEP = Namespace('http://cepler.org/ontology#')
+		self.CEP = Namespace('http://www.cepler.org/ontology#')
 		self.WD = Namespace('https://www.wikidata.org/wiki/')
 		
 		return;
