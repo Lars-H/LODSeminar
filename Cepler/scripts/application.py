@@ -256,7 +256,8 @@ class RequestHandler:
 			print(RequestHandler.logString + "Factor attempt no. " + str(x + 1))
 
 			# Make a copy of possibleWrappers
-			wrapperQueue = possibleWrappers
+			wrapperQueue = possibleWrappers[:]
+			print(RequestHandler.logString + "Wrapper order: " + wrapperQueue)
 
 			# The normalized input value is divided by a partly randomized factor.
 			factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
