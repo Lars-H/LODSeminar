@@ -10,4 +10,4 @@ rq = app.RequestHandler()
 # rq.getResource(datasource, value, unit, range)
 
 #rq.getResponse(1000, 'cm', 'json')
-rq.getResource('dbpedia',1000,'kg',50)
+rq.getResource('worldbank',1000,'m',50)

@@ -6,18 +6,27 @@ from helper.units import MassUnits, DistanceUnits, MonetaryUnits, WikidataUnits
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from StringIO import StringIO
 from wrapper.dbpedia.dbpediaWrapper import DBPediaWrapper
+from wrapper.worldbank.wbWrapper import wbWrapper
 import helper.conversion as conv
 import helper.units as units
 import pprint
 import random
 import simplejson as json
 import sys
+import availableWrappers
+
+
+
 
 # Methods for factor or interface communication.
 class RequestHandler: 	
 
 	# For logging:
 	logString = "APPLICATION - "
+
+
+
+
 
 	# Is called from the server with a value, a unit, and an output format.
 	# Parses the input, normalizes it, decides which wrapper to query and
@@ -64,7 +73,7 @@ class RequestHandler:
 			raise RuntimeError("Building the request graph failed!")
 
 		# For debugging:
-		requestGraph.serialize(destination='graph_tests/factorRequestGraph.txt', format='turtle')
+		#requestGraph.serialize(destination='graph_tests/factorRequestGraph.txt', format='turtle')
 
 		# A range inside which results can lie around the query value is determined.
 		range = Range().getRange(query_value)
@@ -74,6 +83,11 @@ class RequestHandler:
 
 		# Right now, only the DBpedia wrapper is queried.
 		# TODO add process to rank wrappers and call them (as soon as more than one wrapper is available)
+		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
+
+
+
+
 		try:
 			rdfResult = self.getData("dbpedia", query_value, base_unit, range)
 		except Exception:
@@ -83,7 +97,7 @@ class RequestHandler:
 		if rdfResult is not None:
 
 			# For debugging:
-			rdfResult.serialize(destination='graph_tests/factorResultGraph.txt', format='turtle')
+			#rdfResult.serialize(destination='graph_tests/factorResultGraph.txt', format='turtle')
 
 			# Merge request and result graphs and add the factor
 			try:
@@ -93,8 +107,8 @@ class RequestHandler:
 				raise RuntimeError("Merging request and result graphs failed!")
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
-			finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
-			finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+			#finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
+			#finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
 			# TODO process outFormat parameter here! TODO auslagern
 
@@ -117,9 +131,35 @@ class RequestHandler:
 		else:
 			return None
 
+
+
+
+
 	# When "interface" is queried as API. TODO comment.
-	def getResource(self, wrapper, query_value, base_unit, range):
+	def getResource(self, inWrapper, inValue, inUnit, inRange):
 		
+		# Process values passed from the user.
+		
+		# Wrapper
+		wrapper = inWrapper
+		if wrapper != "dbpedia" and wrapper != "worldbank":
+			raise ValueError("Invalid datasource. Possible values are 'dbpedia' and 'worldbank'.")
+
+		# Value
+		query_value = float(inValue)
+
+		# Range
+		# TODO change to decimal!
+		range = float(inRange)
+
+		# Unit
+		base_unit = inUnit
+		quantity = self.decideContext(base_unit)
+		base_unit = units.baseUnit(quantity)
+		
+		print(RequestHandler.logString + "User query: " + str(query_value) + " " + str(base_unit) + ", range " + str(range))
+		print(RequestHandler.logString + "Quantity: " + str(quantity))
+
 		# Instance of GraphBuilder which builds the RDF graph.
 		graphBuilder = GraphBuilder()
 
@@ -130,19 +170,19 @@ class RequestHandler:
 			raise RuntimeError("Building the request graph failed!")
 
 		# For debugging:
-		requestGraph.serialize(destination='graph_tests/interfaceRequestGraph.txt', format='turtle')
+		#requestGraph.serialize(destination='graph_tests/interfaceRequestGraph.txt', format='turtle')
 
 		# Get data from wrapper
-		try:
-			rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
-		except Exception:
-			raise RuntimeError("Fetching data from the wrapper failed!")
+		#try:
+		rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
+		#except Exception:
+		#	raise RuntimeError("Fetching data from the wrapper failed!")
 	
 		# Merge request and result (no factor here).
 		if rdfResult is not None:
 
 			# For debugging, uncomment:
-			rdfResult.serialize(destination='graph_tests/interfaceResultGraph.txt', format='turtle')
+			#rdfResult.serialize(destination='graph_tests/interfaceResultGraph.txt', format='turtle')
 
 			# Test whether merging graphs works
 			try:
@@ -151,8 +191,8 @@ class RequestHandler:
 				raise RuntimeError("Merging request and result graphs failed!")
 
 			# Convert output graph to JSON-LD and save as file (for debugging).
-			finalGraph.serialize(destination='graph_tests/interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
-			finalGraph.serialize(destination='graph_tests/interfaceFinalGraph.txt', format='turtle')
+			#finalGraph.serialize(destination='graph_tests/interfaceFinalGraph_JSONLD.txt', format='json-ld', indent=4)
+			#finalGraph.serialize(destination='graph_tests/interfaceFinalGraph.txt', format='turtle')
 
 			# Return to API user.
 			print(finalGraph.serialize(format='json-ld', indent=4))
@@ -163,19 +203,51 @@ class RequestHandler:
 			return None
 
 
+
+
+
+
 	# Communicates with wrapper. TODO comment.
-	def getData(self, wrapper, query_value, base_unit, range):
-		try:
-			dbpWrapper = DBPediaWrapper()
-		except Exception:
-			raise RuntimeError('Creating a DBpediaWrapper failed.')
+	def getData(self, inWrapper, query_value, base_unit, range):
+		
+		# Wrapper variable
+		wrapperInstance = None
 
-		# Get results from the DBpediaWrapper (kg).
-		quantity = self.decideContext(base_unit)
-		print(RequestHandler.logString + "Query to DBPediaWrapper: (" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
-		rdfResult = dbpWrapper.getResults(quantity, query_value, range)
+		# Create wrapper instance
+		if inWrapper == "dbpedia":
+			try:
+				wrapperInstance = DBPediaWrapper()
+			except Exception:
+				raise RuntimeError('Creating a DBpediaWrapper failed.')
 
-		return rdfResult
+		elif inWrapper == "worldbank":
+			try:
+				wrapperInstance = wbWrapper()
+			except Exception:
+				raise RuntimeError('Creating a WorldbankWrapper failed.')
+
+		else:
+			raise RuntimeError("inWrapper variable not set properly! Should have been asserted before...")
+
+		if wrapperInstance is None:
+		
+			raise RuntimeError("No wrapper instance could be created for an unknown reason!")
+
+		else:
+
+			# Which quantity?
+			quantity = self.decideContext(base_unit)
+
+			# Get results from the wrapper.			
+			print(RequestHandler.logString + "Query to " + inWrapper + " wrapper: " + \
+					"(" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
+			rdfResult = wrapperInstance.getResults(quantity, query_value, range)
+
+			return rdfResult
+
+
+
+
 
 
 	# TODO comment
@@ -200,6 +272,10 @@ class RequestHandler:
 		else: 
 			print(RequestHandler.logString + "The quantity we are looking for is " + str(quantity) + ".")
 			return quantity
+
+
+
+
 
 
 	# TODO comment
