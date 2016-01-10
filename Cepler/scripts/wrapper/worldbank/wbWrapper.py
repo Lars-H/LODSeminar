@@ -19,7 +19,7 @@ class wbWrapper:
 		self.endPointUrl = "http://worldbank.270a.info/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "select distinct ?indicator ?actualValue ?indicatorLabel ?countryLabel WHERE {"
+		self.QueryPrefix = "select distinct ?indicator ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
 		self.__initNamespaces();
 		return;
@@ -34,25 +34,29 @@ class wbWrapper:
 	#Main function that gets the results
 	#@return: RDF Graph	
 	def getResults(self, unit, value, rng):
-		#Build Query String
-		queryStr = self.buildQuery(unit, value, rng)
-		#Run Query
-		results = self.runQuery(queryStr)
-		print(len(results))
-		#Decode 
-		if(len(results) >0):
-			i  = random.randrange(0, len(results), 1)
+		if unit == Mapping.COST:
+			#Build Query String
+			queryStr = self.buildQuery(unit, value, rng)
+			#Run Query
+			results = self.runQuery(queryStr)
+			print(len(results['results']['bindings']))
+			#Decode 
+			if(len(results['results']['bindings']) >0):
+				i  = random.randrange(0, len(results['results']['bindings']), 1)
+				
+				print i 
+				try:
+					rdfResult = self.resultToRDF(results['results']['bindings'][i])
+				except ValueError:	
+					rdfResult = None
+				#Return Wrapper Result
+				return rdfResult;	
 			
-			print i 
-			try:
-				rdfResult = self.resultToRDF(results['results']['bindings'][i])
-			except ValueError:	
-				rdfResult = None
+			else: return None
 
-		#Return Wrapper Result
-		return rdfResult;
-
-
+		else:
+			return None ;
+		
 	#Constructor, defying explicit EndPointUrl
 	def setEndpointUrl(self, endPointUrl):
 		self.sparql = SPARQLWrapper(self.endPointUrl)
@@ -69,47 +73,48 @@ class wbWrapper:
 		#Add the QueryPrefix
 		query = self.QueryPrefix
 
-		#mMonetary Properties
-		if unit == Mapping.COST:
-			props = wbProperties.wbIndicators
+		props = wbProperties.wbIndicators
 
-			#iterate through possible indicators
-			for i in range(len(wbProperties.wbIndicators)):
-				if(i > 0):
-					query += " UNION "
-				query += "{ ?indicator <http://purl.org/linked-data/cube#dataSet> <" + wbProperties.wbIndicators[i] + "> . }"
+		#iterate through possible indicators
+		for i in range(len(wbProperties.wbIndicators)):
+			if(i > 0):
+				query += " UNION "
+			query += "{ ?indicator <http://purl.org/linked-data/cube#dataSet> <" + wbProperties.wbIndicators[i] + "> . }"
 
-			#limit years
-			for i in range(len(wbProperties.wbAllowedYears)):
-				if(i > 0):
-					query += " UNION "
-				query += "{ ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/" + wbProperties.wbAllowedYears[i] + "> . }"
+		#limit years
+		for i in range(len(wbProperties.wbAllowedYears)):
+			if(i > 0):
+				query += " UNION "
+			query += "{ ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/" + wbProperties.wbAllowedYears[i] + "> . }"
 
-				#retreive acutal values
-			query += " ?indicator <http://purl.org/linked-data/sdmx/2009/measure#obsValue> ?actualValue. "
+			#retreive acutal values
+		query += " ?indicator <http://purl.org/linked-data/sdmx/2009/measure#obsValue> ?actualValue. "
 
-			#retrieve indicator label
-			query += " ?indicator <http://worldbank.270a.info/property/indicator> ?TOPindicator. ?TOPindicator <http://www.w3.org/2004/02/skos/core#prefLabel> ?indicatorLabel. "
+		#retrieve indicator label
+		query += " ?indicator <http://worldbank.270a.info/property/indicator> ?TOPindicator. ?TOPindicator <http://www.w3.org/2004/02/skos/core#prefLabel> ?indicatorLabel. "
 
-			##retrieve country label
-			query += " ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
+		#retrieve country label
+		query += " ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
 
-			#add range
-			query += " FILTER (?actualValue > " + str(value - rng/2) + ")"
-			query += " FILTER (?actualValue < " + str(value + rng/2) + ")"	
+		#add range
+		query += " FILTER (?actualValue > " + str(value - rng/2) + ")"
+		query += " FILTER (?actualValue < " + str(value + rng/2) + ")"	
 
-		else:
-			return None ;
+		#retrieve DBpedia Link of country
+
+		query += "OPTIONAL {?country <http://www.w3.org/2002/07/owl#sameAs> ?countryDBLink. FILTER regex(str(?countryDBLink),\"dbpedia\") } "
+
+		
 		
 		#Add the query Suffix
 		query += self.QuerySuffix;
 		
-		print query
+		#print query
 		return query;
 
 
 	def resultToRDF(self, result):
-		print(result)
+		#print(result)
 		if(bool(result)):
 			indicatorNode = result['indicator']
 			indicatorURI = indicatorNode['value']
@@ -125,8 +130,6 @@ class wbWrapper:
 			indicatorActualValueNode = result['actualValue']
 			indicatorActualValue = indicatorActualValueNode['value']
 
-			#build graph
-
 			g = self.__initGraph()
 
 			response = BNode('result1');
@@ -136,6 +139,17 @@ class wbWrapper:
 			g.add( (response, self.CEP.unit , self.WD.Q4917))
 			g.add( (response, RDF.type , self.CEP.Result))
 			g.add( (response, self.CEP.uri , URIRef(indicatorURI)))
+
+
+			#add picture if existent
+
+			if(result.has_key("countryDBLink")):
+				picNode = result['countryDBLink']
+				picValue = picNode['value']
+				countryDBPic = self.getDBPic(picValue)
+				#print countryDBPic
+				if countryDBPic is not None:
+					g.add( (response, FOAF.depiction, URIRef(countryDBPic) ))
 			
 			g.serialize(destination='output.txt', format='n3')
 
@@ -150,4 +164,22 @@ class wbWrapper:
 		g.bind('wd', self.WD)
 		g.bind('foaf', FOAF)
 		return g;		
+
+	def getDBPic(self, resourceURL):
+		sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+		query =	" select ?countryPic WHERE { <"  + resourceURL + "> <http://xmlns.com/foaf/0.1/depiction> ?countryPic . }"
+		sparql.setQuery(query) 
+		sparql.setReturnFormat("json")
+		queryResult = sparql.query().convert()
+		picResult = queryResult['results']['bindings'][0]
+		
+		#convert to RDF
+		if(bool(picResult)):
+			countryNode = picResult['countryPic']
+			picURI = countryNode['value']
+
+			return picURI;
+
+		else: return None
+
 

@@ -6,11 +6,16 @@ import random
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 import pprint
 
+
+
 wbWrapper1 = wbWrapper();
+
+#print wbWrapper1.getDBPic("<http://dbpedia.org/resource/Equatorial_Guinea>")
+
 
 #testresult = wbWrapper1.buildQuery(Mapping.COST, 45000000000, 4500000000)
 
-rdfResult = wbWrapper1.getResults(Mapping.COST, 45000000000, 500003330000) 
+rdfResult = wbWrapper1.getResults(Mapping.COST, 2304982677, 2000900000) 
 
 
 if rdfResult is not None:
