@@ -132,7 +132,7 @@ class wbWrapper:
 
 			g = self.__initGraph()
 
-			response = BNode('result1');
+			response = BNode('result');
 
 			g.add( (response, RDFS.label , Literal(combinedLabelValue) ))
 			g.add( (response, RDF.value , Literal(indicatorActualValue) )) 
