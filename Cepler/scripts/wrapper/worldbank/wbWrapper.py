@@ -171,7 +171,10 @@ class wbWrapper:
 		sparql.setQuery(query) 
 		sparql.setReturnFormat("json")
 		queryResult = sparql.query().convert()
-		picResult = queryResult['results']['bindings'][0]
+		try:
+			picResult = queryResult['results']['bindings'][0]
+		except IndexError:
+			picResult = None
 		
 		#convert to RDF
 		if(bool(picResult)):

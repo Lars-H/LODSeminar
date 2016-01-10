@@ -101,6 +101,7 @@ class GraphBuilder:
 			except UnicodeEncodeError:
 				return "Oops! An invalid label was delivered by the datasource. Try again!"
 
+		temp = None
 		# out_unit
 		for outUnit in self.g.objects(BNode('result'), GraphBuilder.CEP.unit): # should only occur once!
 			temp = str(outUnit)

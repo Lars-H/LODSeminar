@@ -1,13 +1,13 @@
 from graphutils import GraphBuilder
-from helper.factor import Factor
 from helper.properties import Mapping
-from helper.range import Range
 from helper.units import MassUnits, DistanceUnits, MonetaryUnits, WikidataUnits
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from StringIO import StringIO
 from wrapper.dbpedia.dbpediaWrapper import DBPediaWrapper
 from wrapper.worldbank.wbWrapper import wbWrapper
 import helper.conversion as conv
+import helper.factor as factorProvider
+import helper.range as rangeProvider
 import helper.units as units
 import pprint
 import random
@@ -55,16 +55,6 @@ class RequestHandler:
 		# Instance of GraphBuilder which builds the RDF graph.
 		graphBuilder = GraphBuilder()
 
-		# Input is normalized to base unit.
-		print(RequestHandler.logString),
-		norm_value = conv.convert(orig_value, orig_unit, quantity)
-
-		# The normalized input value is divided by a partly randomized factor.
-		factor = Factor().getFactor(norm_value)
-		print(RequestHandler.logString + "Value is divided by factor: " + str(factor))
-		query_value = norm_value/factor
-		print(RequestHandler.logString + "Therefore we will query " + str(query_value)+".")
-
 		# Start building the final RDF graph. The "request" and part of the "query"
 		# section are produced now.
 		try:
@@ -73,31 +63,36 @@ class RequestHandler:
 			raise RuntimeError("Building the request graph failed!")
 
 		# For debugging:
-		#requestGraph.serialize(destination='graph_tests/factorRequestGraph.txt', format='turtle')
+		#print(requestGraph.serialize(format='turtle'))
+
+		# Input is normalized to base unit.
+		norm_value = conv.convert(orig_value, orig_unit, quantity, RequestHandler.logString)
+
+		# The normalized input value is divided by a partly randomized factor.
+		factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
+		query_value = norm_value/factor
+		print(RequestHandler.logString + "We will query " + str(query_value)+".")
 
 		# A range inside which results can lie around the query value is determined.
-		range = Range().getRange(query_value)
-		print(RequestHandler.logString + "Range is " + str(range) + ", meaning values between " + 
-				str(query_value-range/2) + " and " +
-				str(query_value+range/2) + " can be returned.")
+		range = rangeProvider.getRange(query_value, RequestHandler.logString)
 
-		# Right now, only the DBpedia wrapper is queried.
-		# TODO add process to rank wrappers and call them (as soon as more than one wrapper is available)
+		# TODO Methode, die dynamisch Faktor auswaehlt, Range berechnet, Wrappers durchgeht (und das iterativ)
+
+		# Process of wrapper selection, TODO auslagern
 		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
+		random.shuffle(possibleWrappers)
+		currentWrapper = possibleWrappers.pop(0)
 
-
-
-
-		try:
-			rdfResult = self.getData("dbpedia", query_value, base_unit, range)
-		except Exception:
-			raise RuntimeError("Fetching data from the wrapper failed!")
+		#try:
+		rdfResult = self.getData(currentWrapper, query_value, base_unit, range)
+		#except Exception:
+		#	raise RuntimeError("Fetching data from the wrapper failed!")
 
 		# Process results
 		if rdfResult is not None:
 
 			# For debugging:
-			#rdfResult.serialize(destination='graph_tests/factorResultGraph.txt', format='turtle')
+			print(rdfResult.serialize(format='turtle'))
 
 			# Merge request and result graphs and add the factor
 			try:
@@ -110,11 +105,9 @@ class RequestHandler:
 			#finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
 			#finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
-			# TODO process outFormat parameter here! TODO auslagern
-
+			# TODO auslagern
 			if outFormat == "json":
 				
-				# INPROGRESS: Build a JSON document
 				print(graphBuilder.buildJSON(factor, inValue, inUnit))
 				return graphBuilder.buildJSON(factor, inValue, inUnit)
 			
@@ -129,6 +122,7 @@ class RequestHandler:
 				raise ValueError("Return format must be 'json' or 'json-ld'! This should have been asserted before...")
 
 		else:
+			print("No results returned.")
 			return None
 
 
@@ -200,6 +194,7 @@ class RequestHandler:
 
 		# If no result available:
 		else:
+			print("No results returned.")
 			return None
 
 

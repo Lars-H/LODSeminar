@@ -3,20 +3,20 @@ from units import MassUnits, DistanceUnits, MonetaryUnits
 import sys
 
 
-def convert(orig_value, orig_unit, quantity):
+def convert(orig_value, orig_unit, quantity, logString):
 	norm_value = None
 	if (quantity == Mapping.WEIGHT):
-		norm_value = convertToKilogram(orig_value, orig_unit)
+		norm_value = convertToKilogram(orig_value, orig_unit, logString)
 	elif (quantity == Mapping.DISTANCE):
-		norm_value = convertToMeter(orig_value, orig_unit)
+		norm_value = convertToMeter(orig_value, orig_unit, logString)
 	elif (quantity == Mapping.COST):
-		norm_value = convertToDollar(orig_value, orig_unit)
+		norm_value = convertToDollar(orig_value, orig_unit, logString)
 	else:
 		raise RuntimeError('Conversion failed because quantity was not properly set.')
 
 	return norm_value
 
-def convertToKilogram(orig_value, orig_unit):
+def convertToKilogram(orig_value, orig_unit, logString):
 	orig_value_parsed = float(orig_value)
 	norm_value = None
 	if orig_unit == MassUnits.TON.value:
@@ -28,10 +28,10 @@ def convertToKilogram(orig_value, orig_unit):
 	else:
 		raise RuntimeError('Conversion to kilogram failed.')
 
-	print("Value converted to base unit kilogram: " + str(norm_value))
+	print(logString + "Value converted to base unit kilogram: " + str(norm_value))
 	return norm_value
 
-def convertToMeter(orig_value, orig_unit):
+def convertToMeter(orig_value, orig_unit, logString):
 	orig_value_parsed = float(orig_value)
 	norm_value = None
 	if orig_unit == DistanceUnits.KILOMETER.value:
@@ -43,10 +43,10 @@ def convertToMeter(orig_value, orig_unit):
 	else:
 		raise RuntimeError('Conversion to meter failed.')
 
-	print("Value converted to base unit meter: " + str(norm_value))
+	print(logString + "Value converted to base unit meter: " + str(norm_value))
 	return norm_value
 
-def convertToDollar(orig_value, orig_unit):
+def convertToDollar(orig_value, orig_unit, logString):
 	orig_value_parsed = float(orig_value)
 	norm_value = None
 	if orig_unit == MonetaryUnits.EURO.value:
@@ -56,5 +56,5 @@ def convertToDollar(orig_value, orig_unit):
 	else:
 		raise RuntimeError('Conversion to meter failed.')
 
-	print("Value converted to base unit US dollar: " + str(norm_value))
+	print(logString + "Value converted to base unit US dollar: " + str(norm_value))
 	return norm_value
