@@ -12,9 +12,10 @@ app = Flask(__name__)
 @app.route('/compare')
 #@produces('text/html')
 def compare():
-    
+    #Get the Accept Header
     acceptHeader = str(request.accept_mimetypes)
-    print(acceptHeader)
+    #print(acceptHeader)
+
     #Get the variable value and unit
     try:
         value = request.args.get('v')
@@ -76,10 +77,56 @@ def compare():
 
 
 #Handling direct negotiation with interfaces
+#Example query: http://localhost:5000/dbpedia/compare?v=210&u=t&r=0.2
+#
 @app.route('/<path:source>/compare')
 def compaer_other(source):
-    s = str(source)
-    return jsonify(result = 'not implemented yet: ' + str(s));
+    #Get the Accept Header
+    acceptHeader = str(request.accept_mimetypes)
+    
+    #Get the variable value and unit and range
+    try:
+        value = request.args.get('v')
+        print(value)
+        unit = request.args.get('u')
+        print(unit)
+        rng = request.args.get('r')
+        print(rng)
+    except IOError:
+        return badRequest();
+
+    print("Trying to access resource: " + str(source))    
+
+    if not (unit is None) and not(value is None):
+        #Send Request to application
+        handler = RequestHandler();
+    
+    #JSON-LD
+        if "application/ld+json" in acceptHeader:
+
+            print('Server: Received a JSON-LD request. For DataSource: ' + str(source))
+            #Try to get a JSON-LD response
+            try:
+                response = handler.getResource(str(source), value, unit, rng)
+            except ValueError:
+                print('Server: A ValueError has occurred.')
+                badRequest();
+            except RuntimeError:
+                print('Server: An RuntimeError has occurred.')
+                abort(500);    
+
+            #Return answer        
+            if not (response is None):
+                #Valid response
+                return response;
+            else:
+                #No result found
+                return jsonify(result = 'no result was found');    
+        else:
+            return abort(406);        
+    else:        
+        return badRequest(); 
+
 
 #HTML Pages
 @app.route('/')
