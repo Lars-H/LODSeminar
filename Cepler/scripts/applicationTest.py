@@ -5,7 +5,7 @@ rq = app.RequestHandler()
 
 # You can test here.
 # For the Cepler algorithm use:
-# rq.getResponse(value, unit)
+# rq.getResponse(value, unit, format)
 # For one of the interfaces use:
 # rq.getResource(datasource, value, unit, range)
 
