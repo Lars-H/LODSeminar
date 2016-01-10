@@ -1,6 +1,8 @@
+@prefix cep: <http://www.cepler.org/ontology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix cep: <http://www.cepler.org/ontology#> .
+@prefix schema: <http://schema.org/> .
+@prefix wikibase: <http://wikiba.se/ontology#> .
 
 cep:Request rdf:type rdfs:Class .
 cep:Request rdfs:label "Request" @en .
@@ -39,7 +41,11 @@ cep:result rdfs:range cep:Result .
 
 cep:unit rdf:type rdf:Property .
 cep:unit rdf:label "unit" @en .
-cep:unit rdfs:comment "Provides a unit to "
+cep:unit rdfs:comment "Adds a unit. "
+cep:unit schema:isSimilarTo wikibase:quantityUnit .
 
 
-cep:result
+cep:uri rdf:type rdf:Property .
+cep:uri rdf:label "uri" @en .
+cep:uri rdfs:comment "Relates a URI to a Cepler Result." @en .
+cep:uri rdfs:domain cep:Result .
