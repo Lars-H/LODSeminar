@@ -25,23 +25,49 @@ def compare():
         if not (unit is None) and not(value is None):
             #Send Request to application
             handler = RequestHandler();
-            response = handler.getResponse(value, unit)
-            print(str(response))
-            if not (response is None):
-                if "application/ld+json" in acceptHeader:
+
+            #Check the Accept Header for format
+
+            #JSON-LD
+            if "application/ld+json" in acceptHeader:
+
+                print('Server: Received a JSON-LD request.')
+                #Try to get a JSON-LD response
+                try:
+                    response = handler.getResponse(value, unit, 'json-ld')
+                except IOError, ValueError:
+                    print('Server: An Error has occured.')
+                    abort(500);
+
+                #Return answer        
+                if not (response is None):
+                    #Valid response
                     return response;
-                elif "application/json" in acceptHeader:
-                    return jsonify(result = 'You wanted HTML?!'); 
                 else:
-                    return badRequest();
-            #Check if request could be answered
+                    #No result found
+                    return jsonify(result = 'no result was found');
+
+            #JSON             
+            elif "application/json" in acceptHeader: 
+                print('Server: Received a JSON request.')
+                try:
+                    response = handler.getResponse(value, unit, 'json')
+                except IOError, ValueError:
+                    print('Server: An Error has occured.')
+                    abort(500);  
+                if not (response is None):
+                    return response;
+                else:
+                    return jsonify(result = 'no result was found'); 
+
+            #Unsupported Datatype       
             else:
-               return jsonify(result = 'no result was found');
+                return abort(406);
         else:
             return badRequest();        
     except ValueError:   
         print('ERROR: The application has encountered an unexpected Error')  
-        return jsonify(result = 'no result was found') 
+        return abort(500); 
 
 
 #Handling direct negotiation with interfaces

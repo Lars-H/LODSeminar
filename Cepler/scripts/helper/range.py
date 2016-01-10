@@ -3,4 +3,7 @@ class Range:
 	# fall is specified.
 	def getRange(self, query_value):
 		# TODO insert intelligence that depends on size of input
-		return 0.1*query_value
+		try:
+			return 0.1*query_value	
+		except Exception:
+			raise RuntimeError("Range calculation failed!")
