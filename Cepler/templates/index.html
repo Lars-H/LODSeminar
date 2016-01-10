@@ -78,7 +78,6 @@
 		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
 		<p class="maintext"><h31> <a id="resultUri"> Dirk Notwitzki</h1> </a></p>
 		<div id="image_div">
-		 
 		</div>
 	</div>
 </div>
@@ -192,9 +191,18 @@
 
 	function handleResponse(response)
 	{
-		ShowMessage(response.result.toString());
+		var data = JSON.parse(response);
+
+		if (data.hasOwnProperty('result'))
+		{
+			ShowMessage(data.result.toString());
+		}
+		else
+		{
+			displayJSON(result);
+		}
+		
 		document.getElementById('outer_res_div').style.display = 'block';
-		document.getElementById('image_div').innerHTML = fillImage(200).toString();	
 	}
 
 	function DisplayResult( text, displayType )
@@ -215,17 +223,9 @@
 		}
 	}
 
-	function fillImage(number)
+	function displayJSON(data)
 	{
-
-		var HtmlIn = "";
-
-		for (var i = 0; i <= number; i++) 
-		{
-			HtmlIn += "<img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img>";
-		};
-		HtmlIn = "<img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img> <img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img>";
-		return HtmlIn;
+		ShowMessage("JSON received!");
 	}
 
 
