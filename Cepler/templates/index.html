@@ -74,10 +74,14 @@
 	<h2 style="color: #04B45F;"id="display_result"></h2>
 	<div align="center">
 		<h1>Your Result:</h1>
-		<p class="maintext"><h31> <a id="inValue"> 4003939 </a> <a id="inUnit"> t </a></h31> are</p>
+		<p class="maintext"><h31> <a id="inValue"> 4003939 </a> <a id="inUnit"> t </a></h31> are about</p>
 		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
-		<p class="maintext"><h31> <a id="resultUri"> Dirk Notwitzki</h1> </a></p>
+		<p class="maintext"><h31> <a class="ourLink" target="_blank" href="" id="resultLabel"> Dirk Notwitzki</h1></h31> <a  id="original_value"></a> </a></p>
+		<p id="typeLabel" class="maintext"></p>
 		<div id="image_div">
+			<a class="image_container" >
+			<img id="resultPic" alt="" />
+			</a>
 		</div>
 	</div>
 </div>
@@ -119,6 +123,8 @@
 <script type="text/javascript">
 	function tryItClick()
 	{
+		document.getElementById('outer_res_div').style.display = 'none';
+
 		//First: check input validity
 		var value = document.getElementById('textbox').value;
 		var selectedUnit = document.getElementById('slct').value;
@@ -191,18 +197,21 @@
 
 	function handleResponse(response)
 	{
-		var data = JSON.parse(response);
+		ShowMessage("Something was received!");
+		//var data = JSON.parse(response);
 
-		if (data.hasOwnProperty('result'))
+		if (response.hasOwnProperty('result'))
 		{
-			ShowMessage(data.result.toString());
+			document.getElementById('outer_res_div').style.display = 'none';
+			ShowMessage("No Result");
 		}
 		else
 		{
-			displayJSON(result);
+			displayJSON(response);
 		}
+
 		
-		document.getElementById('outer_res_div').style.display = 'block';
+		
 	}
 
 	function DisplayResult( text, displayType )
@@ -225,7 +234,36 @@
 
 	function displayJSON(data)
 	{
-		ShowMessage("JSON received!");
+		console.log("Great Success")
+		ShowMessage("Great Success!");
+		document.getElementById('inValue').innerHTML = data['in_value'].toString();
+		document.getElementById('inUnit').innerHTML = data['in_unit'].toString();
+		document.getElementById('factor').innerHTML = data['factor'].toString();
+		document.getElementById('resultLabel').innerHTML = data['result_label'].toString();
+		document.getElementById('resultLabel').href = data['result_uri'].toString(); 
+		var origVal = " (" + data['out_value'].toString() + " " + data['out_unit'].toString() + ")";
+		
+		if(origVal != null)
+		{
+			document.getElementById('original_value').innerHTML = origVal.toString();
+		}
+
+		//Check for type Label
+		if(data.hasOwnProperty('type_label'))
+		{
+			var desciption = "which is a " + data['type_label'].toString();	
+			document.getElementById('typeLabel').innerHTML = desciption.toString();
+			console.log("Type Label found!");
+		}
+
+		//Check for Picture
+		if(data.hasOwnProperty('depiction'))
+		{
+			document.getElementById('resultPic').src =  data['depiction'].toString();	
+		}
+
+
+		document.getElementById('outer_res_div').style.display = 'block';
 	}
 
 

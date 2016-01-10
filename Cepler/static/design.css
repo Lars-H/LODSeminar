@@ -50,6 +50,22 @@ h31 {
   color: #333;
 }
 
+a.image_container {
+    border: 1px solid black;
+    background-color: transparent;
+    width: 80%;
+    display: inline-block;
+    overflow: hidden;
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+}
+
+a.image_container img {
+    width: 100%;
+}
+
 .h5 {
   font-family: 'Raleway', sans-serif;
   font-size: 16px;
@@ -138,13 +154,13 @@ it:hover{
 }
 
 .overlayCl div {
-     width: 60%;
-     height: 60%;
-     margin: 100px auto;
-     background-color: #fff;
-     border:3px solid #FFFFFF;
-     padding:15px;
-     text-align:center;
+    width: 60%;
+    height: 60%;
+    margin: 100px auto;
+    background-color: #fff;
+    border:3px solid #FFFFFF;
+    padding:15px;
+    text-align:center;
 }
 
 .ovBtn {
@@ -571,10 +587,15 @@ it:hover{
 }
 
 #outer_res_div {
-  /*display: none; */
+  display: none; 
 }
 
 .single_image_div {
   height: 10px;
   width: auto;
+}
+
+.ourLink {
+  text-decoration: none;
+  color: #024b28;
 }

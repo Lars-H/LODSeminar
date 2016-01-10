@@ -12,6 +12,7 @@ app = Flask(__name__)
 @app.route('/compare')
 #@produces('text/html')
 def compare():
+    
     acceptHeader = str(request.accept_mimetypes)
     print(acceptHeader)
     #Get the variable value and unit
@@ -21,53 +22,57 @@ def compare():
     except IOError:
         return badRequest();
 
-    try:
-        if not (unit is None) and not(value is None):
-            #Send Request to application
-            handler = RequestHandler();
+    if not (unit is None) and not(value is None):
+        #Send Request to application
+        handler = RequestHandler();
 
-            #Check the Accept Header for format
+        #Check the Accept Header for format
 
-            #JSON-LD
-            if "application/ld+json" in acceptHeader:
+        #JSON-LD
+        if "application/ld+json" in acceptHeader:
 
-                print('Server: Received a JSON-LD request.')
-                #Try to get a JSON-LD response
-                try:
-                    response = handler.getResponse(value, unit, 'json-ld')
-                except IOError, ValueError:
-                    print('Server: An Error has occured.')
-                    abort(500);
+            print('Server: Received a JSON-LD request.')
+            #Try to get a JSON-LD response
+            try:
+                response = handler.getResponse(value, unit, 'json-ld')
+            except ValueError:
+                print('Server: A ValueError has occured.')
+                badRequest();
+            except RuntimeError:
+                print('Server: An RuntimeError has occured.')
+                abort(500);    
 
-                #Return answer        
-                if not (response is None):
-                    #Valid response
-                    return response;
-                else:
-                    #No result found
-                    return jsonify(result = 'no result was found');
-
-            #JSON             
-            elif "application/json" in acceptHeader: 
-                print('Server: Received a JSON request.')
-                try:
-                    response = handler.getResponse(value, unit, 'json')
-                except IOError, ValueError:
-                    print('Server: An Error has occured.')
-                    abort(500);  
-                if not (response is None):
-                    return response;
-                else:
-                    return jsonify(result = 'no result was found'); 
-
-            #Unsupported Datatype       
+            #Return answer        
+            if not (response is None):
+                #Valid response
+                return response;
             else:
-                return abort(406);
+                #No result found
+                return jsonify(result = 'no result was found');
+
+        #JSON             
+        elif "application/json" in acceptHeader: 
+            print('Server: Received a JSON request.')
+            try:
+                response = handler.getResponse(value, unit, 'json')
+                print(response);
+            except ValueError:
+                print('Server: A ValueError has occured.')
+                badRequest();
+            except RuntimeError:
+                print('Server: An RuntimeError has occured.')
+                abort(500);    
+                                      
+            if not (response is None):
+                return response;
+            else:
+                return jsonify(result = 'no result was found'); 
+
+        #Unsupported Datatype       
         else:
-            return badRequest();        
-    except ValueError:   
-        print('ERROR: The application has encountered an unexpected Error')  
-        return abort(500); 
+            return abort(406);
+    else:
+        return badRequest();        
 
 
 #Handling direct negotiation with interfaces
