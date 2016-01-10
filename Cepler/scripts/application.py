@@ -257,7 +257,7 @@ class RequestHandler:
 
 			# Make a copy of possibleWrappers
 			wrapperQueue = possibleWrappers[:]
-			print(RequestHandler.logString + "Wrapper order: " + wrapperQueue)
+			print(RequestHandler.logString + "Wrapper order: " + str(wrapperQueue))
 
 			# The normalized input value is divided by a partly randomized factor.
 			factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
