@@ -78,13 +78,23 @@ class RequestHandler:
 			finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
 			finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
 
-			# TODO process outFormat parameter here!
+			# TODO process outFormat parameter here! TODO auslagern
 
-			# INPROGRESS: Build a JSON document
-			print(graphBuilder.buildJSON(factor, inValue, inUnit))
+			if outFormat == "json":
+				
+				# INPROGRESS: Build a JSON document
+				print(graphBuilder.buildJSON(factor, inValue, inUnit))
+				return graphBuilder.buildJSON(factor, inValue, inUnit)
+			
+			elif outFormat == "json-ld":
 
-			# Return graph to the calling program.		
-			return finalGraph.serialize(format='json-ld', indent=4)
+				# Return graph to the calling program.		
+				print(finalGraph.serialize(format='json-ld', indent=4))
+				return finalGraph.serialize(format='json-ld', indent=4)
+
+			else:
+
+				raise ValueError("Return format must be 'json' or 'json-ld'!")
 
 		else:
 			return None
