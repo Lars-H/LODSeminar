@@ -571,5 +571,10 @@ it:hover{
 }
 
 #outer_res_div {
-  /*display: none; /*
+  /*display: none; */
+}
+
+.single_image_div {
+  height: 10px;
+  width: auto;
 }
