@@ -70,23 +70,25 @@
 <h2 style="color: #04B45F" align ="center" id="status_text"></h2>
 
 <div id="outer_res_div">
-<div id="resultDiv" class="div_res" style="height: 400px;">
+<div id="resultDiv" class="div_res" style="min-height: 400px;">
 	<h2 style="color: #04B45F;"id="display_result"></h2>
 	<div align="center">
 		<h1>Your Result:</h1>
 		<p class="maintext"><h31> <a id="inValue"> 4003939 </a> <a id="inUnit"> t </a></h31> are</p>
 		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
 		<p class="maintext"><h31> <a id="resultUri"> Dirk Notwitzki</h1> </a></p>
+		<div id="image_div">
+		 
+		</div>
 	</div>
-
 </div>
 <div style="height: 32px;"></div>
-<div id="button_try_div" align="center" >
+	<div id="button_try_div" align="center" >
 		<button type="button" class="button" onclick="tryItClick()" >Try again!</button>
 		<button type="button" class="button" onclick="" >Tweet it!</button>
 	</div>
 </div>
-
+</div>
 
 
 
@@ -151,7 +153,7 @@
 
 	function timeoutHandle()
 	{
-		ShowMessage("Sorry, the server does not seem to repsond...");
+		ShowMessage("Sorry, the server does not seem to respond...");
 	}
 
 	function ShowMessage( text, displayType )
@@ -191,7 +193,8 @@
 	function handleResponse(response)
 	{
 		ShowMessage(response.result.toString());
-		document.getElementById('outer_res_div').style.display = 'block';	
+		document.getElementById('outer_res_div').style.display = 'block';
+		document.getElementById('image_div').innerHTML = fillImage(200).toString();	
 	}
 
 	function DisplayResult( text, displayType )
@@ -212,6 +215,18 @@
 		}
 	}
 
+	function fillImage(number)
+	{
+
+		var HtmlIn = "";
+
+		for (var i = 0; i <= number; i++) 
+		{
+			HtmlIn += "<img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img>";
+		};
+		HtmlIn = "<img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img> <img height="30" src="{{ url_for('static', filename='imgPerson.png') }}"></img>";
+		return HtmlIn;
+	}
 
 
 </script>
