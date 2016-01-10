@@ -184,6 +184,9 @@ class RequestHandler:
 					"(" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
 			rdfResult = wrapperInstance.getResults(quantity, query_value, range)
 
+			if rdfResult is None:
+				# Logging
+				print(RequestHandler.logString + "No results could be found at " + inWrapper + ".")
 			return rdfResult
 
 
@@ -289,13 +292,18 @@ class RequestHandler:
 			# Process results
 			if out_format == "json":
 				
-				print(graphBuilder.buildJSON(factor, orig_value, orig_unit))
+				# For debugging:
+				#print(graphBuilder.buildJSON(factor, orig_value, orig_unit))
+				
+				# Return JSON array to the calling program.
 				return graphBuilder.buildJSON(factor, orig_value, orig_unit)
 			
 			elif out_format == "json-ld":
 
-				# Return graph to the calling program.		
-				print(finalGraph.serialize(format='json-ld', indent=4))
+				# For debugging:	
+				#print(finalGraph.serialize(format='json-ld', indent=4))
+				
+				# Return graph to the calling program.	
 				return finalGraph.serialize(format='json-ld', indent=4)
 
 			else:
