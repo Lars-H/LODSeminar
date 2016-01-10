@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+<head>
+	<title>Cepler</title>
+	<meta charset="iso-8859-1">	
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='design.css') }}">
+	<link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->	
+<div id="nav_container">
+
+	<nav id="primary_nav_wrap">
+	<ul class="menu_item">
+		<li><h1 style="color: red">Beta</h1></li>
+	  <li><a href="/"><it>Try it!</it></a>
+	  <li><a href="#"><it>Resources</it></a>
+	    <ul>
+	      <li><a href="/api"><it>API</it></a></li>
+	      <li><a href="/ontology"><it>Ontology</it></a></li>
+	      <li><a href="/datasources"><it>Data Sources</it></a></li>
+	    </ul>
+	  </li>
+	  <li><a href="/about"><it>About</it></a></li>
+	</ul>
+	</nav>
+</div>
+<!--Buffer Div-->
+<div id="buffer_div"> 
+</div> 
+
+
+<!-- Main Div -->	
+<div id="main_div"> 
+
+	<div id="controls" align="center">
+		<h1>Try out Cepler!</h1>
+	<form>
+	<div align=center>
+		<div style="height:60px;">
+			<input id="textbox"></input>
+			<select id ="slct" >
+			<option selected> Choose a unit... </option>
+			  <optgroup label="Weight">
+			  	<option value="t">t</option>
+			    <option value="kg">kg</option>
+			    <option value="g">g</option>
+			  </optgroup>
+			  <optgroup label="Distance">
+			    <option href="https://www.wikidata.org/wiki/Q828224" value="km">km</option>
+			    <option value="m">m</option>
+			    <option value="cm">cm</option>
+			  </optgroup>
+			    <optgroup label="Money">
+			    <option value="euro">Euro</option>
+			    <option value="usd">US-Dollar</option>
+			  </optgroup>
+			</select>
+		</div>
+	</form>
+	</div> 
+	<div id="button_try_div" align="center" >
+		<button type="button" class="button" onclick="tryItClick()" >Try it!</button>
+	</div>
+	</div>
+
+</div>
+
+<!-- Result-->
+<h2 style="color: #04B45F" align ="center" id="status_text"></h2>
+
+<div id="outer_res_div">
+<div id="resultDiv" class="div_res" style="min-height: 400px;">
+	<h2 style="color: #04B45F;"id="display_result"></h2>
+	<div align="center">
+		<h1>Your Result:</h1>
+		<p class="maintext"><h31> <a id="inValue"> 4003939 </a> <a id="inUnit"> t </a></h31> are about</p>
+		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
+		<p class="maintext"><h31> <a class="ourLink" target="_blank" href="" id="resultLabel"> Dirk Notwitzki</h1></h31> <a  id="original_value"></a> </a></p>
+		<p id="typeLabel" class="maintext"></p>
+		<div id="image_div">
+			<a class="image_container" >
+			<img id="resultPic" alt="" />
+			</a>
+		</div>
+	</div>
+</div>
+<div style="height: 32px;"></div>
+	<div id="button_try_div" align="center" >
+		<button type="button" class="button" onclick="tryItClick()" >Try again!</button>
+		<button type="button" class="button" onclick="twitterClick()" >Tweet it!</button>
+	</div>
+</div>
+</div>
+
+
+
+
+<!-- Footer -->	
+<div style="height:50px;"></div>
+<footer>
+	<div id="footerText" align=center>
+	(C) Ben, Nico, Lars
+	</div>
+</footer>
+
+
+</body>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')
+</script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<script src="//cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
+
+<script type="text/javascript">
+	function tryItClick()
+	{
+		document.getElementById('outer_res_div').style.display = 'none';
+
+		//First: check input validity
+		var value = document.getElementById('textbox').value;
+		var selectedUnit = document.getElementById('slct').value;
+		if( document.getElementById('slct').selectedIndex == 0)
+		{
+			ShowMessage("Please select a valid unit!");
+		}
+		else
+		{
+			if(value == "")
+			{
+				ShowMessage("Please enter a value!")
+			}
+			else if(!(Number(value)))
+			{
+				ShowMessage("Please enter a number!")
+			}
+			else
+			{
+				if(value==27121571)
+				{
+				 	window.location.href = 'https://en.wikipedia.org/wiki/Johannes_Kepler';
+				}
+				else
+				{
+					processRequest(value, selectedUnit);
+				}				
+			}
+		}
+	}
+
+	function timeoutHandle()
+	{
+		ShowMessage("Sorry, the server does not seem to respond...");
+	}
+
+	function ShowMessage( text, displayType )
+	{
+		DisplayResult(text, displayType)
+
+	}
+
+	function ShowMessage( text)
+	{
+		DisplayResult(text, "")
+	}
+
+	function ShowStatus(text)
+	{
+		DisplayResult(text, "Status")
+	}
+	
+	function processRequest( value, unit)
+	{
+		ShowStatus("... wait for it...", "");
+		$(function() 
+		{
+    		
+      		$.getJSON($SCRIPT_ROOT + '/compare', 
+      		{
+        		v: value,
+        		u: unit
+      		}, function(data) 
+      		{
+      			handleResponse(data);
+      			return false;
+    		});
+  		});
+	}
+
+	function handleResponse(response)
+	{
+		ShowMessage("Something was received!");
+		//var data = JSON.parse(response);
+
+		if (response.hasOwnProperty('result'))
+		{
+			document.getElementById('outer_res_div').style.display = 'none';
+			ShowMessage("No Result");
+		}
+		else
+		{
+			displayJSON(response);
+		}
+
+		
+		
+	}
+
+	function DisplayResult( text, displayType )
+	{
+		if(displayType.toString() == "result")
+		{
+			document.getElementById('display_result').innerHTML = text.toString();
+		}
+
+		else if(displayType.toString() == "Status")
+		{
+			document.getElementById('status_text').innerHTML = text.toString();
+		}
+
+		else
+		{
+			document.getElementById('status_text').innerHTML = text.toString();
+		}
+	}
+
+	function displayJSON(data)
+	{
+		console.log("Great Success")
+		ShowMessage("Great Success!");
+		document.getElementById('inValue').innerHTML = data['in_value'].toString();
+		document.getElementById('inUnit').innerHTML = data['in_unit'].toString();
+		document.getElementById('factor').innerHTML = data['factor'].toString();
+		document.getElementById('resultLabel').innerHTML = data['result_label'].toString();
+		document.getElementById('resultLabel').href = data['result_uri'].toString(); 
+		var origVal = " (" + data['out_value'].toString() + " " + data['out_unit'].toString() + ")";
+		
+		if(origVal != null)
+		{
+			document.getElementById('original_value').innerHTML = origVal.toString();
+		}
+
+		//Check for type Label
+		if(data.hasOwnProperty('type_label'))
+		{
+			var desciption = "which is a " + data['type_label'].toString();	
+			document.getElementById('typeLabel').innerHTML = desciption.toString();
+			console.log("Type Label found!");
+		}
+
+		//Check for Picture
+		if(data.hasOwnProperty('depiction'))
+		{
+			document.getElementById('resultPic').src =  data['depiction'].toString();	
+		}
+
+
+		document.getElementById('outer_res_div').style.display = 'block';
+	}
+
+	function twitterClick()
+	{
+		console.log("Posting on Twitter");
+		var textToTweet = getTwitterString();
+		if (textToTweet.length > 140)
+		{
+			alert('Tweet should be less than 140 Chars');
+		}
+		else 
+		{
+			var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(textToTweet);
+			window.open(twtLink,'_blank');
+		}
+	}
+
+	function getTwitterString()
+	{
+		console.log("Building Twitter String");
+
+		var resultLabel = document.getElementById('resultLabel').innerHTML.toString().replace(' ', '');
+
+		var twitterString = "Look, I found this comparison on http://cepler.org : ";
+		twitterString += document.getElementById('inValue').innerHTML.toString();
+		twitterString += " ";
+		twitterString += document.getElementById('inUnit').innerHTML.toString();
+		twitterString += " are about ";
+		twitterString += document.getElementById('factor').innerHTML.toString();
+		twitterString += " ";
+		twitterString += document.getElementById('resultLabel').innerHTML.toString();
+		twitterString += ". #Cepler #" + resultLabel;
+
+		console.log("This is the Twitter String: " + twitterString.toString());
+		return twitterString;
+
+	}
+
+
+</script>
+<!-- $("#result").text(data.result); -->
+
+</html>
