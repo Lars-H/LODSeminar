@@ -68,62 +68,11 @@ class RequestHandler:
 		# Input is normalized to base unit.
 		norm_value = conv.convert(orig_value, orig_unit, quantity, RequestHandler.logString)
 
-		# The normalized input value is divided by a partly randomized factor.
-		factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
-		query_value = norm_value/factor
-		print(RequestHandler.logString + "We will query " + str(query_value)+".")
+		# Ask results from the wrappers.
+		finalGraph = self.getFinalGraph(quantity, norm_value, base_unit, graphBuilder, out_format, orig_unit, orig_value)
 
-		# A range inside which results can lie around the query value is determined.
-		range = rangeProvider.getRange(query_value, RequestHandler.logString)
-
-		# TODO Methode, die dynamisch Faktor auswaehlt, Range berechnet, Wrappers durchgeht (und das iterativ)
-
-		# Process of wrapper selection, TODO auslagern
-		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
-		random.shuffle(possibleWrappers)
-		currentWrapper = possibleWrappers.pop(0)
-
-		#try:
-		rdfResult = self.getData(currentWrapper, query_value, base_unit, range)
-		#except Exception:
-		#	raise RuntimeError("Fetching data from the wrapper failed!")
-
-		# Process results
-		if rdfResult is not None:
-
-			# For debugging:
-			print(rdfResult.serialize(format='turtle'))
-
-			# Merge request and result graphs and add the factor
-			try:
-				finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
-				finalGraph = graphBuilder.addFactorToGraph(factor)
-			except Exception:
-				raise RuntimeError("Merging request and result graphs failed!")
-
-			# Convert output graph to JSON-LD and save as file (for debugging).
-			#finalGraph.serialize(destination='graph_tests/factorFinalGraph.txt', format='turtle')
-			#finalGraph.serialize(destination='graph_tests/factorFinalGraph_JSONLD.txt', format='json-ld', indent=4)
-
-			# TODO auslagern
-			if outFormat == "json":
-				
-				print(graphBuilder.buildJSON(factor, inValue, inUnit))
-				return graphBuilder.buildJSON(factor, inValue, inUnit)
-			
-			elif outFormat == "json-ld":
-
-				# Return graph to the calling program.		
-				print(finalGraph.serialize(format='json-ld', indent=4))
-				return finalGraph.serialize(format='json-ld', indent=4)
-
-			else:
-
-				raise ValueError("Return format must be 'json' or 'json-ld'! This should have been asserted before...")
-
-		else:
-			print("No results returned.")
-			return None
+		# Pass to calling method.
+		return finalGraph
 
 
 
@@ -167,10 +116,7 @@ class RequestHandler:
 		#requestGraph.serialize(destination='graph_tests/interfaceRequestGraph.txt', format='turtle')
 
 		# Get data from wrapper
-		#try:
 		rdfResult = self.getData(wrapper, float(query_value), base_unit, float(range))
-		#except Exception:
-		#	raise RuntimeError("Fetching data from the wrapper failed!")
 	
 		# Merge request and result (no factor here).
 		if rdfResult is not None:
@@ -282,3 +228,80 @@ class RequestHandler:
 		requestGraph = graphBuilder.buildRequestGraph(orig_value, orig_unit_wd)
 
 		return requestGraph
+
+
+
+
+
+	# TODO comment
+	def getFinalGraph(self, quantity, norm_value, base_unit, graphBuilder, out_format, orig_unit, orig_value):
+
+		# Get list of all wrappers which can process this quantity
+		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
+		
+		# Calculate a random wrapper ranking
+		random.shuffle(possibleWrappers)
+		
+		# Try at most 10 random factors
+		factor = 0
+		range = 0
+		x = 0
+		rdfResult = None
+		while x < 10 and not rdfResult:
+
+			# Logging
+			print(RequestHandler.logString + "Factor attempt no. " + str(x + 1))
+
+			# Make a copy of possibleWrappers
+			wrapperQueue = possibleWrappers
+
+			# The normalized input value is divided by a partly randomized factor.
+			factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
+			query_value = norm_value/factor
+			print(RequestHandler.logString + "We will query " + str(query_value)+".")
+
+			# A range inside which results can lie around the query value is determined.
+			valueRange = rangeProvider.getRange(query_value, RequestHandler.logString)
+
+			# try all wrappers
+			currentWrapper = None
+			while wrapperQueue and not rdfResult:
+				currentWrapper = wrapperQueue.pop(0)
+				rdfResult = self.getData(currentWrapper, query_value, base_unit, valueRange)
+
+			# Next iteration
+			x = x + 1
+
+
+		# If result was found, merge to request graph and return final graph. Else, return None
+		if rdfResult: 
+			# For debugging:
+			#print(rdfResult.serialize(format='turtle'))
+
+			# Merge request and result graphs and add the factor
+			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
+			finalGraph = graphBuilder.addFactorToGraph(factor)
+
+			# For debugging:
+			#print(finalGraph.serialize(format='turtle'))
+			#print(finalGraph.serialize(format='json-ld', indent=4))
+
+			# Process results
+			if out_format == "json":
+				
+				print(graphBuilder.buildJSON(factor, orig_value, orig_unit))
+				return graphBuilder.buildJSON(factor, orig_value, orig_unit)
+			
+			elif out_format == "json-ld":
+
+				# Return graph to the calling program.		
+				print(finalGraph.serialize(format='json-ld', indent=4))
+				return finalGraph.serialize(format='json-ld', indent=4)
+
+			else:
+
+				raise ValueError("Return format must be 'json' or 'json-ld'! This should have been asserted before...")
+
+		else:
+			print("No results returned.")
+			return None
