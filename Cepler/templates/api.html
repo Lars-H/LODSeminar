@@ -27,6 +27,9 @@
 <!--Buffer Div-->
 <div id="buffer_div"> 
 </div> 
+<div align="center">
+  <h1 style="color: red; opacity: 0.7;">Beta version.</h1>
+</div>
 
 
 <!-- Main Div -->	
@@ -59,6 +62,9 @@
   							<h2>Desciption:</h2>
   							<p class="maintext">The compare method can be used in order to compare a given value and unit to another resource.
   							</p>
+                <h2>Accepts:</h2>
+                <p class="maintext">Acceptable Datatypes: "application/ld+json"
+                </p>
   							<h2>Parameters:</h2>
   							<ul class="maintext" >
   								<li style="font-weight:bold;">value (required)</li>
@@ -79,79 +85,79 @@
   							<div class="json_div">
   							<pre>
 [
-  {
-    "@id": "_:result",
-    "@type": [
-      "http://dbpedia.org/ontology/Automobile"
-    ],
-    "http://lemon-model.net/lemon#context": [
-      {
-        "@id": "https://www.wikidata.org/wiki/Q11570"
-      }
-    ],
-    "http://purl.org/dqm-vocabulary/v1/dqm#hasURI": [
-      {
-        "@id": "http://dbpedia.org/resource/Penny_board"
-      }
-    ],
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
-      {
-        "@value": 1.9
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Penny board"
-      }
-    ],
-    "http://xmlns.com/foaf/0.1/depiction": [
-      {
-        "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Penny_Skateboard_at_a_skateboard_and_surfer_shop_in_Shibuya,_Tokyo.jpg"
-      }
-    ]
-  },
-  {
-    "@id": "http://dbpedia.org/ontology/Automobile",
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "automobile"
-      }
-    ]
-  },
-  {
-    "@id": "_:query",
-    "http://schema.org/result": [
-      {
-        "@id": "_:result"
-      }
-    ],
-    "http://semanticscience.org/resource/SIO_001018": [
-      {
-        "@value": 16812
-      }
-    ],
-    "http://spinrdf.org/spin#query": [
-      {
-        "@id": "_:request"
-      }
-    ]
-  },
-  {
-    "@id": "_:request",
-    "@type": [
-      "http://purl.org/net/provenance/types#Query"
-    ],
-    "http://lemon-model.net/lemon#context": [
-      {
-        "@id": "https://www.wikidata.org/wiki/Q11570"
-      }
-    ],
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
-      {
-        "@value": 33333.0
-      }
-    ]
-  }
+    {
+        "@id": "http://dbpedia.org/ontology/Place",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "place"
+            }
+        ]
+    },
+    {
+        "@id": "_:result",
+        "@type": [
+            "http://dbpedia.org/ontology/Place"
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q11573"
+            }
+        ],
+        "http://www.cepler.org/ontology#uri": [
+            {
+                "@id": "http://dbpedia.org/resource/Autostrada_A4_(Italy)"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": "517000.0"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Autostrada A4 (Italien)"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/depiction": [
+            {
+                "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Mappa_autostrada_A4_Italia.svg"
+            }
+        ]
+    },
+    {
+        "@id": "_:query",
+        "http://schema.org/result": [
+            {
+                "@id": "_:result"
+            }
+        ],
+        "http://semanticscience.org/resource/SIO_001018": [
+            {
+                "@value": 71
+            }
+        ],
+        "http://spinrdf.org/spin#query": [
+            {
+                "@id": "_:request"
+            }
+        ]
+    },
+    {
+        "@id": "_:request",
+        "@type": [
+            "http://purl.org/net/provenance/types#Query"
+        ],
+        "http://lemon-model.net/lemon#context": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q828224"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 37372.0
+            }
+        ]
+    }
 ]</pre>
   							</div>
 
@@ -162,8 +168,14 @@
   							</pre>
   						</div>
   							<h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
-  							<p class="maintext" >Client Error: The request could not be handled</p>
+  							<p class="maintext" >Client Error: The request could not be handled due to an incorrect request.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> </h2>
+                <p class="maintext" >Client Error: The accept header was not correctly specified. Please note that only "application/ld+json" is supported with the current API.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/500">500</a> </h2>
+                <p class="maintext" >Server Error: Something went wrong on the server. We are sorry that we could not complete your request!</p>
+              </div>
   						</div>
+              
   						</div>	
   						<div class="req_div" id="example">
   							<div class="inner_div">
