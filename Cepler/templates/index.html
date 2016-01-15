@@ -251,7 +251,7 @@
 		document.getElementById('factor').innerHTML = data['factor'].toString();
 		document.getElementById('resultLabel').innerHTML = data['result_label'].toString();
 		document.getElementById('resultLabel').href = data['result_uri'].toString(); 
-		var origVal = " (" + data['out_value'].toString() + " " + data['out_unit'].toString() + ")";
+		var origVal = " (" + parseInt(data['out_value']).toString() + " " + data['out_unit'].toString() + ")";
 		
 		if(origVal != null)
 		{
@@ -261,13 +261,17 @@
 		//Check for type Label
 		if(data.hasOwnProperty('type_label'))
 		{
-			var desciption = "which is a " + data['type_label'].toString() + ".";	
-			document.getElementById('typeLabel').innerHTML = desciption.toString();
-			console.log("Type Label found!");
-		}
-		else
-		{
-			document.getElementById('typeLabel').innerHTML = "";
+			if(data['type_label'].toString() == "")
+			{
+				document.getElementById('typeLabel').innerHTML = "";
+				console.log("No Type Label found!");
+			}
+			else
+			{
+				var desciption = "which is a " + data['type_label'].toString() + ".";	
+				document.getElementById('typeLabel').innerHTML = desciption.toString();
+				console.log("Type Label found!");
+			}
 		}
 
 		//Check for Picture

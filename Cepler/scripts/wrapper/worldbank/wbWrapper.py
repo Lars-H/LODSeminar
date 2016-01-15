@@ -49,13 +49,12 @@ class wbWrapper:
 			#Build Query String
 			queryStr = self.buildQuery(unit, value, rng)
 			#Run Query
-			print("WB-Wrapper Sparql Request: " + str(queryStr))
-
+			#print("WB-Wrapper Sparql Request: " + str(queryStr))
 			try:
 				#Old Implementation: No Threading
 				#results = self.runQuery(queryStr)
 
-				#Using threading in order to catch timeouts+
+				#Using threading in order to catch timeouts
 				self.res = None;
 				thread.start_new_thread( runQuery, (self, queryStr))
 				timer = 1
@@ -65,10 +64,10 @@ class wbWrapper:
 
 				if not (self.res is None):
 					results = self.res
-					print("Result found in time.")
-					print(str(results))
+					#print("Result found in time.")
+					#print(str(results))
 				else:
-					print("No result found in time")	
+					#print("No result found in time")	
 					return None;
 
 			except TypeError:
@@ -102,8 +101,6 @@ class wbWrapper:
 		return results;
 
 	def resultCallback(self, results):
-		#print(results)
-		#print(str(self))
 		self.res = results;
 
 
