@@ -15,7 +15,7 @@ wbWrapper1 = wbWrapper();
 
 #testresult = wbWrapper1.buildQuery(Mapping.COST, 45000000000, 4500000000)
 
-rdfResult = wbWrapper1.getResults(Mapping.COST, 2304982677, 2000900000) 
+rdfResult = wbWrapper1.getResults(Mapping.COST, 2, 4) 
 
 
 if rdfResult is not None:

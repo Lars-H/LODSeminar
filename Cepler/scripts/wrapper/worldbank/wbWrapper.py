@@ -4,7 +4,18 @@ from SPARQLWrapper import SPARQLWrapper, N3
 import simplejson as json 
 import wbProperties
 import random
+import threading
+import thread
+import time
 from Properties import Mapping
+
+#Run Query 
+#Used for threading
+def runQuery( wrapperO, query ):	
+		wrapperO.sparql.setQuery(query);
+		results = wrapperO.sparql.query().convert()
+		wrapperO.resultCallback(results);
+
 
 class wbWrapper: 
 
@@ -41,7 +52,25 @@ class wbWrapper:
 			print("WB-Wrapper Sparql Request: " + str(queryStr))
 
 			try:
-				results = self.runQuery(queryStr)
+				#Old Implementation: No Threading
+				#results = self.runQuery(queryStr)
+
+				#Using threading in order to catch timeouts+
+				self.res = None;
+				thread.start_new_thread( runQuery, (self, queryStr))
+				timer = 1
+				while ((self.res is None) and (timer <= 5) ):
+					timer += 1
+					time.sleep(1)
+
+				if not (self.res is None):
+					results = self.res
+					print("Result found in time.")
+					print(str(results))
+				else:
+					print("No result found in time")	
+					return None;
+
 			except TypeError:
 				return None
 			#Decode 
@@ -70,8 +99,13 @@ class wbWrapper:
 	def runQuery(self,  query ):		
 		self.sparql.setQuery(query);
 		results = self.sparql.query().convert()
-		#print(len(results))
 		return results;
+
+	def resultCallback(self, results):
+		#print(results)
+		#print(str(self))
+		self.res = results;
+
 
 	def buildQuery(self, unit, value, rng):
 		#Add the QueryPrefix
