@@ -150,6 +150,10 @@
 			{
 				ShowMessage("Don't be so negative!")	
 			}
+			else if(parseInt(value) >= 1 000 000 000 000)
+			{
+				ShowMessage("Don't aim to high! Enter a smaller value please.")	
+			}
 			else
 			{
 				if(value==27121571)
@@ -241,6 +245,7 @@
 	{
 		console.log("Great Success")
 		ShowMessage("Great Success!");
+
 		document.getElementById('inValue').innerHTML = data['in_value'].toString();
 		document.getElementById('inUnit').innerHTML = data['in_unit'].toString();
 		document.getElementById('factor').innerHTML = data['factor'].toString();

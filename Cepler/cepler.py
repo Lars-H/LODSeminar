@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, render_template, request, abort
+from flask import Flask, jsonify, render_template, request, abort, send_from_directory
 from scripts.application import RequestHandler
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from flask_negotiate import consumes, produces
@@ -143,8 +143,17 @@ def api():
 
 @app.route('/ontology')
 def ontology():
-    return render_template('ontology.html')  
+    #Get the accept header
+    acceptHeader = str(request.accept_mimetypes)
 
+    if "text/turtle" in acceptHeader:
+        return send_from_directory('static', 'cepler_ontology.ttl');
+    else:
+        return render_template('ontology.html')  
+
+@app.route('/download/ontology')
+def ontology_download():
+    return send_from_directory('static', 'cepler_ontology.ttl');
 
 @app.route('/datasources')
 def datasources():

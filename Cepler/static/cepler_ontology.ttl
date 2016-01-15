@@ -4,47 +4,48 @@
 @prefix schema: <http://schema.org/> .
 @prefix wikibase: <http://wikiba.se/ontology#> .
 
+#Cepler Class: Request
 cep:Request rdf:type rdfs:Class .
 cep:Request rdfs:label "Request" @en .
 cep:Request rdfs:comment "Specifies the parameters that are requested, consisting of an input value and an input unit." @en .
 
-
+#Cepler Property: request
 cep:request rdf:type rdf:Property .
 cep:request rdf:label "request" @en .
 cep:request rdfs:comment "Relates a Cepler Query to its Cepler Request. " @en .
 cep:request rdfs:domain cep:Query .
 cep:request rdfs:range cep:Request .
 
-
+#Cepler Property: factor
 cep:factor rdf:type rdf:Property .
 cep:factor rdf:label "factor" @en .
 cep:factor rdfs:comment "Adds a factor to a Cepler Query to set the requested value and a Cepler Result into a numeric relation." @en .
 cep:factor rdfs:domain cep:Query .
 
-
+#Cepler Class: Query
 cep:Query rdf:type rdfs:Class .
 cep:Query rdfs:label "Query" @en .
 cep:Query rdfs:comment "Is a Query to the Cepler API that combines a Cepler Request with a Cepler Result." @en .
 
-
+#Cepler Class: Result
 cep:Result rdf:type rdfs:Class .
 cep:Result rdfs:label "Result" @en .
 cep:Result rdfs:comment "Is a Result to a Cepler Query being related to a Cepler request." @en .
 
-
+#Cepler Property: result
 cep:result rdf:type rdf:Property .
 cep:result rdf:label "result" @en .
 cep:result rdfs:comment "Relates a Cepler Query to its Cepler Result." .
 cep:result rdfs:domain cep:Query .
 cep:result rdfs:range cep:Result .
 
-
+#Cepler Property: unit
 cep:unit rdf:type rdf:Property .
 cep:unit rdf:label "unit" @en .
 cep:unit rdfs:comment "Adds a unit. "
 cep:unit schema:isSimilarTo wikibase:quantityUnit .
 
-
+#Cepler Property: uri
 cep:uri rdf:type rdf:Property .
 cep:uri rdf:label "uri" @en .
 cep:uri rdfs:comment "Relates a URI to a Cepler Result." @en .
