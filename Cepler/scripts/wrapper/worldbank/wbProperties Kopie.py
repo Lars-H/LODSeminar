@@ -2,8 +2,7 @@
 
 #Prefixes
 
-#wbIndicatorPrefix = "http://worldbank.270a.info/dataset/"
-wbIndicatorPrefix = "wb:";
+wbIndicatorPrefix = "http://worldbank.270a.info/dataset/"
 
 #Indicators
 nationalIncome = wbIndicatorPrefix + "NY.ADJ.NNTY.CD"

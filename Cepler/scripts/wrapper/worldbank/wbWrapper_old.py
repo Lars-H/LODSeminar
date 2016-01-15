@@ -19,7 +19,7 @@ class wbWrapper:
 		self.endPointUrl = "http://worldbank.270a.info/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "Prefix wb: <http://worldbank.270a.info/dataset/> Prefix c: <http://purl.org/linked-data/cube#> Prefix pd: <http://purl.org/linked-data/sdmx/2009/dimension#> Prefix pm: <http://purl.org/linked-data/sdmx/2009/measure#> Prefix y:<http://reference.data.gov.uk/id/year/> select distinct ?i ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
+		self.QueryPrefix = "select distinct ?indicator ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
 		self.__initNamespaces();
 		return;
@@ -38,12 +38,11 @@ class wbWrapper:
 			#Build Query String
 			queryStr = self.buildQuery(unit, value, rng)
 			#Run Query
-			print("WB-Wrapper Sparql Request: " + str(queryStr))
-
 			try:
 				results = self.runQuery(queryStr)
-			except TypeError:
-				return None
+			except URLError:
+				return None;	
+			print(len(results['results']['bindings']))
 			#Decode 
 			if(len(results['results']['bindings']) >0):
 				i  = random.randrange(0, len(results['results']['bindings']), 1)
@@ -83,26 +82,26 @@ class wbWrapper:
 		for i in range(len(wbProperties.wbIndicators)):
 			if(i > 0):
 				query += " UNION "
-			query += "{ ?i c:dataSet " + wbProperties.wbIndicators[i] + " . }"
+			query += "{ ?indicator <http://purl.org/linked-data/cube#dataSet> <" + wbProperties.wbIndicators[i] + "> . }"
 
 		#limit years
 		for i in range(len(wbProperties.wbAllowedYears)):
 			if(i > 0):
 				query += " UNION "
-			query += "{ ?i pd:refPeriod y:" + wbProperties.wbAllowedYears[i] + " . }"
+			query += "{ ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/" + wbProperties.wbAllowedYears[i] + "> . }"
 
 			#retreive acutal values
-		query += " ?i pm:obsValue ?actualValue. "
+		query += " ?indicator <http://purl.org/linked-data/sdmx/2009/measure#obsValue> ?actualValue. "
 
 		#retrieve indicator label
-		query += " ?i <http://worldbank.270a.info/property/indicator> ?Ti. ?Ti <http://www.w3.org/2004/02/skos/core#prefLabel> ?indicatorLabel. "
+		query += " ?indicator <http://worldbank.270a.info/property/indicator> ?TOPindicator. ?TOPindicator <http://www.w3.org/2004/02/skos/core#prefLabel> ?indicatorLabel. "
 
 		#retrieve country label
-		query += " ?i pd:refArea ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
+		query += " ?indicator <http://purl.org/linked-data/sdmx/2009/dimension#refArea> ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
 
 		#add range
-		query += " FILTER (?actualValue > " + str(int(value - rng/2)) + ")"
-		query += " FILTER (?actualValue < " + str(int(value + rng/2)) + ")"
+		query += " FILTER (?actualValue > " + str(value - rng/2) + ")"
+		query += " FILTER (?actualValue < " + str(value + rng/2) + ")"	
 
 		#retrieve DBpedia Link of country
 
@@ -118,12 +117,11 @@ class wbWrapper:
 
 
 	def resultToRDF(self, result):
-		print(result)
+		#print(result)
 		if(bool(result)):
-			indicatorNode = result['i']
+			indicatorNode = result['indicator']
 			indicatorURI = indicatorNode['value']
 
-			print(indicatorURI)
 			indicatorLabelNode = result['indicatorLabel']
 			indicatorLabelValue = indicatorLabelNode['value']  
 
@@ -171,7 +169,6 @@ class wbWrapper:
 		return g;		
 
 	def getDBPic(self, resourceURL):
-		print(resourceURL)
 		sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 		query =	" select ?countryPic WHERE { <"  + resourceURL + "> <http://xmlns.com/foaf/0.1/depiction> ?countryPic . }"
 		sparql.setQuery(query) 
@@ -186,7 +183,7 @@ class wbWrapper:
 		if(bool(picResult)):
 			countryNode = picResult['countryPic']
 			picURI = countryNode['value']
-			print(picURI)
+
 			return picURI;
 
 		else: return None
