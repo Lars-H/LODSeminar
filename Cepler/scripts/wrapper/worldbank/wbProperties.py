@@ -18,4 +18,4 @@ minimumWage19yearOld = wbIndicatorPrefix + "DB_mw_19apprentice"
 wbIndicators = [nationalIncome, nationalSavings, weaponExports, weaponImports, foreignDirectInvestment, BPI, BPIPerCapita, governmentHealthExpediturePerCapita, minimumWage19yearOld]
 
 #Used years
-wbAllowedYears = ["2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"]
+wbAllowedYears = ["2008", "2009", "2010", "2011", "2012"]
