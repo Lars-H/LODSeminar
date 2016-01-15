@@ -36,11 +36,11 @@ def compare():
             #Try to get a JSON-LD response
             try:
                 response = handler.getResponse(value, unit, 'json-ld')
-            except ValueError:
-                print('Server: A ValueError has occured.')
+            except ValueError as e:
+                print('Server: A ValueError has occured. ' + str(e))
                 badRequest();
-            except RuntimeError:
-                print('Server: An RuntimeError has occured.')
+            except RuntimeError as e:
+                print('Server: A RuntimeError has occured. ' + str(e))
                 abort(500);    
 
             #Return answer        
@@ -57,12 +57,12 @@ def compare():
             try:
                 response = handler.getResponse(value, unit, 'json')
                 print(response);
-            except ValueError:
-                print('Server: A ValueError has occured.')
+            except ValueError as e:
+                print('Server: A ValueError has occured. ' + str(e))
                 badRequest();
-            except RuntimeError:
-                print('Server: An RuntimeError has occured.')
-                abort(500);    
+            except RuntimeError as e:
+                print('Server: A RuntimeError has occured. ' + str(e))
+                abort(500);     
                                       
             if not (response is None):
                 return response;

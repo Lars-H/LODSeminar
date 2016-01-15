@@ -64,7 +64,7 @@
 	</form>
 	</div> 
 	<div id="button_try_div" align="center" >
-		<button type="button" class="button" onclick="tryItClick()" >Try it!</button>
+		<button id='theButton'type="button" class="button" onclick="tryItClick()" >Try it!</button>
 	</div>
 	</div>
 
@@ -146,6 +146,10 @@
 			{
 				ShowMessage("Please enter a number!")
 			}
+			else if(parseInt(value) <= 0)
+			{
+				ShowMessage("Don't be so negative!")	
+			}
 			else
 			{
 				if(value==27121571)
@@ -212,10 +216,7 @@
 		else
 		{
 			displayJSON(response);
-		}
-
-		
-		
+		}		
 	}
 
 	function DisplayResult( text, displayType )
@@ -255,15 +256,24 @@
 		//Check for type Label
 		if(data.hasOwnProperty('type_label'))
 		{
-			var desciption = "which is a " + data['type_label'].toString();	
+			var desciption = "which is a " + data['type_label'].toString() + ".";	
 			document.getElementById('typeLabel').innerHTML = desciption.toString();
 			console.log("Type Label found!");
+		}
+		else
+		{
+			document.getElementById('typeLabel').innerHTML = "";
 		}
 
 		//Check for Picture
 		if(data.hasOwnProperty('depiction'))
 		{
-			document.getElementById('resultPic').src =  data['depiction'].toString();	
+			document.getElementById('resultPic').src =  data['depiction'].toString();
+			document.getElementById('image_div').style.display = 'block';	
+		}
+		else
+		{
+			document.getElementById('image_div').style.display = 'none';
 		}
 
 
@@ -274,15 +284,15 @@
 	{
 		console.log("Posting on Twitter");
 		var textToTweet = getTwitterString();
-		if (textToTweet.length > 140)
+		/*if (textToTweet.length > 140)
 		{
 			alert('Tweet should be less than 140 Chars');
 		}
 		else 
-		{
+		{*/
 			var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(textToTweet);
 			window.open(twtLink,'_blank');
-		}
+		//}
 	}
 
 	function getTwitterString()
@@ -305,6 +315,7 @@
 		return twitterString;
 
 	}
+
 
 
 </script>
