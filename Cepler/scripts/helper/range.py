@@ -6,4 +6,4 @@ def getRange(query_value, logString='RANGE - '):
 	print(logString + "Range is " + str(range) + ", meaning values between " + \
 			str(query_value-range/2) + " and " + \
 			str(query_value+range/2) + " can be returned.")
-	return range	
+	return range

@@ -239,14 +239,12 @@ class RequestHandler:
 	# TODO comment
 	def getFinalGraph(self, quantity, norm_value, base_unit, graphBuilder, out_format, orig_unit, orig_value):
 
-		# Get list of all wrappers which can process this quantity
+		# Get shuffled list of all wrappers which can process this quantity and shuffled list of factors.
 		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
-		
-		# Calculate a random wrapper ranking
-		random.shuffle(possibleWrappers)
-		
+		possibleFactors = factorProvider.getFactorsAndRanges()
+
 		# Try at most 10 random factors
-		factor = 0
+		currentFactor = 0
 		range = 0
 		x = 0
 		rdfResult = None
