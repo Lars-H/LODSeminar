@@ -19,7 +19,7 @@ class wbWrapper:
 		self.endPointUrl = "http://worldbank.270a.info/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "Prefix wb: <http://worldbank.270a.info/dataset/> Prefix c: <http://purl.org/linked-data/cube#> Prefix pd: <http://purl.org/linked-data/sdmx/2009/dimension#> Prefix pm: <http://purl.org/linked-data/sdmx/2009/measure#> Prefix y:<http://reference.data.gov.uk/id/year/> select distinct ?i ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
+		self.QueryPrefix = "Prefix wb: <http://worldbank.270a.info/dataset/> Prefix c: <http://purl.org/linked-data/cube#> Prefix pd: <http://purl.org/linked-data/sdmx/2009/dimension#> Prefix pm: <http://purl.org/linked-data/sdmx/2009/measure#> Prefix y: <http://reference.data.gov.uk/id/year/> select distinct ?i ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
 		self.__initNamespaces();
 		return;
@@ -118,19 +118,21 @@ class wbWrapper:
 
 
 	def resultToRDF(self, result):
-		print(result)
+		#print(result)
 		if(bool(result)):
 			indicatorNode = result['i']
 			indicatorURI = indicatorNode['value']
 
-			print(indicatorURI)
+			#print(indicatorURI)
 			indicatorLabelNode = result['indicatorLabel']
 			indicatorLabelValue = indicatorLabelNode['value']  
 
 			countryLabelNode = result['countryLabel']
 			countryLabelValue = countryLabelNode['value']
 
-			combinedLabelValue = indicatorLabelValue + " of " + countryLabelValue
+			#year as substring of indicator value
+			valueYear = indicatorURI[-4:]
+			combinedLabelValue = indicatorLabelValue + " of " + countryLabelValue + " (" + valueYear + ")"
 
 			indicatorActualValueNode = result['actualValue']
 			indicatorActualValue = indicatorActualValueNode['value']
@@ -156,7 +158,7 @@ class wbWrapper:
 				if countryDBPic is not None:
 					g.add( (response, FOAF.depiction, URIRef(countryDBPic) ))
 			
-			g.serialize(destination='output.txt', format='n3')
+			#g.serialize(destination='output.txt', format='n3')
 
 		return g	
 
@@ -171,7 +173,6 @@ class wbWrapper:
 		return g;		
 
 	def getDBPic(self, resourceURL):
-		print(resourceURL)
 		sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 		query =	" select ?countryPic WHERE { <"  + resourceURL + "> <http://xmlns.com/foaf/0.1/depiction> ?countryPic . }"
 		sparql.setQuery(query) 
@@ -186,7 +187,6 @@ class wbWrapper:
 		if(bool(picResult)):
 			countryNode = picResult['countryPic']
 			picURI = countryNode['value']
-			print(picURI)
 			return picURI;
 
 		else: return None
