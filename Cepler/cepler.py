@@ -46,13 +46,15 @@ def compare():
             #Return answer        
             if not (response is None):
                 #Valid response
+                #Return it as JSON-LD
                 return response;
             else:
                 #No result found
                 return jsonify(result = 'no result was found');
 
-        #JSON             
-        elif "application/json" in acceptHeader: 
+        #HTML          
+        #elif "application/json" in acceptHeader: 
+        else:    
             print('Server: Received a JSON request.')
             try:
                 response = handler.getResponse(value, unit, 'json')
@@ -65,16 +67,17 @@ def compare():
                 abort(500);     
                                       
             if not (response is None):
-                return response;
+                #Render template and inject JSON
+                return render_template('index_temp.html', data=response)
+                #return response;
             else:
                 return jsonify(result = 'no result was found'); 
 
         #Unsupported Datatype       
-        else:
-            return abort(406);
+        #else:
+        #    return abort(406);
     else:
         return badRequest();        
-
 
 #Handling direct negotiation with interfaces
 #Example query: http://localhost:5000/dbpedia/compare?v=210&u=t&r=0.2
@@ -157,7 +160,18 @@ def ontology_download():
 
 @app.route('/datasources')
 def datasources():
-    return render_template('datasources.html')      
+    return render_template('datasources.html')  
+
+@app.route('/describe')
+def describe():
+    #Get the variable value and unit
+    try:
+        value = request.args.get('v')
+        unit = request.args.get('u')
+    except IOError:
+        return badRequest();
+
+    return render_template('index_temp.html', data=data)    
 
 #Other Function
 
