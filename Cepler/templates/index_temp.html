@@ -89,6 +89,7 @@
 			<img id="resultPic" alt="" />
 			</a>
 		</div>
+		<p class="maintext" id="sharableLink"></p>
 	</div>
 </div>
 <div style="height: 32px;"></div>
@@ -281,7 +282,7 @@
 		}
 
 		//Check for Picture
-		if(data.hasOwnProperty('depiction'))
+		if(data['depiction'].toString() != "")
 		{
 			document.getElementById('resultPic').src =  data['depiction'].toString();
 			document.getElementById('image_div').style.display = 'block';	
@@ -291,6 +292,13 @@
 			document.getElementById('image_div').style.display = 'none';
 		}
 
+		if(data.hasOwnProperty('display'))
+		{
+			if(data['display'].toString() != "")
+			{
+				document.getElementById('sharableLink').innerHTML = data['display'].toString() ; 
+			}
+		}
 
 		document.getElementById('outer_res_div').style.display = 'block';
 	}
@@ -299,15 +307,10 @@
 	{
 		console.log("Posting on Twitter");
 		var textToTweet = getTwitterString();
-		/*if (textToTweet.length > 140)
-		{
-			alert('Tweet should be less than 140 Chars');
-		}
-		else 
-		{*/
-			var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(textToTweet);
-			window.open(twtLink,'_blank');
-		//}
+
+		var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(textToTweet);
+		window.open(twtLink,'_blank');
+		
 	}
 
 	function getTwitterString()

@@ -5,6 +5,9 @@ from flask import Flask, jsonify, render_template, request, abort, send_from_dir
 from scripts.application import RequestHandler
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from flask_negotiate import consumes, produces
+from scripts.helper import cipher
+import json
+import urlparse
 
 
 app = Flask(__name__)
@@ -173,15 +176,21 @@ def ontology_download():
 def datasources():
     return render_template('datasources.html')  
 
-@app.route('/describe')
-def describe(message ='No Error message!'):
-    #Get the variable value and unit
-    try:
-        value = request.args.get('v')
-        unit = request.args.get('u')
-    except IOError:
-        return badRequest();
+@app.route('/display')
+def display():
+    #Get the request
+    rqst = str(request.args.get('r'));
+    print(rqst)
 
+    #Decrypt request
+    #Using the most advanced cryptographic algorihm ;) 
+    dcrpted = cipher.decrypt("cepler", rqst);
+    print(dcrpted)
+
+    #To JSON
+    data = json.dumps(urlparse.parse_qs(dcrpted))
+    print(str(data))
+        
     return render_template('index_temp.html', data=data)    
 
 
