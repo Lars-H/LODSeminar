@@ -86,75 +86,81 @@
   							<pre>
 [
     {
-        "@id": "http://dbpedia.org/ontology/Place",
+        "@id": "http://dbpedia.org/ontology/Automobile",
         "http://www.w3.org/2000/01/rdf-schema#label": [
             {
-                "@value": "place"
+                "@value": "automobile"
             }
         ]
     },
     {
-        "@id": "_:result",
+        "@id": "http://dbpedia.org/resource/Sisu_A-45",
         "@type": [
-            "http://dbpedia.org/ontology/Place"
-        ],
-        "http://www.cepler.org/ontology#unit": [
-            {
-                "@id": "https://www.wikidata.org/wiki/Q11573"
-            }
-        ],
-        "http://www.cepler.org/ontology#uri": [
-            {
-                "@id": "http://dbpedia.org/resource/Autostrada_A4_(Italy)"
-            }
-        ],
-        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
-            {
-                "@value": "517000.0"
-            }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-            {
-                "@value": "Autostrada A4 (Italien)"
-            }
-        ],
-        "http://xmlns.com/foaf/0.1/depiction": [
-            {
-                "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Mappa_autostrada_A4_Italia.svg"
-            }
-        ]
-    },
-    {
-        "@id": "_:query",
-        "http://schema.org/result": [
-            {
-                "@id": "_:result"
-            }
-        ],
-        "http://semanticscience.org/resource/SIO_001018": [
-            {
-                "@value": 71
-            }
-        ],
-        "http://spinrdf.org/spin#query": [
-            {
-                "@id": "_:request"
-            }
+            "http://dbpedia.org/ontology/Automobile"
         ]
     },
     {
         "@id": "_:request",
         "@type": [
-            "http://purl.org/net/provenance/types#Query"
+            "http://www.cepler.org/ontology#Statement"
         ],
-        "http://lemon-model.net/lemon#context": [
+        "http://www.cepler.org/ontology#unit": [
             {
-                "@id": "https://www.wikidata.org/wiki/Q828224"
+                "@id": "https://www.wikidata.org/wiki/Q191118"
             }
         ],
         "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
             {
-                "@value": 37372.0
+                "@value": 172.0
+            }
+        ]
+    },
+    {
+        "@id": "_:result",
+        "http://www.cepler.org/ontology#entity": [
+            {
+                "@id": "http://dbpedia.org/resource/Sisu_A-45"
+            }
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q11570"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 5000.0
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Sisu A-45"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/depiction": [
+            {
+                "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Protosisua45.jpg"
+            }
+        ]
+    },
+    {
+        "@id": "_:factor",
+        "@type": [
+            "http://www.cepler.org/ontology#Factor"
+        ],
+        "http://www.cepler.org/ontology#divides": [
+            {
+                "@id": "_:request"
+            }
+        ],
+        "http://www.cepler.org/ontology#multiplies": [
+            {
+                "@id": "_:result"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 33
             }
         ]
     }

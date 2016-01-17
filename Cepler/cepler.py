@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+
 import os
-from flask import Flask, jsonify, render_template, request, abort, send_from_directory, make_response
+from flask import Flask, jsonify, render_template, request, abort, send_from_directory, Response
 from scripts.application import RequestHandler
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from flask_negotiate import consumes, produces
@@ -51,7 +52,8 @@ def compare():
             if not (response is None):
                 #Valid response
                 #Return it as JSON-LD
-                return response;
+                #return response;
+                return Response(response, content_type='application/ld+json; charset=utf-8')
             else:
                 #No result found
                 return jsonify(result = 'no result was found');
