@@ -114,14 +114,12 @@ class WikidataWrapper:
 		#Add the query Suffix
 		query += self.QuerySuffix;
 	
-		print(query)	
 		return query;
 
 
 	def __resultToRDF(self, result):
 		#Check if there is a result
 		if(bool(result)):
-			print(result)
 			#Get the Uri in uriVale
 			entityValue = result['entity']['value']
 

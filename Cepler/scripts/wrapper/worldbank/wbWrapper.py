@@ -49,7 +49,6 @@ class wbWrapper:
 			#Build Query String
 			queryStr = self.buildQuery(unit, value, rng)
 			#Run Query
-			#print("WB-Wrapper Sparql Request: " + str(queryStr))
 			try:
 				#Old Implementation: No Threading
 				#results = self.runQuery(queryStr)
@@ -143,18 +142,16 @@ class wbWrapper:
 		
 		#Add the query Suffix
 		query += self.QuerySuffix;
-		
-		#print query
+
 		return query;
 
 
 	def resultToRDF(self, result):
-		#print(result)
 		if(bool(result)):
 			indicatorNode = result['i']
 			indicatorURI = indicatorNode['value']
 
-			#print(indicatorURI)
+
 			indicatorLabelNode = result['indicatorLabel']
 			indicatorLabelValue = indicatorLabelNode['value']  
 
@@ -185,7 +182,6 @@ class wbWrapper:
 				picNode = result['countryDBLink']
 				picValue = picNode['value']
 				countryDBPic = self.getDBPic(picValue)
-				#print countryDBPic
 				if countryDBPic is not None:
 					g.add( (response, FOAF.depiction, URIRef(countryDBPic) ))
 			
