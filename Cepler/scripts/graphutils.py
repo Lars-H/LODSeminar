@@ -64,6 +64,7 @@ class GraphBuilder:
 		
 		# Connect result subgraph to query
 		self.g.add( (BNode('factor'), GraphBuilder.CEP.multiplies, BNode('result')) )
+		self.g.add( (BNode('result'), RDF.type, GraphBuilder.CEP.Fact) )
 
 		return self.g
 
