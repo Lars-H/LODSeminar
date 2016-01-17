@@ -11,7 +11,7 @@ wikiwrapper = WikidataWrapper();
 
 #Get a Result from the Wrapper (RDF Graph)
 #rdfResult = wikiwrapper.getResults(Mapping.DISTANCE, 400000 ,10000)
-rdfResult = wikiwrapper.getResults(Mapping.COST, 5000800, 10003000);
+rdfResult = wikiwrapper.getResults(Mapping.DISTANCE, 5000800, 10003000);
 
 
 

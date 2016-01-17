@@ -50,7 +50,6 @@ class WikidataWrapper:
 		if(len(results['results']['bindings']) >0):
 			#As of now: Return the first result
 			i  = random.randrange(0, len(results['results']['bindings']), 1)
-			i= 21
 			print i 
 			try:
 				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
@@ -181,15 +180,9 @@ class WikidataWrapper:
 
 				#add Pic
 				if(furtherInfoResults.has_key("pic")):
-					picValue = result['pic']['value']
+					picValue = furtherInfoResults['pic']['value']
 
 					g.add( ( fact, FOAF.depiction, URIRef(picValue) ))
-
-				
-
-				
-				entTypeDescrValue = furtherInfoResults['entTypeDescr']['value']
-	
 
 				if(furtherInfoResults.has_key("entType")):
 					
