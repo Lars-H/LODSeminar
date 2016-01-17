@@ -19,7 +19,7 @@ class WikidataWrapper:
 		self.endPointUrl = "https://query.wikidata.org/bigdata/namespace/wdq/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "PREFIX p: <http://www.wikidata.org/prop/> PREFIX wikibase: <http://wikiba.se/ontology#> PREFIX wd: <http://www.wikidata.org/entity/> SELECT ?entity ?prop ?value  WHERE {"
+		self.QueryPrefix = "PREFIX schema: <http://schema.org/> PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX p: <http://www.wikidata.org/prop/> PREFIX wikibase: <http://wikiba.se/ontology#> PREFIX wd: <http://www.wikidata.org/entity/> SELECT ?entity ?entLabel ?entType ?entTypeDescr ?prop ?value WHERE {"
 		self.QuerySuffix = "} LIMIT 100"
 		self.__initNamespaces();
 		self.usefulResultFlag = True 
@@ -104,7 +104,7 @@ class WikidataWrapper:
 			#P2044 = elevation above sea level
 
 
-		query += "?statement1 wikibase:quantityUnit " + quantUnit + " . ?statement1 wikibase:quantityAmount ?value . ?statement2 ?prop1 ?statement1 . ?entity ?prop ?statement2 ."
+		query += "?statement1 wikibase:quantityUnit " + quantUnit + " . ?statement1 wikibase:quantityAmount ?value . ?statement2 ?prop1 ?statement1 . ?entity ?prop ?statement2 .  ?entity rdfs:label ?entLabel  . FILTER (lang(?entLabel)='en') ?entity wdt:P31 ?entType. ?entity schema:description ?entTypeDescr  FILTER (lang(?entTypeDescr)='en')"
 		
 		#Filter bad Props		
 		for i in range(len(excludedProps)):
@@ -131,9 +131,22 @@ class WikidataWrapper:
 			#Get the Actual Value for the Property
 			valueValue = result['value']['value']
 
+			#get the entity's label
+			entityLabelValue = result['entLabel']['value']
+
+			#get entity type
+			entityTypeValue = result['entType']['value']
+
+			#get entity type's description
+			entityTypeDescriptionValue = result['entTypeDescr']['value']
+
+
 			print(entityValue)
 			print(propValue)
 			print(valueValue)
+			print(entityLabelValue)
+			print(entityTypeValue)
+			print(entityTypeDescriptionValue)
 
 			#Get: EntityLabel, PropertyLabel, UnitLabel, UnitDescription, UnitDepiction
 			furtherInfoResults = self.__getAdditionalInfo(entityValue, propValue)
@@ -150,10 +163,12 @@ class WikidataWrapper:
 				fact = BNode('result');
 
 				#Build the Obligatory part for the Response
+				#
 				
 				g.add( (fact, self.CEP.entity, URIRef(entityValue)))
 				g.add( (fact, RDF.value, Literal(valueValue)))	
-
+				g.add( (URIRef(entityValue), RDF.type , URIRef(entityTypeValue) ))
+				g.add( (URIRef(entityTypeValue) , RDFS.label, Literal(entityTypeDescriptionValue)) )
 
 				#Defining the context (which is the unit of the response)s
 				#Using WikiData in order to have a standardized data source for the unit
@@ -169,10 +184,9 @@ class WikidataWrapper:
 
 				# Label, if no info avalible, flag result as not useful
 
-				factLabelPart1 = furtherInfoResults['propLabel']['value']
-				factLabelPart2 = furtherInfoResults['entLabel']['value']
+				propLabelValue = furtherInfoResults['propLabel']['value']
 
-				factLabel = factLabelPart1 + " of " + factLabelPart2
+				factLabel = propLabelValue + " of " + entityLabelValue
 
 				#print factLabel
 
@@ -183,15 +197,6 @@ class WikidataWrapper:
 					picValue = furtherInfoResults['pic']['value']
 
 					g.add( ( fact, FOAF.depiction, URIRef(picValue) ))
-
-				if(furtherInfoResults.has_key("entType")):
-					
-					entTypeValue = furtherInfoResults['entType']['value']
-					g.add( (URIRef(entityValue), RDF.type , URIRef(entTypeValue) ))	
-
-					if(furtherInfoResults.has_key("entTypeDescr")):
-						entTypeDescrValue = furtherInfoResults['entTypeDescr']['value']
-						g.add( (URIRef(entTypeValue) , RDFS.label, Literal(entTypeDescrValue)) )
 
 				g.serialize(destination='output.txt', format='n3')
 				return g	
@@ -213,21 +218,18 @@ class WikidataWrapper:
 
 	def __getAdditionalInfo( self, entityUri, propUri):
 
+		#schon da: ?entity ?entLabel ?entType ?entTypeDescr ?prop ?value
+
 		additionalSparql = SPARQLWrapper("https://query.wikidata.org/bigdata/namespace/wdq/sparql")
 		
-		additionalSparqlInfoQuery = "PREFIX p: <http://www.wikidata.org/prop/> PREFIX schema: <http://schema.org/> PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX wd: <http://www.wikidata.org/entity/> SELECT ?entLabel ?entType ?propLabel ?entTypeDescr ?pic WHERE{ "
+		additionalSparqlInfoQuery = "PREFIX wd: <http://www.wikidata.org/entity/> PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> SELECT ?propLabel ?pic WHERE{ "
 
 		wikidataEntity = self.__getWikiDataResource(entityUri)
 		wikidataProp = self.__getWikiDataResource(propUri)
 
-		#SPARQL Entity Label
-		additionalSparqlInfoQuery += "wd:" + wikidataEntity + " rdfs:label ?entLabel  . FILTER (lang(?entLabel)='en') "
 
 		#SPARQL Property Label
 		additionalSparqlInfoQuery += "wd:" + wikidataProp +" rdfs:label ?propLabel  . FILTER(lang(?propLabel)='en') "
-
-		#SPARQL optional type and description
-		additionalSparqlInfoQuery += "OPTIONAL {wd:" + wikidataEntity + " wdt:P31 ?entType. wd:" + wikidataEntity +" schema:description ?entTypeDescr  FILTER (lang(?entTypeDescr)='en')} "
 
 		#SPARQL optional picture
 		additionalSparqlInfoQuery += "OPTIONAL {wd:" + wikidataEntity + " wdt:P18 ?pic} "
