@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, render_template, request, abort, send_from_directory
+from flask import Flask, jsonify, render_template, request, abort, send_from_directory, make_response
 from scripts.application import RequestHandler
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from flask_negotiate import consumes, produces
@@ -14,14 +14,18 @@ app = Flask(__name__)
 def compare():
     #Get the Accept Header
     acceptHeader = str(request.accept_mimetypes)
-    #print(acceptHeader)
+
+    #Default Response is None
+    response = None
 
     #Get the variable value and unit
     try:
         value = request.args.get('v')
         unit = request.args.get('u')
     except IOError:
-        return badRequest();
+        return badRequest("Sorry, one of the parameters was not submitted correctly!");
+
+            
 
     if not (unit is None) and not(value is None):
         #Send Request to application
@@ -30,18 +34,18 @@ def compare():
         #Check the Accept Header for format
 
         #JSON-LD
+        #Return a JSON-LD response
         if "application/ld+json" in acceptHeader:
-
             print('Server: Received a JSON-LD request.')
             #Try to get a JSON-LD response
             try:
                 response = handler.getResponse(value, unit, 'json-ld')
             except ValueError as e:
                 print('Server: A ValueError has occured. ' + str(e))
-                badRequest();
+                return badRequest("Please specify the parameters correctly!");
             except RuntimeError as e:
                 print('Server: A RuntimeError has occured. ' + str(e))
-                abort(500);    
+                return abort(500);    
 
             #Return answer        
             if not (response is None):
@@ -52,19 +56,22 @@ def compare():
                 #No result found
                 return jsonify(result = 'no result was found');
 
-        #HTML          
-        #elif "application/json" in acceptHeader: 
+        #For any other Request a HTML Document is returned          
         else:    
             print('Server: Received a JSON request.')
             try:
                 response = handler.getResponse(value, unit, 'json')
                 print(response);
+
+            #Handling Value Errors: Input
             except ValueError as e:
                 print('Server: A ValueError has occured. ' + str(e))
-                badRequest();
+                return badRequest("Please specify the parameters correctly!");
+
+            #Handling Runtime Errors: Our Server failed somewhere 
             except RuntimeError as e:
                 print('Server: A RuntimeError has occured. ' + str(e))
-                abort(500);     
+                return abort(500);     
                                       
             if not (response is None):
                 #Render template and inject JSON
@@ -73,11 +80,8 @@ def compare():
             else:
                 return jsonify(result = 'no result was found'); 
 
-        #Unsupported Datatype       
-        #else:
-        #    return abort(406);
     else:
-        return badRequest();        
+        return badRequest("The parameters provided are not valid!");        
 
 #Handling direct negotiation with interfaces
 #Example query: http://localhost:5000/dbpedia/compare?v=210&u=t&r=0.2
@@ -87,6 +91,9 @@ def compaer_other(source):
     #Get the Accept Header
     acceptHeader = str(request.accept_mimetypes)
     
+    #Default Response is none
+    response = None;
+
     #Get the variable value and unit and range
     try:
         value = request.args.get('v')
@@ -113,10 +120,10 @@ def compaer_other(source):
                 response = handler.getResource(str(source), value, unit, rng)
             except ValueError:
                 print('Server: A ValueError has occurred.')
-                badRequest();
+                return badRequest('Please specify the parameters correctly!');
             except RuntimeError:
                 print('Server: An RuntimeError has occurred.')
-                abort(500);    
+                return abort(500);    
 
             #Return answer        
             if not (response is None):
@@ -149,6 +156,7 @@ def ontology():
     #Get the accept header
     acceptHeader = str(request.accept_mimetypes)
 
+    #When Turtle requested, return turtle, otherwise return HTML
     if "text/turtle" in acceptHeader:
         return send_from_directory('static', 'cepler_ontology.ttl');
     else:
@@ -163,7 +171,7 @@ def datasources():
     return render_template('datasources.html')  
 
 @app.route('/describe')
-def describe():
+def describe(message ='No Error message!'):
     #Get the variable value and unit
     try:
         value = request.args.get('v')
@@ -173,12 +181,18 @@ def describe():
 
     return render_template('index_temp.html', data=data)    
 
-#Other Function
 
-def badRequest():
-    return abort(400);
+#Return a 400 with a customized message
+def badRequest(message ='No Error message!'):
+    #Transfer message
+    data = message
+
+    #Return message in template
+    return render_template('400_temp.html', data = data)
 
 
+#Main Function
+#Starting Server
 if __name__ == '__main__':
     app.debug = True
     app.run()

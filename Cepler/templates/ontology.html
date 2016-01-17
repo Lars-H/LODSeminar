@@ -43,7 +43,9 @@
 			<p class="maintext">
 				Please find our ontology described in RDF below.
 			</p>
-			<div style="height:32px;"></div>
+			<div style="height:10px;"></div>
+			<div class="maintext" ><a  class="ourLink" href="/download/ontology"> RDF Download (turtle)</a></div>
+			<div style="height:10px;"></div>
 			<!-- CLASSES -->
 			<h3>Classes</h3>
 			<div class="line_div"> </div>
@@ -51,7 +53,7 @@
 			
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Query">cep:Query</p>
+			<p class="h5" id="Statement">cep:Statement</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -68,7 +70,7 @@
 
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Request">cep:Request</p>
+			<p class="h5" id="Fact">cep:Fact</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -85,7 +87,7 @@
 
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Result">cep:Result</p>
+			<p class="h5" id="Factor">cep:Factor</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -107,7 +109,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="request">cep:request</p>
+			<p class="h5" id="divides">cep:divides</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -124,7 +126,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="result">cep:result</p>
+			<p class="h5" id="multiplies">cep:multiplies</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -158,7 +160,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="uri">cep:uri</p>
+			<p class="h5" id="entity">cep:entity</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -172,23 +174,6 @@
 			  </tr>
 			</table>
 			</div>	
-
-			<!--A Property-->
-			<div class="req_div">
-			<p class="h5" id="factor">cep:factor</p>
-			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
-				<col width="40%">
-  				<col width="80%">
-			  <tr>
-			    <td ><h2>Property:</h2></td>
-			    <td><h2>Value:</h2></td> 
-			  </tr>
-			  <tr class="maintext">
-			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Sets a query and a result into a binary relation.'</td> 
-			  </tr>
-			</table>
-			</div>		
 
 
 			<!-- RDF -->
@@ -207,52 +192,46 @@
 @prefix schema: http://schema.org/ .
 @prefix wikibase: http://wikiba.se/ontology# .
 
-#Cepler Class: Request
-cep:Request rdf:type rdfs:Class .
-cep:Request rdfs:label "Request" @en .
-cep:Request rdfs:comment "Specifies the parameters that are requested, consisting of an input value and an input unit." @en .
+#Cepler Class: Statement
+cep:Statement rdf:type rdfs:Class .
+cep:Statement rdfs:label "Statement" @en .
+cep:Statement rdfs:comment "A Cepler Statement consists of a value and a unit. " @en .
 
-#Cepler Property: request
-cep:request rdf:type rdf:Property .
-cep:request rdf:label "request" @en .
-cep:request rdfs:comment "Relates a Cepler Query to its Cepler Request. " @en .
-cep:request rdfs:domain cep:Query .
-cep:request rdfs:range cep:Request .
+#Cepler Property: divides
+cep:divides rdf:type rdf:Property .
+cep:divides rdf:label "divides" @en .
+cep:divides rdfs:comment "Divides a Cepler Statement's value by a Cepler Factor. " @en .
+cep:divides rdfs:domain cep:Factor .
+cep:divides rdfs:range cep:Statement .
 
-#Cepler Property: factor
-cep:factor rdf:type rdf:Property .
-cep:factor rdf:label "factor" @en .
-cep:factor rdfs:comment "Adds a factor to a Cepler Query to set the requested value and a Cepler Result into a numeric relation." @en .
-cep:factor rdfs:domain cep:Query .
+#Cepler Class: Factor
+cep:Factor rdf:type rdfs:Class .
+cep:Factor rdfs:label "Factor" @en .
+cep:Factor rdfs:comment "Defines a numerical relation between a Cepler Statement and a Cepler Fact. " @en .
 
-#Cepler Class: Query
-cep:Query rdf:type rdfs:Class .
-cep:Query rdfs:label "Query" @en .
-cep:Query rdfs:comment "Is a Query to the Cepler API that combines a Cepler Request with a Cepler Result." @en .
+#Cepler Class: Fact
+cep:Fact rdf:type rdfs:Class .
+cep:Fact rdfs:label "Fact" @en .
+cep:Fact rdfs:comment "A Cepler Fact describes a measurable dimension of some entity (e.g., its weight, length or cost). " @en .
 
-#Cepler Class: Result
-cep:Result rdf:type rdfs:Class .
-cep:Result rdfs:label "Result" @en .
-cep:Result rdfs:comment "Is a Result to a Cepler Query being related to a Cepler request." @en .
-
-#Cepler Property: result
-cep:result rdf:type rdf:Property .
-cep:result rdf:label "result" @en .
-cep:result rdfs:comment "Relates a Cepler Query to its Cepler Result." .
-cep:result rdfs:domain cep:Query .
-cep:result rdfs:range cep:Result .
+#Cepler Property: multiplies
+cep:multiplies rdf:type rdf:Property .
+cep:multiplies rdf:label "multiplies" @en .
+cep:multiplies rdfs:comment "Multiplies a Cepler Fact' value by a Cepler Factor. " .
+cep:multiplies rdfs:domain cep:Factor .
+cep:multiplies rdfs:range cep:Fact .
 
 #Cepler Property: unit
 cep:unit rdf:type rdf:Property .
 cep:unit rdf:label "unit" @en .
-cep:unit rdfs:comment "Adds a unit. "
+cep:unit rdfs:comment "Defines the dimension of a numerical value. "
 cep:unit schema:isSimilarTo wikibase:quantityUnit .
 
-#Cepler Property: uri
-cep:uri rdf:type rdf:Property .
-cep:uri rdf:label "uri" @en .
-cep:uri rdfs:comment "Relates a URI to a Cepler Result." @en .
-cep:uri rdfs:domain cep:Result .
+#Cepler Property: entity
+cep:entity rdf:type rdf:Property .
+cep:entity rdf:label "entity" @en .
+cep:entity rdfs:comment "Relates an entity to a Cepler Fact." @en .
+cep:entity rdfs:domain cep:Fact .
 </pre>
 
 			</p>
