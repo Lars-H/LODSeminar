@@ -78,7 +78,7 @@ class RequestHandler:
 
 
 
-	# When "interface" is queried as API. TODO comment.
+	# When "interface" is queried as API. Only 1:1 comparisons with a range are possible.
 	def getResource(self, inWrapper, inValue, inUnit, inRange):
 		
 		# Process values passed from the user.
@@ -92,7 +92,6 @@ class RequestHandler:
 		query_value = float(inValue)
 
 		# Range
-		# TODO change to decimal!
 		range = float(inRange)
 
 		# Unit
@@ -148,7 +147,7 @@ class RequestHandler:
 
 
 
-	# Communicates with wrapper. TODO comment.
+	# Fetches data from the datasource specified in "wrapper".
 	def getData(self, inWrapper, query_value, base_unit, range):
 		
 		# Wrapper variable
@@ -187,6 +186,10 @@ class RequestHandler:
 			if rdfResult is None:
 				# Logging
 				print(RequestHandler.logString + "No results could be found at " + inWrapper + ".")
+
+			else:
+				# Logging
+				print(RequestHandler.logString + "Result was returned from " + inWrapper + ".")
 			return rdfResult
 
 
@@ -194,7 +197,7 @@ class RequestHandler:
 
 
 
-	# TODO comment
+	# Decides from "orig_unit" which quantity is going to be queried.
 	def decideContext(self, orig_unit):
 		quantity = None
 		for u in MassUnits:
@@ -222,7 +225,7 @@ class RequestHandler:
 
 
 
-	# TODO comment
+	# The request part of the final RDF graph is built.
 	def buildRequestGraph(self, graphBuilder, orig_unit, orig_value):
 		# read wikidata unit
 		orig_unit_wd = WikidataUnits.wdUnits.get(orig_unit)
@@ -236,7 +239,7 @@ class RequestHandler:
 
 
 
-	# TODO comment
+	# Iterate over possible datasources, factors and ranges and build the final graph out of the first good result.
 	def getFinalGraph(self, quantity, norm_value, base_unit, graphBuilder, out_format, orig_unit, orig_value):
 
 		# Get shuffled list of all wrappers which can process this quantity and shuffled list of factors.
