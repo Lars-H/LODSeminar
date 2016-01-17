@@ -1,8 +1,11 @@
 from rdflib import Graph, BNode, Literal, URIRef
 from rdflib.namespace import Namespace, RDF, RDFS, FOAF, NamespaceManager
 from helper.units import WikidataUnits
+import helper.cipher as cipher
 import json
 import rdflib
+import urllib
+import urlparse
 
 class GraphBuilder:
 
@@ -82,7 +85,7 @@ class GraphBuilder:
 		query = {'in_unit': '', 'in_value': '', 'factor': '',
 					'result_uri': '', 'result_label': '',
 					'out_unit': '', 'out_value': '', 'type_uri': '',
-					'type_label': '', 'depiction': ''}
+					'type_label': '', 'depiction': '', 'display': ''}
 		
 		# Those three values are already known, easier than parsing from the graph
 		query['factor'] = factor
@@ -127,7 +130,12 @@ class GraphBuilder:
 		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
 			query['depiction'] = pic
 
+		# For persistance of results
+		display = urllib.urlencode(query)
+		display = cipher.encrypt('cepler', display)
+		query['display'] = display
 
+		# Make the dict a JSON array
 		jsonarray = json.dumps(query, sort_keys=True, indent=4, separators=(',', ': '))
 
 		return jsonarray

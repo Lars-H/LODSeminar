@@ -1,6 +1,6 @@
 from itertools import cycle
 
-ALPHA = 'abcdefghijklmnopqrstuvwxyz&=0123456789'
+ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&=0123456789:/#_%=.&+'
 def encrypt(key, plaintext):
     """Encrypt the string and return the ciphertext"""
     pairs = zip(plaintext, cycle(key))
@@ -8,7 +8,7 @@ def encrypt(key, plaintext):
 
     for pair in pairs:
         total = reduce(lambda x, y: ALPHA.index(x) + ALPHA.index(y), pair)
-        result += ALPHA[total % 38]
+        result += ALPHA[total % 73]
 
     return result.lower()
 
@@ -19,7 +19,7 @@ def decrypt(key, ciphertext):
 
     for pair in pairs:
         total = reduce(lambda x, y: ALPHA.index(x) - ALPHA.index(y), pair)
-        result += ALPHA[total % 38]
+        result += ALPHA[total % 43]
 
     return result
 
