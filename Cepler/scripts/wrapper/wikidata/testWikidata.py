@@ -11,9 +11,9 @@ wikiwrapper = WikidataWrapper();
 
 #Get a Result from the Wrapper (RDF Graph)
 #rdfResult = wikiwrapper.getResults(Mapping.DISTANCE, 400000 ,10000)
-rdfResult = wikiwrapper.test();
-print(rdfResult)
-#print(rdfResult)
+rdfResult = wikiwrapper.getResults(Mapping.COST, 5000800, 10003000);
+
+
 
 #if rdfResult is not None:
 #	rdfResult.serialize(destination='output.txt', format='turtle')
