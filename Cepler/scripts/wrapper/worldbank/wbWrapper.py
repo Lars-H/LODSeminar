@@ -76,7 +76,7 @@ class wbWrapper:
 			if(len(results['results']['bindings']) >0):
 				i  = random.randrange(0, len(results['results']['bindings']), 1)
 				
-				print i 
+				#print i 
 				try:
 					rdfResult = self.resultToRDF(results['results']['bindings'][i])
 				except ValueError:	
