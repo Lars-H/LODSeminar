@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from flask import Flask, jsonify, render_template, request, abort, send_from_directory
+from flask import Flask, jsonify, render_template, request, abort, send_from_directory, make_response
 from scripts.application import RequestHandler
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from flask_negotiate import consumes, produces
@@ -14,14 +14,13 @@ app = Flask(__name__)
 def compare():
     #Get the Accept Header
     acceptHeader = str(request.accept_mimetypes)
-    #print(acceptHeader)
 
     #Get the variable value and unit
     try:
         value = request.args.get('v')
         unit = request.args.get('u')
     except IOError:
-        return badRequest();
+        return badRequest("Sorry, one of the parameters was not submitted correctly!");
 
     if not (unit is None) and not(value is None):
         #Send Request to application
@@ -30,15 +29,15 @@ def compare():
         #Check the Accept Header for format
 
         #JSON-LD
+        #Return a JSON-LD response
         if "application/ld+json" in acceptHeader:
-
             print('Server: Received a JSON-LD request.')
             #Try to get a JSON-LD response
             try:
                 response = handler.getResponse(value, unit, 'json-ld')
             except ValueError as e:
                 print('Server: A ValueError has occured. ' + str(e))
-                badRequest();
+                badRequest("Please specify the parameters correctly!");
             except RuntimeError as e:
                 print('Server: A RuntimeError has occured. ' + str(e))
                 abort(500);    
@@ -52,8 +51,7 @@ def compare():
                 #No result found
                 return jsonify(result = 'no result was found');
 
-        #HTML          
-        #elif "application/json" in acceptHeader: 
+        #For any other Request a HTML Document is returned          
         else:    
             print('Server: Received a JSON request.')
             try:
@@ -61,7 +59,7 @@ def compare():
                 print(response);
             except ValueError as e:
                 print('Server: A ValueError has occured. ' + str(e))
-                badRequest();
+                badRequest("Please specify the parameters correctly!");
             except RuntimeError as e:
                 print('Server: A RuntimeError has occured. ' + str(e))
                 abort(500);     
@@ -77,7 +75,7 @@ def compare():
         #else:
         #    return abort(406);
     else:
-        return badRequest();        
+        return badRequest("The parameters provided are not valid!");        
 
 #Handling direct negotiation with interfaces
 #Example query: http://localhost:5000/dbpedia/compare?v=210&u=t&r=0.2
@@ -175,8 +173,10 @@ def describe():
 
 #Other Function
 
-def badRequest():
-    return abort(400);
+#Return a 400 with a customized message
+def badRequest(message):
+    return abort(make_response(str(message), 400))
+    #return abort(400);
 
 
 if __name__ == '__main__':
