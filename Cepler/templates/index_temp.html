@@ -38,7 +38,8 @@
 <div id="main_div"> 
 
 	<div id="controls" align="center">
-		<h1>Try out Cepler!</h1>
+		<h1 >Try out Cepler!</h1>
+	</div>
 	<form>
 	<div align=center>
 		<div style="height:60px;">
@@ -51,7 +52,7 @@
 			    <option value="g">g</option>
 			  </optgroup>
 			  <optgroup label="Distance">
-			    <option href="https://www.wikidata.org/wiki/Q828224" value="km">km</option>
+			    <option value="km">km<option>
 			    <option value="m">m</option>
 			    <option value="cm">cm</option>
 			  </optgroup>
@@ -77,12 +78,10 @@
 <div id="resultDiv" class="div_res" style="min-height: 400px;">
 	<h2 style="color: #04B45F;"id="display_result"></h2>
 	<div align="center">
-		<h1>Your Result:</h1>
-		{% if data %}
-		<p class="maintext"><h31> <a id="inValue"> {{ data['in_value']|safe }}</a> <a id="inUnit"> t </a></h31> are about</p>
-		{% endif %}
-		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
-		<p class="maintext"><h31> <a class="ourLink" target="_blank" href="" id="resultLabel"> Dirk Notwitzki</h1></h31> <a  id="original_value"></a> </a></p>
+		<h1>Your Result:</h1>		
+		<p class="maintext"><h31> <a id="inValue"> </a> <a id="inUnit">  </a></h31> are about</p>
+		<p class="maintext"><h3> <a id="factor"> </h3> </a></p>
+		<p class="maintext"><h31> <a class="ourLink" target="_blank" href="" id="resultLabel"></h1></h31> <a  id="original_value"></a> </a></p>
 		<p id="typeLabel" class="maintext"></p>
 		<div id="image_div">
 			<a class="image_container" >
@@ -99,14 +98,15 @@
 </div>
 </div>
 
-
-
+<div align="center">
+<a href="/about#info" ><img  style="height: 28px;"src="{{url_for('static', filename='info.png') }}" title="About Cepler"> </img></a>
+</div>
 
 <!-- Footer -->	
-<div style="height:50px;"></div>
+<div style="height:80px;"></div>
 <footer>
 	<div id="footerText" align=center>
-	(C) Ben, Nico, Lars
+	Cepler - A Comparison Engine</br>by Ben, Nico, Lars
 	</div>
 </footer>
 
