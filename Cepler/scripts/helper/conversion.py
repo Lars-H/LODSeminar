@@ -1,7 +1,8 @@
 from properties import Mapping
 from units import MassUnits, DistanceUnits, MonetaryUnits
+import eurusd
 import requests
-import sys
+import os
 
 
 def convert(orig_value, orig_unit, quantity, logString):
@@ -67,14 +68,13 @@ def curlCurrencyConversion(logString):
 	try:
 		r = requests.get('http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s=EURUSD=X')
 		print(logString + 'Yahoo Finance API result: ' + r.text),
-		f = open('eurusd','w')
-		f.write(r.text.split(',').pop(1))
+		f = open(os.getcwd() + '/eurusd.py','w')
+		f.write("rate = " + r.text.split(',').pop(1))
 		f.close()
+		reload(eurusd)
 	except requests.exceptions.ConnectionError:
 		r = None
 		print(logString + 'Yahoo Finance API call not successful, taking lately queried conversion rate.')
 	
 	# read from file, no matter if API call was successful
-	f = open('eurusd','r')
-	result = f.read()
-	return float(result)
+	return eurusd.rate
