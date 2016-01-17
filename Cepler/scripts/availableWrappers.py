@@ -12,7 +12,7 @@ def getAvailableWrappers(quantity):
 		return result
 
 	elif quantity == Mapping.DISTANCE:
-		result = ['wikidata'] # TODO 'dbpedia', 
+		result = ['dbpedia', 'wikidata']
 		random.shuffle(result)
 		return result
 
