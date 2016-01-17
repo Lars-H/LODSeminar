@@ -30,7 +30,7 @@
 <div id="buffer_div">
 </div> 
 <div align="center">
-  <h1 style="color: red; opacity: 0.7;">Beta version.</h1>
+  <h1 style="color: red; opacity: 0.7;"> Beta version.</h1>
 </div> 
 
 
@@ -78,7 +78,9 @@
 	<h2 style="color: #04B45F;"id="display_result"></h2>
 	<div align="center">
 		<h1>Your Result:</h1>
-		<p class="maintext"><h31> <a id="inValue"> 4003939 </a> <a id="inUnit"> t </a></h31> are about</p>
+		{% if data %}
+		<p class="maintext"><h31> <a id="inValue"> {{ data['in_value']|safe }}</a> <a id="inUnit"> t </a></h31> are about</p>
+		{% endif %}
 		<p class="maintext"><h3> <a id="factor"> 200</h3> </a></p>
 		<p class="maintext"><h31> <a class="ourLink" target="_blank" href="" id="resultLabel"> Dirk Notwitzki</h1></h31> <a  id="original_value"></a> </a></p>
 		<p id="typeLabel" class="maintext"></p>
@@ -209,12 +211,12 @@
 		//New Direct Call
 		var url = "/compare?v=" + value.toString() + "&u=" + unit.toString();
 		window.open(url,"_self")
-
 	}
 
 	function handleResponse(response)
 	{
 		ShowMessage("Something was received!");
+		//var data = JSON.parse(response);
 
 		if (response.hasOwnProperty('result'))
 		{
@@ -256,6 +258,7 @@
 
 		document.getElementById('inValue').innerHTML = data['in_value'].toString();
 		document.getElementById('inUnit').innerHTML = data['in_unit'].toString();
+
 		document.getElementById('factor').innerHTML = data['factor'].toString();
 		document.getElementById('resultLabel').innerHTML = data['result_label'].toString();
 		document.getElementById('resultLabel').href = data['result_uri'].toString(); 
@@ -332,6 +335,16 @@
 		return twitterString;
 
 	}
+
+	function fillData(data)
+	{
+		console.log("fillData")
+		//document.getElementById('inValue').innerHTML = data['in_value'].toString();
+		displayJSON(data)
+		//document.getElementById('outer_res_div').style.display = 'block';
+	}
+
+	fillData({{ data|safe }})
 
 
 
