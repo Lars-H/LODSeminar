@@ -170,11 +170,6 @@
 		}
 	}
 
-	function timeoutHandle()
-	{
-		ShowMessage("Sorry, the server does not seem to respond...");
-	}
-
 	function ShowMessage( text, displayType )
 	{
 		DisplayResult(text, displayType)
@@ -216,7 +211,6 @@
 	function handleResponse(response)
 	{
 		ShowMessage("Something was received!");
-		//var data = JSON.parse(response);
 
 		if (response.hasOwnProperty('result'))
 		{
@@ -262,7 +256,7 @@
 		document.getElementById('factor').innerHTML = data['factor'].toString();
 		document.getElementById('resultLabel').innerHTML = data['result_label'].toString();
 		document.getElementById('resultLabel').href = data['result_uri'].toString(); 
-		var origVal = " (" + parseInt(data['out_value']).toString() + " " + data['out_unit'].toString() + ")";
+		var origVal = " (" + data['out_value'].toString() + " " + data['out_unit'].toString() + ")";
 		
 		if(origVal != null)
 		{
@@ -339,14 +333,27 @@
 	function fillData(data)
 	{
 		console.log("fillData")
-		//document.getElementById('inValue').innerHTML = data['in_value'].toString();
-		displayJSON(data)
-		//document.getElementById('outer_res_div').style.display = 'block';
+
+		if (data != null)
+		{
+			if(data.hasOwnProperty('result'))
+			{
+				console.log("no result found!")
+				ShowMessage(data['result'].toString())
+
+				//Fill in input data again
+				document.getElementById('textbox').value = data['in_value'].toString();
+				document.getElementById('slct').value = data['in_unit'].toString();
+			}
+			else
+			{
+				console.log('result found!')
+				displayJSON(data)
+			}
+		}
 	}
 
 	fillData({{ data|safe }})
-
-
 
 </script>
 <!-- $("#result").text(data.result); -->

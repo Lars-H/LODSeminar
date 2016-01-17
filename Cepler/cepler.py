@@ -41,10 +41,10 @@ def compare():
             try:
                 response = handler.getResponse(value, unit, 'json-ld')
             except ValueError as e:
-                print('Server: A ValueError has occured. ' + str(e))
+                print('Server: A ValueError has occurred. ' + str(e))
                 return badRequest("Please specify the parameters correctly!");
             except RuntimeError as e:
-                print('Server: A RuntimeError has occured. ' + str(e))
+                print('Server: A RuntimeError has occurred. ' + str(e))
                 return abort(500);    
 
             #Return answer        
@@ -76,9 +76,9 @@ def compare():
             if not (response is None):
                 #Render template and inject JSON
                 return render_template('index_temp.html', data=response)
-                #return response;
             else:
-                return jsonify(result = 'no result was found'); 
+                response = " { 'result': 'no result found!', 'in_value' : '" + str (value) + "',  'in_unit' : '" + str(unit)+ "' }";
+                return render_template('index_temp.html', data=response)
 
     else:
         return badRequest("The parameters provided are not valid!");        
@@ -141,7 +141,8 @@ def compaer_other(source):
 #HTML Pages
 @app.route('/')
 def index():
-    return render_template('index.html')
+    #return render_template('index.html')
+    return render_template('index_temp.html')
 
 @app.route('/about')
 def about():
