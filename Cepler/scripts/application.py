@@ -181,7 +181,10 @@ class RequestHandler:
 			# Get results from the wrapper.			
 			print(RequestHandler.logString + "Query to " + inWrapper + " wrapper: " + \
 					"(" + str(quantity) + ", " + str(query_value) + ", " + str(range) +")")
-			rdfResult = wrapperInstance.getResults(quantity, query_value, range)
+			try:
+				rdfResult = wrapperInstance.getResults(quantity, query_value, range)	
+			except ValueError: # DBpedia-Wrapper
+				rdfResult = None
 
 			if rdfResult is None:
 				# Logging
