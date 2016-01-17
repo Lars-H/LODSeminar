@@ -105,11 +105,11 @@ def compaer_other(source):
         rng = request.args.get('r')
         print(rng)
     except IOError:
-        return badRequest();
+        return badRequest("Sorry, one of the parameters was not submitted correctly!");
 
     print("Trying to access resource: " + str(source))    
 
-    if not (unit is None) and not(value is None):
+    if not (unit is None) and not(value is None) and not(rng is None):
         #Send Request to application
         handler = RequestHandler();
     
@@ -137,7 +137,7 @@ def compaer_other(source):
         else:
             return abort(406);        
     else:        
-        return badRequest(); 
+        return badRequest("Sorry, one of the parameters was not submitted correctly!");
 
 
 #HTML Pages

@@ -26,7 +26,7 @@ class DBPediaWrapper:
 
 	def __initNamespaces(self):
 		#Define Namespaces
-		self.WD = Namespace('https://www.wikidata.org/wiki/')
+		self.WD = Namespace('https://www.wikidata.org/entity/')
 		self.CEP = Namespace('http://www.cepler.org/ontology#')
 		return;
 

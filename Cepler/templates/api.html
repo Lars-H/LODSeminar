@@ -36,9 +36,10 @@
 <div id="main_div"> 
 	<div class="api_div">
 	<p class="header">Cepler API<subtext> version 1.0</subtext></h1></p>
-	<p class="subtext">http://cepler.org/</p>
+	<p class="subtext">http://cepler-1157.appspot.com/</p>
 	<div class="line_div"></div>
 	<div style="height:32px;"></div>
+
 <!-- MAIN /Compare-->
 	<div class="method_container">
 		<div class="Mhead"><p1 class="text">/compare</p1> </div>
@@ -47,8 +48,8 @@
 				<div style="height:33px;">
 				<ul class="tabrow">
 					<li><a href="#request" style="text-decoration: none; color: black;">Request</a></li>
+          <li><a href="#example" style="text-decoration: none; color: black;">Example</a></li>
 					<li><a href="#response" style="text-decoration: none; color: black;">Response</a></li>
-					<li><a href="#example" style="text-decoration: none; color: black;">Example</a></li>
 				</ul>
 				<ul class="getrow">
 					<li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" style="text-decoration: none; color: white;">GET</a></li>
@@ -56,27 +57,41 @@
 			</div>
 				<div>
 					<div>
+              <!--Request -->
   						<div class="req_div" id="request">
   							<div class="inner_div">
   							<h3>Request</h3>
   							<h2>Desciption:</h2>
-  							<p class="maintext">The compare method can be used in order to compare a given value and unit to another resource.
+  							<p class="maintext">The compare method can be used in order to compare a given value and unit to another resource. The available resource can be found <a  class="ourLink" href="/datasources">here</a>. Our algorithm decides on a division factor in order to find a comparable object.
   							</p>
                 <h2>Accepts:</h2>
-                <p class="maintext">Acceptable Datatypes: "application/ld+json"
+                <p class="maintext">Acceptable Datatypes: "application/ld+json" </br>
+                  For all other Accept-Types: HTML is returned.
                 </p>
   							<h2>Parameters:</h2>
   							<ul class="maintext" >
-  								<li style="font-weight:bold;">value (required)</li>
+  								<li style="font-weight:bold;">v(required)</li>
   								<p><p1 style="font-style:italic;">Type: </p1>float </p>
   								<p><p1 style="font-style:italic;">Example: </p1>12993 </p>
-  								<li style="font-weight:bold;">unit (required)</li>	
+  								<li style="font-weight:bold;">u(required)</li>	
   								<p><p1 style="font-style:italic;">Type: </p1>enum </p>
   								<p><p1 style="font-style:italic;">Unit: </p1>[t,k,g,km,m,euro,usd] </p>
   								<p><p1 style="font-style:italic;">Example: </p1>"t" </p>	
   							</ul>
   						</div>
   						</div>
+            <!--Example --> 
+            <div class="req_div" id="example">
+                <div class="inner_div">
+                <h3>Example</h3>
+                <p class="maintext" >The following example request a value of "2000000" and a unit of "t" (tons):</p>
+                <div class="json_div">
+                  <p class="maintext" style="left-margin=10px;"><pre> http://cepler-1157.appspot.com/compare?v=2000000&u=t</pre></p>
+                </div>
+              </div>    
+              </div>   
+
+            <!--Response -->
 						<div class="req_div" id="response">
 							<div class="inner_div">
 							<h3>Response</h3>
@@ -174,33 +189,353 @@
   							</pre>
   						</div>
   							<h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
-  							<p class="maintext" >Client Error: The request could not be handled due to an incorrect request.</p>
-                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> </h2>
-                <p class="maintext" >Client Error: The accept header was not correctly specified. Please note that only "application/ld+json" is supported with the current API.</p>
+  							<p class="maintext" >Client Error: The request could not be handled due to an incorrect request. If available, an error message is provided in the response.</p>
                 <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/500">500</a> </h2>
                 <p class="maintext" >Server Error: Something went wrong on the server. We are sorry that we could not complete your request!</p>
               </div>
   						</div>
               
   						</div>	
-  						<div class="req_div" id="example">
-  							<div class="inner_div">
-  							<h3>Example</h3>
-  							<p class="maintext" >The following example request a value of "2000000" and a unit of "t" (tons):</p>
-  							<div class="json_div">
-  								<p class="maintext" style="left-margin=10px;"><pre> http://cepler.org/compare?v=2000000&u=t</pre></p>
-  							</div>
-  						</div>		
-  						</div>	
+  						
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+
 <div style="height:32px;"></div> 
 <div class="line_div"></div>
 <div style="height:32px;"></div> 
 
+
+<!-- DBPEDIA /Compare-->
+  <div class="method_container">
+    <div class="Mhead"><p1 class="text">/dbpedia/compare</p1> </div>
+    <div class="Mbody"> 
+      <div class="center_body">
+        <div style="height:33px;">
+        <ul class="tabrow">
+          <li><a href="#request_db" style="text-decoration: none; color: black;">Request</a></li>
+          <li><a href="#example_db" style="text-decoration: none; color: black;">Example</a></li>
+          <li><a href="#response_db" style="text-decoration: none; color: black;">Response</a></li>
+        </ul>
+        <ul class="getrow">
+          <li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" style="text-decoration: none; color: white;">GET</a></li>
+        </ul>
+      </div>
+        <div>
+          <div>
+              <div class="req_div" id="request_db">
+                <div class="inner_div">
+                <h3>Request</h3>
+                <h2>Desciption:</h2>
+                <p class="maintext">The compare method can be used in order to compare a given value (v), unit (u) and a range (r) with a resource on DBpedia. The range specifies a relative tolerance around the actual value. Please note that, there will be no division factor used. (Depending on the range it is (almost) 1:1)
+                </p>
+                <h2>Accepts:</h2>
+                <p class="maintext">Acceptable Datatypes: "application/ld+json" </br>
+                  For all other Accept-Types: Not acceptable is returned
+                </p>
+                <h2>Parameters:</h2>
+                <ul class="maintext" >
+                  <li style="font-weight:bold;">v(required)</li>
+                  <p><p1 style="font-style:italic;">Type: </p1>float </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>v=12993 </p>
+                  <li style="font-weight:bold;">u(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>enum </p>
+                  <p><p1 style="font-style:italic;">Unit: </p1>[t,k,g,km,m,euro,usd] </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"u=t" </p>
+                  <li style="font-weight:bold;">r(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>float</p>
+                  <p><p1 style="font-style:italic;">Limits: </p1>r in [0,1] </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"r=0.2" </p>    
+                </ul>
+              </div>
+              </div>
+
+              <!--Example -->
+              <div class="req_div" id="example_db">
+                <div class="inner_div">
+                <h3>Example</h3>
+                <p class="maintext" >The following example request a value of "2000000", a unit of "t" (tons) and a range of 20%. Here, <a href="http://curl.haxx.se" class="ourLink">cURL</a> is used in order to specify the Accept Header.</p>
+                <div class="json_div">
+                  <p class="maintext" style="left-margin=10px;"><pre>curl -v -H "Accept: application/ld+json" "http://cepler-1157.appspot.com/dbpedia/compare?v=2000000&u=t&r=0.2"</pre></p>
+                </div>
+              </div>    
+              </div>  
+
+            <!--Response --> 
+            <div class="req_div" id="response_db">
+              <div class="inner_div">
+              <h3>Response</h3>
+              <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/200">200</a> </h2>
+                <p class="maintext" >If successful, a JSON-LD response is returned:</p>
+                <div class="json_div">
+                <pre>
+[
+    {
+        "@id": "http://dbpedia.org/ontology/Automobile",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "automobile"
+            }
+        ]
+    },
+    {
+        "@id": "http://dbpedia.org/resource/Sisu_A-45",
+        "@type": [
+            "http://dbpedia.org/ontology/Automobile"
+        ]
+    },
+    {
+        "@id": "_:request",
+        "@type": [
+            "http://www.cepler.org/ontology#Statement"
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q191118"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 172.0
+            }
+        ]
+    },
+    {
+        "@id": "_:result",
+        "http://www.cepler.org/ontology#entity": [
+            {
+                "@id": "http://dbpedia.org/resource/Sisu_A-45"
+            }
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q11570"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 5000.0
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Sisu A-45"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/depiction": [
+            {
+                "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Protosisua45.jpg"
+            }
+        ]
+    },
+    {
+        "@id": "_:factor",
+        "@type": [
+            "http://www.cepler.org/ontology#Factor"
+        ],
+        "http://www.cepler.org/ontology#divides": [
+            {
+                "@id": "_:request"
+            }
+        ],
+        "http://www.cepler.org/ontology#multiplies": [
+            {
+                "@id": "_:result"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 33
+            }
+        ]
+    }
+]</pre>
+                </div>
+
+                <p class="maintext" >If no result could be found:</p>
+                <div class="json_div">
+                <pre>
+[ { "result": "no result was found"}]                   
+                </pre>
+              </div>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
+                <p class="maintext" >Client Error: The request could not be handled due to an incorrect request.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> </h2>
+                <p class="maintext" >Client Error: The accept header was not correctly specified. Please note that only "application/ld+json" is supported with the current API.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/500">500</a> </h2>
+                <p class="maintext" >Server Error: Something went wrong on the server. We are sorry that we could not complete your request!</p>
+              </div>
+              </div>
+              
+              </div>  
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:32px;"></div> 
+<div class="line_div"></div>
+<div style="height:32px;"></div> 
+
+<!-- DBPEDIA /Compare-->
+  <div class="method_container">
+    <div class="Mhead"><p1 class="text">/worldbank/compare</p1> </div>
+    <div class="Mbody"> 
+      <div class="center_body">
+        <div style="height:33px;">
+        <ul class="tabrow">
+          <li><a href="#request_wb" style="text-decoration: none; color: black;">Request</a></li>
+          <li><a href="#example_wb" style="text-decoration: none; color: black;">Example</a></li>
+          <li><a href="#response_wb" style="text-decoration: none; color: black;">Response</a></li>
+        </ul>
+        <ul class="getrow">
+          <li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" style="text-decoration: none; color: white;">GET</a></li>
+        </ul>
+      </div>
+        <div>
+          <div>
+            <!--Request -->
+              <div class="req_div" id="request_wb">
+                <div class="inner_div">
+                <h3>Request</h3>
+                <h2>Desciption:</h2>
+                <p class="maintext">The compare method can be used in order to compare a given value (v), unit (u) and a range (r) with a resource on the Worldbank. The range specifies a relative tolerance around the actual value. </br>
+                  Please note that only monetary units (US-Dollar and Euro) are supported. The data is stored in US-Dollar, therefore, we try to get the latest exchange rate using the Yahoo Finance API. Please note that, there will be no division factor used. (Depending on the range it is (almost) 1:1)
+                </p>
+                <h2>Accepts:</h2>
+                <p class="maintext">Acceptable Datatypes: "application/ld+json" </br>
+                  For all other Accept-Types: HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> (Not Acceptable) is returned.
+                </p>
+                <h2>Parameters:</h2>
+                <ul class="maintext" >
+                  <li style="font-weight:bold;">v(required)</li>
+                  <p><p1 style="font-style:italic;">Type: </p1>float </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>v=12993 </p>
+                  <li style="font-weight:bold;">u(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>enum </p>
+                  <p><p1 style="font-style:italic;">Unit: </p1>[euro,usd] </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"u=usd" </p>
+                  <li style="font-weight:bold;">r(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>float</p>
+                  <p><p1 style="font-style:italic;">Limits: </p1>r in [0,1] </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"r=0.2" </p>    
+                </ul>
+              </div>
+              </div>
+
+              <!--Example -->
+              <div class="req_div" id="example_wb">
+                <div class="inner_div">
+                <h3>Example</h3>
+                <p class="maintext" >The following example request a value of "300", a unit of "usd" (US-Dollar) and a range of 40%. Here, cURL is used in order to specify the Accept Header.</p>
+                <div class="json_div">
+                  <p class="maintext" style="left-margin=10px;"><pre>  curl -v -H "Accept: application/ld+json" "http://cepler-1157.appspot.com/worldbank/compare?v=300&u=usd&r=0.4"</pre></p>
+                </div>
+              </div>    
+              </div>    
+
+            <!--Response -->
+            <div class="req_div" id="response_wb">
+              <div class="inner_div">
+              <h3>Response</h3>
+              <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/200">200</a> </h2>
+                <p class="maintext" >If successful, a JSON-LD response is returned:</p>
+                <div class="json_div">
+                <pre>
+[
+    {
+        "@id": "_:factor",
+        "@type": [
+            "http://www.cepler.org/ontology#Factor"
+        ],
+        "http://www.cepler.org/ontology#divides": [
+            {
+                "@id": "_:request"
+            }
+        ],
+        "http://www.cepler.org/ontology#multiplies": [
+            {
+                "@id": "_:result"
+            }
+        ]
+    },
+    {
+        "@id": "_:result",
+        "@type": [
+            "http://www.cepler.org/ontology#Fact",
+            "http://www.cepler.org/ontology#Result"
+        ],
+        "http://www.cepler.org/ontology#entity": [
+            {
+                "@id": "http://worldbank.270a.info/dataset/world-bank-indicators/DB_mw_19apprentice/BR/2010"
+            }
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q4917"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": "299.647518160575"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Minimum wage for a 19-year old worker or an apprentice (US$/month) of Brazil (2010)"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/depiction": [
+            {
+                "@id": "http://en.wikipedia.org/wiki/Special:FilePath/Flag_of_Brazil.svg"
+            }
+        ]
+    },
+    {
+        "@id": "_:request",
+        "@type": [
+            "http://www.cepler.org/ontology#Statement"
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "https://www.wikidata.org/wiki/Q4917"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 300.0
+            }
+        ]
+    }
+]</pre>
+                </div>
+
+                <p class="maintext" >If no result could be found:</p>
+                <div class="json_div">
+                <pre>
+[ { "result": "no result was found"}]                   
+                </pre>
+              </div>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
+                <p class="maintext" >Client Error: The request could not be handled due to an incorrect request.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> </h2>
+                <p class="maintext" >Client Error: The accept header was not correctly specified. Please note that only "application/ld+json" is supported with the current API.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/500">500</a> </h2>
+                <p class="maintext" >Server Error: Something went wrong on the server. We are sorry that we could not complete your request!</p>
+              </div>
+              </div>
+              
+              </div>  
+              
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
 
 </div>
 </div>
