@@ -4,49 +4,43 @@
 @prefix schema: <http://schema.org/> .
 @prefix wikibase: <http://wikiba.se/ontology#> .
 
-#Cepler Class: Request
-cep:Request rdf:type rdfs:Class .
-cep:Request rdfs:label "Request" @en .
-cep:Request rdfs:comment "Specifies the parameters that are requested, consisting of an input value and an input unit." @en .
+#Cepler Class: Statement
+cep:Statement rdf:type rdfs:Class .
+cep:Statement rdfs:label "Statement" @en .
+cep:Statement rdfs:comment "A Cepler Statement consists of a value and a unit. " @en .
 
-#Cepler Property: request
-cep:request rdf:type rdf:Property .
-cep:request rdf:label "request" @en .
-cep:request rdfs:comment "Relates a Cepler Query to its Cepler Request. " @en .
-cep:request rdfs:domain cep:Query .
-cep:request rdfs:range cep:Request .
+#Cepler Property: divides
+cep:divides rdf:type rdf:Property .
+cep:divides rdf:label "divides" @en .
+cep:divides rdfs:comment "Divides a Cepler Statement's value by a Cepler Factor. " @en .
+cep:divides rdfs:domain cep:Factor .
+cep:divides rdfs:range cep:Statement .
 
-#Cepler Property: factor
-cep:factor rdf:type rdf:Property .
-cep:factor rdf:label "factor" @en .
-cep:factor rdfs:comment "Adds a factor to a Cepler Query to set the requested value and a Cepler Result into a numeric relation." @en .
-cep:factor rdfs:domain cep:Query .
+#Cepler Class: Factor
+cep:Factor rdf:type rdfs:Class .
+cep:Factor rdfs:label "Factor" @en .
+cep:Factor rdfs:comment "Defines a numerical relation between a Cepler Statement and a Cepler Fact. " @en .
 
-#Cepler Class: Query
-cep:Query rdf:type rdfs:Class .
-cep:Query rdfs:label "Query" @en .
-cep:Query rdfs:comment "Is a Query to the Cepler API that combines a Cepler Request with a Cepler Result." @en .
+#Cepler Class: Fact
+cep:Fact rdf:type rdfs:Class .
+cep:Fact rdfs:label "Fact" @en .
+cep:Fact rdfs:comment "A Cepler Fact describes a measurable dimension of some entity (e.g., its weight, length or cost). " @en .
 
-#Cepler Class: Result
-cep:Result rdf:type rdfs:Class .
-cep:Result rdfs:label "Result" @en .
-cep:Result rdfs:comment "Is a Result to a Cepler Query being related to a Cepler request." @en .
-
-#Cepler Property: result
-cep:result rdf:type rdf:Property .
-cep:result rdf:label "result" @en .
-cep:result rdfs:comment "Relates a Cepler Query to its Cepler Result." .
-cep:result rdfs:domain cep:Query .
-cep:result rdfs:range cep:Result .
+#Cepler Property: multiplies
+cep:multiplies rdf:type rdf:Property .
+cep:multiplies rdf:label "multiplies" @en .
+cep:multiplies rdfs:comment "Multiplies a Cepler Fact' value by a Cepler Factor. " .
+cep:multiplies rdfs:domain cep:Factor .
+cep:multiplies rdfs:range cep:Fact .
 
 #Cepler Property: unit
 cep:unit rdf:type rdf:Property .
 cep:unit rdf:label "unit" @en .
-cep:unit rdfs:comment "Adds a unit. "
+cep:unit rdfs:comment "Defines the dimension of a numerical value. "
 cep:unit schema:isSimilarTo wikibase:quantityUnit .
 
-#Cepler Property: uri
+#Cepler Property: entity
 cep:uri rdf:type rdf:Property .
 cep:uri rdf:label "uri" @en .
-cep:uri rdfs:comment "Relates a URI to a Cepler Result." @en .
-cep:uri rdfs:domain cep:Result .
+cep:uri rdfs:comment "Relates an entity to a Cepler Fact." @en .
+cep:uri rdfs:domain cep:Fact .
