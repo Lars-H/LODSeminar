@@ -73,6 +73,6 @@ def curlCurrencyConversion(logString):
 	except requests.exceptions.ConnectionError:
 		r = None
 		print(logString + 'Yahoo Finance API call not successful, taking lately queried conversion rate.')
-	
+		
 	# read from file, no matter if API call was successful
 	return eurusd
