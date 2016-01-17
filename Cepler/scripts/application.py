@@ -239,42 +239,39 @@ class RequestHandler:
 	# TODO comment
 	def getFinalGraph(self, quantity, norm_value, base_unit, graphBuilder, out_format, orig_unit, orig_value):
 
-		# Get list of all wrappers which can process this quantity
+		# Get shuffled list of all wrappers which can process this quantity and shuffled list of factors.
 		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
-		
-		# Calculate a random wrapper ranking
-		random.shuffle(possibleWrappers)
-		
+		possibleFactorsAndRanges = factorProvider.getFactorsAndRanges(norm_value,RequestHandler.logString)
+
 		# Try at most 10 random factors
-		factor = 0
-		range = 0
+		currentFactor = 0
+		currentRange = 0
 		x = 0
 		rdfResult = None
-		while x < 10 and not rdfResult:
+		while possibleFactorsAndRanges and not rdfResult:
 
 			# Logging
-			print(RequestHandler.logString + "Factor attempt no. " + str(x + 1))
+			x = x + 1
+			print(RequestHandler.logString + "Factor attempt no. " + str(x))
+
+			# Pop first entry out of the factors and ranges
+			currentFactorAndRange = possibleFactorsAndRanges.pop()
+			currentFactor = currentFactorAndRange[0]
+			currentRangeDecimal = currentFactorAndRange[1]
+			query_value = norm_value/currentFactor
+			currentRange = currentRangeDecimal*query_value
+			print(RequestHandler.logString + "Factor: " + str(currentFactor) + ", range: " + str(currentRangeDecimal))
+			print(RequestHandler.logString + "We will query " + str(query_value)+" and " + str(currentRange) + " around.")
 
 			# Make a copy of possibleWrappers
 			wrapperQueue = possibleWrappers[:]
 			print(RequestHandler.logString + "Wrapper order: " + str(wrapperQueue))
 
-			# The normalized input value is divided by a partly randomized factor.
-			factor = factorProvider.getFactor(norm_value, RequestHandler.logString)
-			query_value = norm_value/factor
-			print(RequestHandler.logString + "We will query " + str(query_value)+".")
-
-			# A range inside which results can lie around the query value is determined.
-			valueRange = rangeProvider.getRange(query_value, RequestHandler.logString)
-
 			# try all wrappers
 			currentWrapper = None
 			while wrapperQueue and not rdfResult:
-				currentWrapper = wrapperQueue.pop(0)
-				rdfResult = self.getData(currentWrapper, query_value, base_unit, valueRange)
-
-			# Next iteration
-			x = x + 1
+				currentWrapper = wrapperQueue.pop()
+				rdfResult = self.getData(currentWrapper, query_value, base_unit, currentRange)
 
 
 		# If result was found, merge to request graph and return final graph. Else, return None
@@ -284,7 +281,7 @@ class RequestHandler:
 
 			# Merge request and result graphs and add the factor
 			finalGraph = graphBuilder.mergeWithResultGraph(rdfResult)
-			finalGraph = graphBuilder.addFactorToGraph(factor)
+			finalGraph = graphBuilder.addFactorToGraph(currentFactor)
 
 			# For debugging:
 			#print(finalGraph.serialize(format='turtle'))
@@ -297,7 +294,7 @@ class RequestHandler:
 				#print(graphBuilder.buildJSON(factor, orig_value, orig_unit))
 				
 				# Return JSON array to the calling program.
-				return graphBuilder.buildJSON(factor, orig_value, orig_unit)
+				return graphBuilder.buildJSON(currentFactor, orig_value, orig_unit)
 			
 			elif out_format == "json-ld":
 

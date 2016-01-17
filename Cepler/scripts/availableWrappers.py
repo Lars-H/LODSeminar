@@ -1,13 +1,22 @@
 from helper.properties import Mapping
+import random
 
 # Based on the queried quantity, a list of wrappers is returned.
 def getAvailableWrappers(quantity):
 
+	result = None
+
 	if quantity == Mapping.COST:
-		return ['dbpedia', 'worldbank']
+		result = ['dbpedia', 'worldbank']
+		random.shuffle(result)
+		return result
 
 	elif quantity == Mapping.DISTANCE:
-		return ['dbpedia']
+		result = ['dbpedia']
+		random.shuffle(result)
+		return result
 
 	elif quantity == Mapping.WEIGHT:
-		return ['dbpedia']
+		result = ['dbpedia']
+		random.shuffle(result)
+		return result
