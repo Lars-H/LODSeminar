@@ -4,8 +4,6 @@ import eurusd as eu
 import requests
 import os
 
-global eurusd = 1.08
-
 def convert(orig_value, orig_unit, quantity, logString):
 	norm_value = None
 	if (quantity == Mapping.WEIGHT):
