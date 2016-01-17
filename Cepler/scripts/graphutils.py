@@ -43,11 +43,11 @@ class GraphBuilder:
 	def buildRequestGraph(self, inValue, inUnit_wd):
 		
 		# Query graph
-		self.g.add( (BNode('query'), RDF.type, GraphBuilder.CEP.Query) )
-		self.g.add( (BNode('query'), GraphBuilder.CEP.request, BNode('request')) )
+		self.g.add( (BNode('factor'), RDF.type, GraphBuilder.CEP.Factor) )
+		self.g.add( (BNode('factor'), GraphBuilder.CEP.divides, BNode('request')) )
 
 		# Request subgraph
-		self.g.add( (BNode('request'), RDF.type, GraphBuilder.CEP.Request) )
+		self.g.add( (BNode('request'), RDF.type, GraphBuilder.CEP.Statement) )
 		self.g.add( (BNode('request'), RDF.value, Literal(float(inValue))) )
 		self.g.add( (BNode('request'), GraphBuilder.CEP.unit, URIRef(inUnit_wd)) )
 
@@ -63,7 +63,7 @@ class GraphBuilder:
 			self.g.add(triple)
 		
 		# Connect result subgraph to query
-		self.g.add( (BNode('query'), GraphBuilder.CEP.result, BNode('result')) )
+		self.g.add( (BNode('factor'), GraphBuilder.CEP.multiplies, BNode('result')) )
 
 		return self.g
 
@@ -71,7 +71,7 @@ class GraphBuilder:
 	def addFactorToGraph(self, factor):
 
 		# Insert factor to query if applicable
-		self.g.add( (BNode('query'), GraphBuilder.CEP.factor, Literal(int(factor))) )
+		self.g.add( (BNode('factor'), RDF.value, Literal(int(factor))) )
 		return self.g
 
 	# This method builds a JSON document to pass to the UI.
@@ -91,7 +91,7 @@ class GraphBuilder:
 		# Those values have to be parsed from the graph:
 
 		# result_uri
-		for resultUri in self.g.objects(BNode('result'), GraphBuilder.CEP.uri): # should only occur once!
+		for resultUri in self.g.objects(BNode('result'), GraphBuilder.CEP.entity): # should only occur once!
 			query['result_uri'] = resultUri
 
 		# result_label
