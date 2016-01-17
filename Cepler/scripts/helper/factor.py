@@ -2,63 +2,45 @@ import random
 
 # Receives an input value in a base unit and outputs
 # a list of division factors which are partly dependent 
-# on the size of the input and partly random.
+# on the size of the input and partly random. TODO remove old stuff
 def getFactorsAndRanges(norm_value, logString='FACTOR - '):
 	
 
 	try:
 		norm_value_parsed = float(norm_value)
 
-		very_small_range = 0.01
-		small_range = 0.02
-		medium_range = 0.05
-		large_range = 0.1
-		very_large_range = 0.2
+		# possible values
+		# If they shall be extended, add a list to the factors list and 
+		# a corresponding range to the ranges list
+		ranges = [0.01, 0.02, 0.05, 0.1, 0.2]
+		factors = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+					[15, 20, 25, 30, 35, 40, 45, 50], 
+					[60, 70, 80, 90, 100], 
+					[150, 200, 250, 300, 350, 400, 450, 500], 
+					[600, 700, 800, 900, 1000]]
 
-		very_small_factors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-		small_factors = [15, 20, 25, 30, 35, 40, 45, 50]
-		medium_factors = [60, 70, 80, 90, 100]
-		large_factors = [150, 200, 250, 300, 350, 400, 450, 500]
-		very_large_factors = [600, 700, 800, 900, 1000]
 
-		random.shuffle(very_small_factors)
-		random.shuffle(small_factors)
-		random.shuffle(medium_factors)
-		random.shuffle(large_factors)
-		random.shuffle(very_large_factors)
 
+		# Shuffle each factor list in order to pick random ones later.
+		for x in factors:
+			random.shuffle(x)
+
+
+		# Take two factors out of each list and write them into the final list
+		# with corresponding ranges.
+		num_lists = len(factors)
 		factors_and_ranges = []
 
-		factor = very_small_factors.pop()
-		factors_and_ranges.append((factor, very_small_range))
+		for i in range(num_lists):
 
-		factor = very_small_factors.pop()
-		factors_and_ranges.append((factor, very_small_range))
+			currentFactorList = factors.pop()
+			currentRange = ranges.pop()
 
-		factor = small_factors.pop()
-		factors_and_ranges.append((factor, small_range))
+			factors_and_ranges.append((currentFactorList.pop(), currentRange))
+			factors_and_ranges.append((currentFactorList.pop(), currentRange))
 
-		factor = small_factors.pop()
-		factors_and_ranges.append((factor, small_range))
 
-		factor = medium_factors.pop()
-		factors_and_ranges.append((factor, medium_range))
-
-		factor = medium_factors.pop()
-		factors_and_ranges.append((factor, medium_range))
-
-		factor = large_factors.pop()
-		factors_and_ranges.append((factor, large_range))
-
-		factor = large_factors.pop()
-		factors_and_ranges.append((factor, large_range))
-
-		factor = very_large_factors.pop()
-		factors_and_ranges.append((factor, very_large_range))
-
-		factor = very_large_factors.pop()
-		factors_and_ranges.append((factor, very_large_range))
-
+		# Shuffle the final list such that the factors are not ordered by size.
 		random.shuffle(factors_and_ranges)
 
 		#print(factors_and_ranges)
