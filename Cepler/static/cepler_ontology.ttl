@@ -40,7 +40,7 @@ cep:unit rdfs:comment "Defines the dimension of a numerical value. "
 cep:unit schema:isSimilarTo wikibase:quantityUnit .
 
 #Cepler Property: entity
-cep:uri rdf:type rdf:Property .
-cep:uri rdf:label "uri" @en .
-cep:uri rdfs:comment "Relates an entity to a Cepler Fact." @en .
-cep:uri rdfs:domain cep:Fact .
+cep:entity rdf:type rdf:Property .
+cep:entity rdf:label "entity" @en .
+cep:entity rdfs:comment "Relates an entity to a Cepler Fact." @en .
+cep:entity rdfs:domain cep:Fact .

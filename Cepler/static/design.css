@@ -233,6 +233,26 @@ it:hover{
   background-color: #04B45F;
 }
 
+.button_2 {
+  font-family: 'Raleway', sans-serif;
+  border:1px solid black;
+  height: 30px;
+  width: 230px;
+  font-size: 16px;
+  vertical-align: center;
+  text-align: center;
+  opacity: 0.5;
+  border-top-left-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
+}
+
+.button_2:hover {
+  background-color: #04B45F;
+}
+
+
 #overlayButtonMute {
   font-family: 'Raleway', sans-serif;
   border:2px solid #FFFFFF;
