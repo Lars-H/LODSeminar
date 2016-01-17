@@ -30,7 +30,7 @@ def getFactorsAndRanges(norm_value, logString='FACTOR - '):
 		factors_and_ranges = []
 
 		factor = very_small_factors.pop()
-		factors_and_ranges.append((factor, very_small_range*factor))
+		factors_and_ranges.append((factor, very_small_range))
 
 		factor = very_small_factors.pop()
 		factors_and_ranges.append((factor, very_small_range))
