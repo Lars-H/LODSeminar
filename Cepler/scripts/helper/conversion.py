@@ -1,9 +1,10 @@
 from properties import Mapping
 from units import MassUnits, DistanceUnits, MonetaryUnits
-import eurusd
+import eurusd as eu
 import requests
 import os
 
+global eurusd = 1.08
 
 def convert(orig_value, orig_unit, quantity, logString):
 	norm_value = None
@@ -52,7 +53,9 @@ def convertToDollar(orig_value, orig_unit, logString):
 	orig_value_parsed = float(orig_value)
 	norm_value = None
 	if orig_unit == MonetaryUnits.EURO.value:
-		norm_value = curlCurrencyConversion(logString)*orig_value
+		# TODO fix currency conversion
+		#norm_value = curlCurrencyConversion(logString)*orig_value
+		norm_value = 1.09*orig_value
 	elif orig_unit == MonetaryUnits.DOLLAR.value:
 		norm_value = orig_value
 	else:
@@ -68,14 +71,10 @@ def curlCurrencyConversion(logString):
 	try:
 		r = requests.get('http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s=EURUSD=X')
 		print(logString + 'Yahoo Finance API result: ' + r.text),
-		print os.path.dirname(os.path.realpath(__file__))
-		f = open(os.path.dirname(os.path.realpath(__file__)) + '/eurusd.py','w')
-		f.write("rate = " + r.text.split(',').pop(1))
-		f.close()
-		reload(eurusd)
+		eurusd = float(r.text.split(',').pop(1))
 	except requests.exceptions.ConnectionError:
 		r = None
 		print(logString + 'Yahoo Finance API call not successful, taking lately queried conversion rate.')
 	
 	# read from file, no matter if API call was successful
-	return eurusd.rate
+	return eurusd
