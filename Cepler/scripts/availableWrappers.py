@@ -7,16 +7,16 @@ def getAvailableWrappers(quantity):
 	result = None
 
 	if quantity == Mapping.COST:
-		result = ['dbpedia', 'worldbank']
+		result = ['dbpedia', 'worldbank', 'wikidata']
 		random.shuffle(result)
 		return result
 
 	elif quantity == Mapping.DISTANCE:
-		result = ['dbpedia']
+		result = ['dbpedia', 'wikidata']
 		random.shuffle(result)
 		return result
 
 	elif quantity == Mapping.WEIGHT:
-		result = ['dbpedia']
+		result = ['dbpedia', 'wikidata']
 		random.shuffle(result)
 		return result

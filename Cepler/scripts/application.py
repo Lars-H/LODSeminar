@@ -4,6 +4,7 @@ from helper.units import MassUnits, DistanceUnits, MonetaryUnits, WikidataUnits
 from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from StringIO import StringIO
 from wrapper.dbpedia.dbpediaWrapper import DBPediaWrapper
+from wrapper.wikidata.wikidataWrapper import WikidataWrapper
 from wrapper.worldbank.wbWrapper import wbWrapper
 import helper.conversion as conv
 import helper.factor as factorProvider
@@ -85,8 +86,8 @@ class RequestHandler:
 		
 		# Wrapper
 		wrapper = inWrapper
-		if wrapper != "dbpedia" and wrapper != "worldbank":
-			raise ValueError("Invalid datasource. Possible values are 'dbpedia' and 'worldbank'.")
+		if wrapper != "dbpedia" and wrapper != "worldbank" and wrapper != "wikidata":
+			raise ValueError("Invalid datasource. Possible values are 'dbpedia', 'worldbank', and 'wikidata'.")
 
 		# Value
 		query_value = float(inValue)
@@ -165,6 +166,12 @@ class RequestHandler:
 				wrapperInstance = wbWrapper()
 			except Exception:
 				raise RuntimeError('Creating a WorldbankWrapper failed.')
+
+		elif inWrapper == "wikidata":
+			try:
+				wrapperInstance = WikidataWrapper()
+			except Exception:
+				raise RuntimeError('Creating a WikidataWrapper failed.')
 
 		else:
 			raise RuntimeError("inWrapper variable not set properly! Should have been asserted before...")
@@ -276,7 +283,7 @@ class RequestHandler:
 			# try all wrappers
 			currentWrapper = None
 			while wrapperQueue and not rdfResult:
-				currentWrapper = wrapperQueue.pop()
+				currentWrapper = wrapperQueue.pop(0)
 				rdfResult = self.getData(currentWrapper, query_value, base_unit, currentRange)
 
 
