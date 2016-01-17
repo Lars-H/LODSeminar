@@ -182,7 +182,7 @@ class DBPediaWrapper:
 
 			#Build the Obligatory part for the Response
 			g.add( (response, RDFS.label, Literal(labelValue)))	
-			g.add( (response, self.CEP.uri, URIRef(uriValue)))
+			g.add( (response, self.CEP.entity, URIRef(uriValue)))
 			g.add( (response, RDF.value, Literal(valueValue)))	
 
 			#Defining the context (which is the unit of the response)s
