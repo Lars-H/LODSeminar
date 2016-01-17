@@ -26,12 +26,12 @@ class MonetaryUnits(enum.Enum):
 	DOLLAR = 'usd'
 
 class WikidataUnits:
-	wdUnits = { MassUnits.TON.value: "https://www.wikidata.org/entity/Q191118", 
-				MassUnits.KILOGRAM.value: "https://www.wikidata.org/entity/Q11570",
-				MassUnits.GRAM.value: "https://www.wikidata.org/entity/Q41803",
-				DistanceUnits.KILOMETER.value: "https://www.wikidata.org/entity/Q828224",
-				DistanceUnits.METER.value: "https://www.wikidata.org/entity/Q11573",
-				DistanceUnits.CENTIMETER.value: "https://www.wikidata.org/entity/Q174728",
-				MonetaryUnits.EURO.value: "https://www.wikidata.org/entity/Q4916",
-				MonetaryUnits.DOLLAR.value: "https://www.wikidata.org/entity/Q4917"
+	wdUnits = { MassUnits.TON.value: "http://www.wikidata.org/entity/Q191118", 
+				MassUnits.KILOGRAM.value: "http://www.wikidata.org/entity/Q11570",
+				MassUnits.GRAM.value: "http://www.wikidata.org/entity/Q41803",
+				DistanceUnits.KILOMETER.value: "http://www.wikidata.org/entity/Q828224",
+				DistanceUnits.METER.value: "http://www.wikidata.org/entity/Q11573",
+				DistanceUnits.CENTIMETER.value: "http://www.wikidata.org/entity/Q174728",
+				MonetaryUnits.EURO.value: "http://www.wikidata.org/entity/Q4916",
+				MonetaryUnits.DOLLAR.value: "http://www.wikidata.org/entity/Q4917"
 	}
