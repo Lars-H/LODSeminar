@@ -176,7 +176,7 @@ class wbWrapper:
 			g.add( (response, RDF.value , Literal(indicatorActualValue) )) 
 			g.add( (response, self.CEP.unit , self.WD.Q4917))
 			g.add( (response, RDF.type , self.CEP.Result))
-			g.add( (response, self.CEP.uri , URIRef(indicatorURI)))
+			g.add( (response, self.CEP.entity , URIRef(indicatorURI)))
 
 
 			#add picture if existent

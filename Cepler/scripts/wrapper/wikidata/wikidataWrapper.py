@@ -19,15 +19,17 @@ class WikidataWrapper:
 		self.endPointUrl = "https://query.wikidata.org/bigdata/namespace/wdq/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "PREFIX wikibase: <http://wikiba.se/ontology#> PREFIX wd: <http://www.wikidata.org/entity/> PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> select distinct ?uri ?value ?label ?type ?typeName ?pic WHERE {"
+		self.QueryPrefix = "PREFIX p: <http://www.wikidata.org/prop/> PREFIX wikibase: <http://wikiba.se/ontology#> PREFIX wd: <http://www.wikidata.org/entity/> SELECT ?resource ?prop ?value  WHERE {{"
 		self.QuerySuffix = "} LIMIT 100"
 		self.__initNamespaces();
 		return;
 
 	def __initNamespaces(self):
 		#Define Namespaces
-		self.WD = Namespace('https://www.wikidata.org/wiki/')
+		self.WD = Namespace('http://www.wikidata.org/entity/')
 		self.CEP = Namespace('http://www.cepler.org/ontology#')
+		self.P = Namespace('http://www.wikidata.org/prop/')
+		self.WIKIBASE = ('http://wikiba.se/ontology#')
 		return;
 
 	#Main function that gets the results
@@ -43,9 +45,9 @@ class WikidataWrapper:
 		results = self.__runQuery(queryStr)
 
 		#Decode 
-		if(len(results['results']['bindings']) > 0):
+		if(len(results['results']['bindings']) >0):
 			#As of now: Return the first result
-			i  = random.randrange(0, len(results)- 1, 1)
+			i  = random.randrange(0, len(results['results']['bindings']), 1)
 			try:
 				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
 			except ValueError:	
@@ -72,6 +74,35 @@ class WikidataWrapper:
 		#Add the QueryPrefix
 		query = self.QueryPrefix
 
+		#add Value filter
+
+		query += " FILTER (?value >" + str(value - rng/2) + ")"
+		query += " FILTER (?value <" + str(value + rng/2) + ")"	
+
+		#weight
+		if unit == Mapping.WEIGHT:
+			#test
+		#cost
+		elif unit == Mapping.COST:
+
+		elif unit == Mapping.DISTANCE:
+			quantUnit = "wd:Q11573"  #metre
+
+			excludedProps = [ p:P2044 ]
+			#P2044 = elevation above sea level
+
+
+		query += "?statement1 wikibase:quantityUnit " + quantUnit + " . ?statement1 wikibase:quantityAmount ?value . ?statement2 ?prop1 ?statement1 . ?resource ?prop ?statement2 ."
+		
+		#Filter bad Props
+		for i in range(len(excludedProps)):
+			if(i > 0):
+				query += " FILTER ("
+			query += "{ ?prop !=" +excludedProps[i] + " ) ."
+
+		##hier weiter!!!!!! 15.1.16
+
+		"""
 		#Different Properties for different unit
 		if unit == Mapping.WEIGHT:
 			#Getting Kilograms as input, however in DBP the properties are in gram
@@ -127,13 +158,15 @@ class WikidataWrapper:
 
 		#Distance
 		elif unit == Mapping.DISTANCE:
-			for i in range(len(dbProperties.distanceProperties)):
-				if(i > 0):
-					query += " OPTIONAL "
-
-				query += "{ ?uri  <" + dbProperties.distanceProperties[i] + "> ?value . }" 
+				#standard
+				query += " ?statmnt1 wikibase:quantityUnit wd:Q11573 . ?statmnt1 wikibase:quantityAmount ?value . ?statmnt2 ?prop1 ?statmnt1 .?resource ?prop ?statmnt2 . "
+				
 
 
+				FILTER(?prop != p:P2044 )
+  				FILTER(?prop != p:P2043 )
+				  }
+				LIMIT 1000
 
 			#Get the label
 			query += " ?uri rdfs:label ?label."
@@ -150,7 +183,7 @@ class WikidataWrapper:
 	
 		#print(query)	
 		return query;
-
+"""
 
 	def __resultToRDF(self, result):
 		#Check if there is a result
@@ -236,29 +269,21 @@ class WikidataWrapper:
 		return g;
 
 	def test(self):
-		query= """PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wd: <http://www.wikidata.org/entity/> 
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX p: <http://www.wikidata.org/prop/>
-PREFIX v: <http://www.wikidata.org/prop/statement/>
-
-SELECT ?p ?pLabel ?w ?wLabel WHERE {
-   wd:Q30 p:P6/v:P6 ?p .
-   ?p wdt:P26 ?w .
-   SERVICE wikibase:label {
-    bd:serviceParam wikibase:language "en" .
-   }
- }"""
- 		query="""PREFIX wikibase: <http://wikiba.se/ontology#> 
-PREFIX wd: <http://www.wikidata.org/entity/> 
-PREFIX wdt: <http://www.wikidata.org/prop/direct/> 
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-select ?uri ?value
+		
+ 		query="""PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+SELECT ?resource ?value ?prop2 
 WHERE {
-	?uri wd:Q11423 ?value.
-}
-LIMIT 100"""
+ ?statement1 wikibase:quantityUnit wd:Q11573 .
+  ?statement1 wikibase:quantityAmount ?value .
+  ?statement2 ?prop1 ?statement1 .
+  ?resource ?prop2 ?statement2 .
+FILTER( ?value > 100)
+FILTER (?value < 10000)
+FILTER(?prop2 != p:P2044 )
+  }
+LIMIT 1000"""
 
 		self.sparql.setQuery(query);
 		results = self.sparql.query().convert()
