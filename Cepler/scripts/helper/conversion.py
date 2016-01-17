@@ -68,8 +68,8 @@ def curlCurrencyConversion(logString):
 	try:
 		r = requests.get('http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s=EURUSD=X')
 		print(logString + 'Yahoo Finance API result: ' + r.text),
-		print(os.getcwd())
-		f = open(os.getcwd() + '/helper/eurusd.py','w')
+		print os.path.dirname(os.path.realpath(__file__))
+		f = open(os.path.dirname(os.path.realpath(__file__)) + '/eurusd.py','w')
 		f.write("rate = " + r.text.split(',').pop(1))
 		f.close()
 		reload(eurusd)
