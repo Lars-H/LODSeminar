@@ -1,6 +1,5 @@
 from properties import Mapping
 from units import MassUnits, DistanceUnits, MonetaryUnits
-import eurusd as eu
 import requests
 import os
 
@@ -51,13 +50,11 @@ def convertToDollar(orig_value, orig_unit, logString):
 	orig_value_parsed = float(orig_value)
 	norm_value = None
 	if orig_unit == MonetaryUnits.EURO.value:
-		# TODO fix currency conversion
-		#norm_value = curlCurrencyConversion(logString)*orig_value
-		norm_value = 1.09*orig_value
+		norm_value = curlCurrencyConversion(logString)*orig_value
 	elif orig_unit == MonetaryUnits.DOLLAR.value:
 		norm_value = orig_value
 	else:
-		raise RuntimeError('Conversion to meter failed.')
+		raise RuntimeError('Conversion to US dollar failed.')
 
 	print(logString + "Value converted to base unit US dollar: " + str(norm_value))
 	return norm_value
@@ -72,6 +69,7 @@ def curlCurrencyConversion(logString):
 		eurusd = float(r.text.split(',').pop(1))
 	except requests.exceptions.ConnectionError:
 		r = None
+		eurusd = 1.09
 		print(logString + 'Yahoo Finance API call not successful, taking lately queried conversion rate.')
 		
 	# read from file, no matter if API call was successful
