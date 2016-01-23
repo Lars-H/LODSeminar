@@ -45,12 +45,11 @@ class WikidataWrapper:
 		#Run Query
 		results = self.__runQuery(queryStr)
 
-		print(len(results['results']['bindings']))
+		#print(len(results['results']['bindings']))
 		#Decode 
 		if(len(results['results']['bindings']) >0):
 			#As of now: Return the first result
 			i  = random.randrange(0, len(results['results']['bindings']), 1)
-			print i 
 			try:
 				rdfResult = self.__resultToRDF(results['results']['bindings'][i])
 			except ValueError:	
@@ -74,8 +73,6 @@ class WikidataWrapper:
 	def __runQuery(self,  query ):		
 		self.sparql.setQuery(query);
 		results = self.sparql.query().convert()
-
-		print(results)
 		return results;
 
 	def __buildQuery(self, unit, value, rng):
@@ -138,22 +135,12 @@ class WikidataWrapper:
 			#get entity type's description
 			entityTypeDescriptionValue = result['entTypeDescr']['value']
 
-
-			print(entityValue)
-			print(propValue)
-			print(valueValue)
-			print(entityLabelValue)
-			print(entityTypeValue)
-			print(entityTypeDescriptionValue)
-
 			#Get: EntityLabel, PropertyLabel, UnitLabel, UnitDescription, UnitDepiction
 			furtherInfoResults = self.__getAdditionalInfo(entityValue, propValue)
 			if furtherInfoResults is None:
 				return None
 			
 			else:
-				print furtherInfoResults
-
 				#Initialize Graph
 				g = self.__initGraph()
 
@@ -185,8 +172,6 @@ class WikidataWrapper:
 				propLabelValue = furtherInfoResults['propLabel']['value']
 
 				factLabel = propLabelValue + " of " + entityLabelValue
-
-				#print factLabel
 
 				g.add( (fact, RDFS.label, Literal(factLabel)) )
 
@@ -235,12 +220,9 @@ class WikidataWrapper:
 		#Suffix
 		additionalSparqlInfoQuery += "} LIMIT 1"
 
-		print additionalSparqlInfoQuery
-
 		additionalSparql.setQuery(additionalSparqlInfoQuery)
 		additionalSparql.setReturnFormat("json")
 		results = additionalSparql.query().convert()
-		print results
 
 		if(len(results['results']['bindings']) > 0):
 
