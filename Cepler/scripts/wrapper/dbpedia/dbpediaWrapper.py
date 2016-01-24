@@ -166,7 +166,16 @@ class DBPediaWrapper:
 
 			#Get the label in labeValue
 			labelNode = result['label']
-			labelValue = labelNode['value']  
+			labelValue = labelNode['value'] 
+
+			if self.unit == Mapping.WEIGHT:
+				labelExtendValue = "weight of " + labelValue	
+			elif self.unit == Mapping.COST:	
+				labelExtendValue = "price of " + labelValue	
+			elif self.unit == Mapping.DISTANCE:
+				labelExtendValue = "length of " + labelValue	
+
+
 
 			#Get the Actual Value for the Property
 			valueNode = result['value']
@@ -184,7 +193,7 @@ class DBPediaWrapper:
 			response = BNode('result');
 
 			#Build the Obligatory part for the Response
-			g.add( (response, RDFS.label, Literal(labelValue)))	
+			g.add( (response, RDFS.label, Literal(labelExtendValue)))	
 			g.add( (response, self.CEP.entity, URIRef(uriValue)))
 			g.add( (response, RDF.value, Literal(valueValue)))	
 
