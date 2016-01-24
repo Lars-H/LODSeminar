@@ -71,7 +71,6 @@ class wbWrapper:
 			except TypeError:
 				return None
 			#Decode 
-			print len(results['results']['bindings'])
 			if(len(results['results']['bindings']) >0):
 				i  = random.randrange(0, len(results['results']['bindings']), 1)
 				
@@ -139,7 +138,6 @@ class wbWrapper:
 		
 		#Add the query Suffix
 		query += self.QuerySuffix;
-		print query
 		return query;
 
 
