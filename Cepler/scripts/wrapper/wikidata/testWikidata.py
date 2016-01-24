@@ -15,12 +15,11 @@ rdfResult = wikiwrapper.getResults(Mapping.DISTANCE, 5000800, 10003000);
 
 
 
-#if rdfResult is not None:
-#	rdfResult.serialize(destination='output.txt', format='turtle')
+if rdfResult is not None:
+	#rdfResult.serialize(destination='output.txt', format='turtle')
 
-#	for stmt in rdfResult:
-#		pprint.pprint(stmt)
-
+	for stmt in rdfResult:
+		pprint.pprint(stmt)
 
 
 
