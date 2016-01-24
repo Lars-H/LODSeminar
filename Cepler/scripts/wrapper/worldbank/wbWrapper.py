@@ -2,7 +2,6 @@ from rdflib import Graph, Literal, BNode, Namespace, RDF, RDFS ,  URIRef
 from rdflib.namespace import DC, FOAF
 from SPARQLWrapper import SPARQLWrapper, N3
 import simplejson as json 
-import wbProperties
 import random
 import threading
 import thread
@@ -30,8 +29,8 @@ class wbWrapper:
 		self.endPointUrl = "http://worldbank.270a.info/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
-		self.QueryPrefix = "Prefix wb: <http://worldbank.270a.info/dataset/> Prefix c: <http://purl.org/linked-data/cube#> Prefix pd: <http://purl.org/linked-data/sdmx/2009/dimension#> Prefix pm: <http://purl.org/linked-data/sdmx/2009/measure#> Prefix y: <http://reference.data.gov.uk/id/year/> select distinct ?i ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
-		self.QuerySuffix = "} LIMIT 100"
+		self.QueryPrefix = "Prefix wb: <http://worldbank.270a.info/dataset/> Prefix pd: <http://purl.org/linked-data/sdmx/2009/dimension#> Prefix pm: <http://purl.org/linked-data/sdmx/2009/measure#> Prefix y: <http://reference.data.gov.uk/id/year/> select distinct ?i ?actualValue ?indicatorLabel ?countryLabel ?countryDBLink WHERE {"
+		self.QuerySuffix = "} LIMIT 70"
 		self.__initNamespaces();
 		return;
 
@@ -57,7 +56,7 @@ class wbWrapper:
 				self.res = None;
 				thread.start_new_thread( runQuery, (self, queryStr))
 				timer = 1
-				while ((self.res is None) and (timer <= 5) ):
+				while ((self.res is None) and (timer <= 7) ):
 					timer += 1
 					time.sleep(1)
 
@@ -72,10 +71,10 @@ class wbWrapper:
 			except TypeError:
 				return None
 			#Decode 
+			print len(results['results']['bindings'])
 			if(len(results['results']['bindings']) >0):
 				i  = random.randrange(0, len(results['results']['bindings']), 1)
 				
-				#print i 
 				try:
 					rdfResult = self.resultToRDF(results['results']['bindings'][i])
 				except ValueError:	
@@ -107,25 +106,23 @@ class wbWrapper:
 		#Add the QueryPrefix
 		query = self.QueryPrefix
 
-		props = wbProperties.wbIndicators
-
-		#iterate through possible indicators
-		for i in range(len(wbProperties.wbIndicators)):
-			if(i > 0):
-				query += " UNION "
-			query += "{ ?i c:dataSet " + wbProperties.wbIndicators[i] + " . }"
-
 		#limit years
-		for i in range(len(wbProperties.wbAllowedYears)):
+		wbAllowedYears = ["2008", "2009", "2010", "2011", "2012"]
+		
+		for i in range(len(wbAllowedYears)):
 			if(i > 0):
 				query += " UNION "
-			query += "{ ?i pd:refPeriod y:" + wbProperties.wbAllowedYears[i] + " . }"
+			query += "{ ?i pd:refPeriod y:" + wbAllowedYears[i] + " . }"
 
 			#retreive acutal values
 		query += " ?i pm:obsValue ?actualValue. "
 
 		#retrieve indicator label
 		query += " ?i <http://worldbank.270a.info/property/indicator> ?Ti. ?Ti <http://www.w3.org/2004/02/skos/core#prefLabel> ?indicatorLabel. "
+
+		#Fliter indicator labels for "current US" (= current US$) as Worldbank does not support currencies as property
+
+		query += " FILTER (regex(str(?indicatorLabel),\"current US\")) FILTER (!regex(str(?indicatorLabel),\"million\"))  "
 
 		#retrieve country label
 		query += " ?i pd:refArea ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
@@ -142,7 +139,7 @@ class wbWrapper:
 		
 		#Add the query Suffix
 		query += self.QuerySuffix;
-
+		print query
 		return query;
 
 
