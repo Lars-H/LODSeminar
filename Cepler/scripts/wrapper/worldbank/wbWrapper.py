@@ -121,7 +121,7 @@ class wbWrapper:
 
 		#Fliter indicator labels for "current US" (= current US$) as Worldbank does not support currencies as property
 
-		query += " FILTER (regex(str(?indicatorLabel),\"current US\")) FILTER (!regex(str(?indicatorLabel),\"million\"))  "
+		query += " FILTER (regex(str(?indicatorLabel),\"current US\\\\$\")) FILTER (!regex(str(?indicatorLabel),\"million\"))  "
 
 		#retrieve country label
 		query += " ?i pd:refArea ?country. ?country <http://www.w3.org/2004/02/skos/core#prefLabel> ?countryLabel. "
