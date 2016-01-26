@@ -130,10 +130,10 @@ class GraphBuilder:
 		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
 			query['depiction'] = pic
 
-		# For persistance of results
-		display = urllib.urlencode(query)
-		display = cipher.encrypt('cepler', display)
-		query['display'] = display
+		# For persistence of results
+		#display = urllib.urlencode(query)
+		#display = cipher.encrypt('cepler', display)
+		#query['display'] = display
 
 		# Make the dict a JSON array
 		jsonarray = json.dumps(query, sort_keys=True, indent=4, separators=(',', ': '))

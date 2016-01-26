@@ -549,6 +549,38 @@ it:hover{
   border: 2px solid black;
 }
 
+.tabrow2 {
+  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 24px;
+  float: left;
+  display: block;
+  height: 80%;
+}
+.tabrow2 li {
+  padding: 4px;
+  border: 1px solid black;
+  background-color: white;
+  border-top-left-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
+}
+
+.tabrow2 li:hover {
+  background-color: #04B45F;
+  font-color: #04B45F;
+}
+
+.tabrow2 li:active
+{
+  background-color: red;
+  border: 2px solid black;
+}
+
 .req_div {
   width: 98%;
   height: 80%;

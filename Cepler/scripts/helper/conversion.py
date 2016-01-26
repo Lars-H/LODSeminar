@@ -2,6 +2,8 @@ from properties import Mapping
 from units import MassUnits, DistanceUnits, MonetaryUnits
 import requests
 import os
+#GAE
+#from google.appengine.api import urlfetch
 
 def convert(orig_value, orig_unit, quantity, logString):
 	norm_value = None
@@ -74,3 +76,20 @@ def curlCurrencyConversion(logString):
 		
 	# read from file, no matter if API call was successful
 	return eurusd
+
+#GAE Implementation
+"""
+def curlCurrencyConversion(logString):
+	eurusd = 1.09;
+	# try to communicate with Yahoo Finance API
+	try:
+		r = urlfetch.fetch('http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s=EURUSD=X')
+		#print(str(r.content));
+		print(logString + 'Yahoo Finance API result: ' + r.content),
+		eurusd = float(r.content.split(',').pop(1))
+	except requests.exceptions.ConnectionError:
+		r = None
+		print(logString + 'Yahoo Finance API call not successful, taking lately queried conversion rate.')
+	
+	# read from file, no matter if API call was successful
+	return eurusd	"""

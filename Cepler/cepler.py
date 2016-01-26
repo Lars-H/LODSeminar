@@ -179,7 +179,7 @@ def datasources():
 @app.route('/display')
 def display():
     #Get the request
-    rqst = str(request.args.get('r'));
+    rqst = request.query_string
     print(rqst)
 
     #Decrypt request
@@ -188,10 +188,10 @@ def display():
     print(dcrpted)
 
     #To JSON
-    data = json.dumps(urlparse.parse_qs(dcrpted))
-    print(str(data))
-        
-    return render_template('index_temp.html', data=data)    
+    #data = json.dumps(urlparse.parse_qs(dcrpted))
+    #print(str(data))
+    return abort(400);    
+    #return render_template('index_temp.html', data=data)    
 
 
 #Return a 400 with a customized message

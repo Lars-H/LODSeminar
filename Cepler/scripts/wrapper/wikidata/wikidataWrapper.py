@@ -181,7 +181,7 @@ class WikidataWrapper:
 
 					g.add( ( fact, FOAF.depiction, URIRef(picValue) ))
 
-				g.serialize(destination='output.txt', format='n3')
+				#g.serialize(destination='output.txt', format='n3')
 				return g	
 			
 			#Print Info, when no result found and return None
