@@ -62,8 +62,16 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#Class">rdfs:Class</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Is a Query to the API that combines a Request with a Result.'</td> 
+			    <td>'Statement'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'A Cepler Statement consists of a value and a unit.'@en</td> 
 			  </tr>
 			</table>
 			</div>
@@ -79,8 +87,16 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#Class">rdfs:Class</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'A Request specifies the parameters that are requested.'</td> 
+			    <td>'Fact'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'A Cepler Fact describes a measurable dimension of some entity (e.g., its weight, length or cost).'@en</td> 
 			  </tr>
 			</table>
 			</div>
@@ -96,8 +112,16 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#Class">rdfs:Class</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'A Result contains information on a result that is related to a request.'</td> 
+			    <td>'Factor'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'Defines a numerical relation between a Cepler Statement and a Cepler Fact.'@en</td> 
 			  </tr>
 			</table>
 			</div>
@@ -118,8 +142,24 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">rdf:Property</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Relates a Query to its Request.'</td> 
+			    <td>'divides'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'Divides a Cepler Statement's value by a Cepler Factor.'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#domain">rdfs:domain</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://cepler.org/ontology#Factor">cep:Factor</a></td>
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#range">rdfs:range</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://cepler.org/ontology#Statement">cep:Statement</a></td> 
 			  </tr>
 			</table>
 			</div>
@@ -135,8 +175,24 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">rdf:Property</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Relates a Query to its Result.'</td> 
+			    <td>'multiplies'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'Multiplies a Cepler Fact value by a Cepler Factor.'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#domain">rdfs:domain</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://cepler.org/ontology#Factor">cep:Factor</a></td>
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#range">rdfs:range</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://cepler.org/ontology#Fact">cep:Fact</a></td> 
 			  </tr>
 			</table>
 			</div>
@@ -152,8 +208,20 @@
 			    <td><h2>Value:</h2></td> 
 			  </tr>
 			  <tr class="maintext">
+			  	<td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdf:type</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">rdf:Property</a></td> 
+			</tr>
+			<tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Defines a unit.'</td> 
+			    <td>'unit'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'Defines the dimension of a numerical value.'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://schema.org/isSimilarTo">schema:isSimilarTo</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://wikiba.se/ontology#quantityUnit">wikibase:quantityUnit</a></td>
 			  </tr>
 			</table>
 			</div>
@@ -170,7 +238,15 @@
 			  </tr>
 			  <tr class="maintext">
 			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></td>
-			    <td>'Defines a URI.'</td> 
+			    <td>'entity'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#comment">rdfs:comment</a></td>
+			    <td>'Relates an entity to a Cepler Fact.'@en</td> 
+			  </tr>
+			  <tr class="maintext">
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://www.w3.org/2000/01/rdf-schema#domain">rdfs:domain</a></td>
+			    <td><a style="text-decoration: none; color: #04B45F;" href="http://cepler.org/ontology#Facts">cep:Fact</a></td>
 			  </tr>
 			</table>
 			</div>	

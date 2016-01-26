@@ -37,8 +37,16 @@
 	<div class="api_div">
 	<p class="header">Cepler API<subtext> version 1.0</subtext></h1></p>
 	<p class="subtext">http://cepler-1157.appspot.com/</p>
-	<div class="line_div"></div>
-	<div style="height:32px;"></div>
+
+<h3 style="color: black;">Available API-Calls:</h3>
+<ul class="nav_api">
+  <li><a href="#compare" style="text-decoration: none; color: black;" >compare</a></li>
+  <li><a href="#compare_db" style="text-decoration: none; color: black;" >dbpedia/compare</a></li>
+  <li><a href="#compare_wb" style="text-decoration: none; color: black;" >worldbank/compare</a></li>
+  <li><a href="#compare_wd" style="text-decoration: none; color: black;" >wikidata/compare</a></li>
+</ul>
+<div style="height:16px;"></div>
+<div class="line_div"></div>
 <div style="height:32px;"></div>
 
 <!-- MAIN /Compare-->
@@ -209,7 +217,7 @@
 
 <!-- DBPEDIA /Compare-->
   <div class="method_container">
-    <div class="Mhead"><p1 class="text">/dbpedia/compare</p1> </div>
+    <div class="Mhead"><p1 id="compare_db" class="text">/dbpedia/compare</p1> </div>
     <div class="Mbody"> 
       <div class="center_body">
         <div style="height:33px;">
@@ -380,9 +388,9 @@
 <div class="line_div"></div>
 <div style="height:32px;"></div> 
 
-<!-- DBPEDIA /Compare-->
+<!-- Worldbank /Compare-->
   <div class="method_container">
-    <div class="Mhead"><p1 class="text">/worldbank/compare</p1> </div>
+    <div class="Mhead"><p1 id="compare_wb" class="text">/worldbank/compare</p1> </div>
     <div class="Mbody"> 
       <div class="center_body">
         <div style="height:33px;">
@@ -465,8 +473,7 @@
     {
         "@id": "_:result",
         "@type": [
-            "http://www.cepler.org/ontology#Fact",
-            "http://www.cepler.org/ontology#Result"
+            "http://www.cepler.org/ontology#Fact"
         ],
         "http://www.cepler.org/ontology#entity": [
             {
@@ -534,12 +541,185 @@
       </div>
     </div>
   </div>
+
+<div style="height:32px;"></div> 
+<div class="line_div"></div>
+<div style="height:32px;"></div> 
+
+
+<!-- Wikidata /Compare-->
+  <div class="method_container">
+    <div class="Mhead"><p1 id="compare_wd" class="text">/wikidata/compare</p1> </div>
+    <div class="Mbody"> 
+      <div class="center_body">
+        <div style="height:33px;">
+        <ul class="tabrow">
+          <li><a href="#request_wd" style="text-decoration: none; color: black;">Request</a></li>
+          <li><a href="#example_wd" style="text-decoration: none; color: black;">Example</a></li>
+          <li><a href="#response_wd" style="text-decoration: none; color: black;">Response</a></li>
+        </ul>
+        <ul class="getrow">
+          <li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" style="text-decoration: none; color: white;">GET</a></li>
+        </ul>
+      </div>
+        <div>
+          <div>
+            <!--Request -->
+              <div class="req_div" id="request_wd">
+                <div class="inner_div">
+                <h3>Request</h3>
+                <h2>Desciption:</h2>
+                <p class="maintext">The compare method can be used in order to compare a given value (v), unit (u) and a range (r) with a resource on Wikidata. The range specifies a relative tolerance around the actual value.
+                </p>
+                <h2>Accepts:</h2>
+                <p class="maintext">Acceptable Datatypes: "application/ld+json" </br>
+                  For all other Accept-Types: HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> (Not Acceptable) is returned.
+                </p>
+                <h2>Parameters:</h2>
+                <ul class="maintext" >
+                  <li style="font-weight:bold;">v(required)</li>
+                  <p><p1 style="font-style:italic;">Type: </p1>float </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>v=12993 </p>
+                  <li style="font-weight:bold;">u(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>enum </p>
+                  <p><p1 style="font-style:italic;">Unit: </p1>[t,k,g,km,m,euro,usd]</p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"u=usd" </p>
+                  <li style="font-weight:bold;">r(required)</li>  
+                  <p><p1 style="font-style:italic;">Type: </p1>float</p>
+                  <p><p1 style="font-style:italic;">Limits: </p1>r in [0,1] </p>
+                  <p><p1 style="font-style:italic;">Example: </p1>"r=0.2" </p>    
+                </ul>
+              </div>
+              </div>
+
+              <!--Example -->
+              <div class="req_div" id="example_wd">
+                <div class="inner_div">
+                <h3>Example</h3>
+                <p class="maintext" >The following example request a value of "300", a unit of "usd" (US-Dollar) and a range of 40%. Here, cURL is used in order to specify the Accept Header.</p>
+                <div class="json_div">
+                  <p class="maintext" style="left-margin=10px;"><pre>  curl -v -H "Accept: application/ld+json" "http://cepler-1157.appspot.com/wikidata/compare?v=20&u=t&r=0.4"</pre></p>
+                </div>
+              </div>    
+              </div>    
+
+            <!--Response -->
+            <div class="req_div" id="response_wd">
+              <div class="inner_div">
+              <h3>Response</h3>
+              <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/200">200</a> </h2>
+                <p class="maintext" >If successful, a JSON-LD response is returned:</p>
+                <div class="json_div">
+                <pre>
+[
+    {
+        "@id": "http://www.wikidata.org/entity/Q860861",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "sculpture"
+            }
+        ]
+    },
+    {
+        "@id": "_:factor",
+        "@type": [
+            "http://www.cepler.org/ontology#Factor"
+        ],
+        "http://www.cepler.org/ontology#divides": [
+            {
+                "@id": "_:request"
+            }
+        ],
+        "http://www.cepler.org/ontology#multiplies": [
+            {
+                "@id": "_:result"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.wikidata.org/entity/Q582172",
+        "@type": [
+            "http://www.wikidata.org/entity/Q860861"
+        ]
+    },
+    {
+        "@id": "_:result",
+        "@type": [
+            "http://www.cepler.org/ontology#Fact"
+        ],
+        "http://www.cepler.org/ontology#entity": [
+            {
+                "@id": "http://www.wikidata.org/entity/Q582172"
+            }
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "http://www.wikidata.org/entity/Q11570"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": "20"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "mass (weight) of Nefertiti Bust"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/depiction": [
+            {
+                "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Nofretete%20Neues%20Museum.jpg"
+            }
+        ]
+    },
+    {
+        "@id": "_:request",
+        "@type": [
+            "http://www.cepler.org/ontology#Statement"
+        ],
+        "http://www.cepler.org/ontology#unit": [
+            {
+                "@id": "http://www.wikidata.org/entity/Q11570"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": 20.0
+            }
+        ]
+    }
+]</pre>
+                </div>
+
+                <p class="maintext" >If no result could be found:</p>
+                <div class="json_div">
+                <pre>
+[ { "result": "no result was found"}]                   
+                </pre>
+              </div>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/400">400</a> </h2>
+                <p class="maintext" >Client Error: The request could not be handled due to an incorrect request.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/406">406</a> </h2>
+                <p class="maintext" >Client Error: The accept header was not correctly specified. Please note that only "application/ld+json" is supported with the current API.</p>
+                <h2>HTTP Status code <a style="text-decoration: underline; color: #04B45F;" href="https://httpstatuses.com/500">500</a> </h2>
+                <p class="maintext" >Server Error: Something went wrong on the server. We are sorry that we could not complete your request!</p>
+              </div>
+              </div>
+              
+              </div>  
+              
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 </div>
 
 </div>
 </div>
+
 <div style="height:50px;"></div>
 
 <!-- Footer --> 

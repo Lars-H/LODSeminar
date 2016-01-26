@@ -29,7 +29,7 @@ cep:Fact rdfs:comment "A Cepler Fact describes a measurable dimension of some en
 #Cepler Property: multiplies
 cep:multiplies rdf:type rdf:Property .
 cep:multiplies rdf:label "multiplies" @en .
-cep:multiplies rdfs:comment "Multiplies a Cepler Fact' value by a Cepler Factor. " .
+cep:multiplies rdfs:comment "Multiplies a Cepler Fact value by a Cepler Factor. " .
 cep:multiplies rdfs:domain cep:Factor .
 cep:multiplies rdfs:range cep:Fact .
 
