@@ -5,6 +5,7 @@ import simplejson as json
 import wdProperties
 import random
 from Properties import Mapping
+import httplib
 
 class WikidataWrapper: 
 
@@ -70,9 +71,13 @@ class WikidataWrapper:
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		return;
 
-	def __runQuery(self,  query ):		
-		self.sparql.setQuery(query);
-		results = self.sparql.query().convert()
+	def __runQuery(self,  query ):	
+		try:	
+			self.sparql.setQuery(query);
+			results = self.sparql.query().convert()
+		except httplib.HTTPException:
+			raise RuntimeError("A timeout occurred when connecting to a datasource.")
+				
 		return results;
 
 	def __buildQuery(self, unit, value, rng):
