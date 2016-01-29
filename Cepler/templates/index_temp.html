@@ -191,21 +191,7 @@
 	function processRequest( value, unit)
 	{
 		ShowStatus("... wait for it...", "");
-		//Old Async JSON Call
-		/*$(function() 
-		{
-    		
-      		$.getJSON($SCRIPT_ROOT + '/compare', 
-      		{
-        		v: value,
-        		u: unit
-      		}, function(data) 
-      		{
-      			//handleResponse(data);
-      			return false;
-    		});
-  		});*/
-		//New Direct Call
+
 		var url = "/compare?v=" + value.toString() + "&u=" + unit.toString();
 		window.open(url,"_self")
 	}
@@ -282,10 +268,13 @@
 		}
 
 		//Check for Picture
-		if(data['depiction'].toString() != "")
+		if(data.hasOwnProperty('depiction'))
 		{
-			document.getElementById('resultPic').src =  data['depiction'].toString();
-			document.getElementById('image_div').style.display = 'block';	
+			if(data['depiction'].toString() != "")
+			{
+				document.getElementById('resultPic').src =  data['depiction'].toString();
+				document.getElementById('image_div').style.display = 'block';	
+			}
 		}
 		else
 		{

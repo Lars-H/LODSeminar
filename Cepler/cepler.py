@@ -180,18 +180,13 @@ def datasources():
 def display():
     #Get the request
     rqst = request.query_string
-    print(rqst)
-
-    #Decrypt request
-    #Using the most advanced cryptographic algorihm ;) 
-    dcrpted = cipher.decrypt("cepler", rqst);
-    print(dcrpted)
+    print("Request: " + str(rqst))
 
     #To JSON
-    #data = json.dumps(urlparse.parse_qs(dcrpted))
-    #print(str(data))
-    return abort(400);    
-    #return render_template('index_temp.html', data=data)    
+    data = json.dumps(urlparse.parse_qs(rqst))
+    print("JSON: "+ str(data))
+    #return abort(400);    
+    return render_template('index_temp.html', data=data)    
 
 
 #Return a 400 with a customized message
