@@ -9,9 +9,9 @@ def getFactorsAndRanges(norm_value, logString='FACTOR - '):
 	try:
 		norm_value_parsed = float(norm_value)
 
-		# possible values and the range where results can lie
+		# possible values
 		# If they shall be extended, add factors to the factors list
-		value_range = 0.02
+		
 		factors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 
 					150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 
 					1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000]
@@ -35,10 +35,15 @@ def getFactorsAndRanges(norm_value, logString='FACTOR - '):
 
 		# Take the ten first factors out of the shuffled list and return them
 		factors_and_ranges = []
+		value_range = 0.02
 
 		for i in range(10):
 
 			current_factor = possible_factors.pop()
+			if current_factor > 50:
+				value_range = 0.1
+			else:
+				value_range = 0.02
 			factors_and_ranges.append((current_factor, value_range))
 
 		#print(factors_and_ranges)
