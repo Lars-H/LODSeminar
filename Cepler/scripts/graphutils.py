@@ -131,9 +131,9 @@ class GraphBuilder:
 			query['depiction'] = pic
 
 		# For persistence of results
-		#display = urllib.urlencode(query)
+		display = urllib.urlencode(query)
 		#display = cipher.encrypt('cepler', display)
-		#query['display'] = display
+		query['display'] = display
 
 		# Make the dict a JSON array
 		jsonarray = json.dumps(query, sort_keys=True, indent=4, separators=(',', ': '))
