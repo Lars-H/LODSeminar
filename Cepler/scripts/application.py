@@ -89,18 +89,24 @@ class RequestHandler:
 			raise ValueError("Invalid datasource. Possible values are 'dbpedia', 'worldbank', and 'wikidata'.")
 
 		# Value
-		query_value = float(inValue)
+		orig_value = float(inValue)
 
 		# Range
-		range = float(inRange)
+		range_decimal = float(inRange)
 
 		# Unit
-		base_unit = inUnit
-		quantity = self.decideContext(base_unit)
+		orig_unit = inUnit
+		quantity = self.decideContext(orig_unit)
 		base_unit = units.baseUnit(quantity)
-		
-		print(RequestHandler.logString + "User query: " + str(query_value) + " " + str(base_unit) + ", range " + str(range))
+
+		# Input is normalized to base unit.
+		query_value = conv.convert(orig_value, orig_unit, quantity, RequestHandler.logString)
+
+		print(RequestHandler.logString + "User query: " + str(orig_value) + " " + str(orig_unit) + ", range " + str(range_decimal))
 		print(RequestHandler.logString + "Quantity: " + str(quantity))
+
+		# Possible range of results:
+		range = range_decimal*query_value
 
 		# Instance of GraphBuilder which builds the RDF graph.
 		graphBuilder = GraphBuilder()
