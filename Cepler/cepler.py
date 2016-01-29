@@ -13,7 +13,7 @@ import urlparse
 app = Flask(__name__)
 
 #API Methods
-@app.route('/compare')
+@app.route('/compare' , methods=['POST', 'GET'])
 #@produces('text/html')
 def compare():
     #Get the Accept Header
