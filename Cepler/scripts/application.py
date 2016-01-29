@@ -8,7 +8,6 @@ from wrapper.wikidata.wikidataWrapper import WikidataWrapper
 from wrapper.worldbank.wbWrapper import wbWrapper
 import helper.conversion as conv
 import helper.factor as factorProvider
-import helper.range as rangeProvider
 import helper.units as units
 import pprint
 import random
@@ -255,6 +254,7 @@ class RequestHandler:
 		# Get shuffled list of all wrappers which can process this quantity and shuffled list of factors.
 		possibleWrappers = availableWrappers.getAvailableWrappers(quantity)
 		possibleFactorsAndRanges = factorProvider.getFactorsAndRanges(norm_value,RequestHandler.logString)
+		print(RequestHandler.logString + "Queue of factors to be attempted: " + str(possibleFactorsAndRanges))
 
 		# Try at most 10 random factors
 		currentFactor = 0
@@ -268,7 +268,7 @@ class RequestHandler:
 			print(RequestHandler.logString + "Factor attempt no. " + str(x))
 
 			# Pop first entry out of the factors and ranges
-			currentFactorAndRange = possibleFactorsAndRanges.pop()
+			currentFactorAndRange = possibleFactorsAndRanges.pop(0)
 			currentFactor = currentFactorAndRange[0]
 			currentRangeDecimal = currentFactorAndRange[1]
 			query_value = norm_value/currentFactor
