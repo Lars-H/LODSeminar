@@ -130,10 +130,19 @@ class GraphBuilder:
 		for pic in self.g.objects(BNode('result'), FOAF.depiction): # should occur 0 or 1 times!
 			query['depiction'] = pic
 
+		# workaround "can't encode ascii char" by urllib
+		str_query = {}
+		for k, v in query.iteritems():
+			str_query[k] = unicode(v).encode('utf-8')
+
 		# For persistence of results
-		display = urllib.urlencode(query)
+		display = urllib.urlencode(str_query)
 		#display = cipher.encrypt('cepler', display)
 		query['display'] = display
+
+		#print display
+		#print query
+		#print str_query
 
 		# Make the dict a JSON array
 		jsonarray = json.dumps(query, sort_keys=True, indent=4, separators=(',', ': '))
