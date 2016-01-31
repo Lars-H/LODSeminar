@@ -27,9 +27,6 @@
 <!--Buffer Div-->
 <div id="buffer_div"> 
 </div> 
-<div align="center">
-  <h1 style="color: red; opacity: 0.7;">Beta version.</h1>
-</div> 
 
 
 <!-- Main Div -->	
@@ -53,7 +50,7 @@
 			
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Statement">cep:Statement</p>
+			<p class="h5" id="Statement">Statement</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -78,7 +75,7 @@
 
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Fact">cep:Fact</p>
+			<p class="h5" id="Fact">Fact</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -103,7 +100,7 @@
 
 			<!--A Class-->
 			<div class="req_div">
-			<p class="h5" id="Factor">cep:Factor</p>
+			<p class="h5" id="Factor">Factor</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -133,7 +130,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="divides">cep:divides</p>
+			<p class="h5" id="divides">divides</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -166,7 +163,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="multiplies">cep:multiplies</p>
+			<p class="h5" id="multiplies">multiplies</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -199,7 +196,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="unit">cep:unit</p>
+			<p class="h5" id="unit">unit</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -228,7 +225,7 @@
 
 			<!--A Property-->
 			<div class="req_div">
-			<p class="h5" id="entity">cep:entity</p>
+			<p class="h5" id="entity">entity</p>
 			<table style="width:80%; left-margin: 10%; top-margin:0px; padding: 0px;">
 				<col width="40%">
   				<col width="80%">
@@ -312,6 +309,17 @@ cep:entity rdfs:domain cep:Fact .
 
 			</p>
 		</div>
+
+			<!-- RDF -->
+			<h3>Example Graph</h3>
+			<div class="line_div"> </div>
+			<p class="maintext">
+				This is a graph representation of a possible result.
+			</p>
+			<div align="center"><img  style="height: 500px;"src="{{url_for('static', filename='graph.png') }}"> </img></div>
+			<div style="height:50px;"></div>
+			<div class="line_div"> </div>
+			<div style="height:32px;"></div>
 
 	</div>
 
