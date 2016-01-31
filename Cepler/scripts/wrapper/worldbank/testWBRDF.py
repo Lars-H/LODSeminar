@@ -13,7 +13,7 @@ wbWrapper1 = wbWrapper();
 #print wbWrapper1.getDBPic("<http://dbpedia.org/resource/Equatorial_Guinea>")
 
 
-rdfResult = wbWrapper1.getResults(Mapping.COST, 2500, 1000)
+rdfResult = wbWrapper1.getResults(Mapping.COST, 194590575, 133343000)
 
 #rdfResult = wbWrapper1.getResults(Mapping.COST, 2, 4) 
 
