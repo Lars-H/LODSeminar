@@ -206,7 +206,7 @@ class WikidataWrapper:
 
 	def __getAdditionalInfo( self, entityUri, propUri):
 
-		#schon da: ?entity ?entLabel ?entType ?entTypeDescr ?prop ?value
+		#original query was too complex for wikidata, so we split the query up in two parts
 
 		additionalSparql = SPARQLWrapper("https://query.wikidata.org/bigdata/namespace/wdq/sparql")
 		

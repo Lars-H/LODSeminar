@@ -26,7 +26,7 @@ class wbWrapper:
 		else:
 			#JSON as Default
 			self.outformat = "json";
-
+		#SPARQL-Settings
 		self.endPointUrl = "http://worldbank.270a.info/sparql";
 		self.sparql = SPARQLWrapper(self.endPointUrl)
 		self.sparql.setReturnFormat(self.outformat)
@@ -63,15 +63,14 @@ class wbWrapper:
 
 				if not (self.res is None):
 					results = self.res
-					#print("Result found in time.")
-					#print(str(results))
+									
 				else:
-					#print("No result found in time")	
+					
 					return None;
 
 			except TypeError:
 				return None
-			#Decode 
+			#Decode retrieved results 
 			if(len(results['results']['bindings']) >0):
 				i  = random.randrange(0, len(results['results']['bindings']), 1)
 				
@@ -121,7 +120,7 @@ class wbWrapper:
 				query += " UNION "
 			query += "{ ?i pd:refPeriod y:" + wbProperties.wbAllowedYears[i] + " . }"
 
-			#retreive acutal values
+		#retreive acutal values
 		query += " ?i pm:obsValue ?actualValue. "
 
 		#retrieve indicator label
@@ -145,6 +144,8 @@ class wbWrapper:
 
 	def resultToRDF(self, result):
 		if(bool(result)):
+
+			#retrieve result data to build up graph
 			indicatorNode = result['i']
 			indicatorURI = indicatorNode['value']
 
@@ -164,8 +165,9 @@ class wbWrapper:
 
 			g = self.__initGraph()
 
+			#result node
 			response = BNode('result');
-
+			#build graph
 			g.add( (response, RDFS.label , Literal(combinedLabelValue) ))
 			g.add( (response, RDF.value , Literal(indicatorActualValue) )) 
 			g.add( (response, self.CEP.unit , self.WD.Q4917))
@@ -196,6 +198,7 @@ class wbWrapper:
 		g.bind('foaf', FOAF)
 		return g;		
 
+		#Second query to get a supporting depiction (flag) from DBpedia
 	def getDBPic(self, resourceURL):
 		sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 		query =	" select ?countryPic WHERE { <"  + resourceURL + "> <http://xmlns.com/foaf/0.1/depiction> ?countryPic . }"
